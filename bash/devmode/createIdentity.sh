@@ -5,7 +5,7 @@
 
 set -e
 
-ORG_NAME="importer"
+ORG_NAME="printer"
 
 fabric-ca-client enroll -u http://admin:adminpw@ca:7054 --mspdir admin
 

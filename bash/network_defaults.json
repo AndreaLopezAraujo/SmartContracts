@@ -1,5 +1,5 @@
 {
-    "ExporterOrg": {
+    "ImpreAndesUsersOrg": {
         "peer_ports": [
             {
                 "peer0": 7051
@@ -13,7 +13,7 @@
             }
         ]
     },
-    "ImporterOrg": {
+    "PrinterOrg": {
         "peer_ports": [
             {
                 "peer0": 8051
@@ -27,7 +27,7 @@
             }
         ]
     },
-    "CarrierOrg": {
+    "SenecasOrg": {
         "peer_ports": [
             {
                 "peer0": 9051

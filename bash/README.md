@@ -34,7 +34,7 @@ Here are the prerequisites you need to install on your system before attempting 
     make docker
     ```
 # Initial Trade Network and Applications
-The initial network has four organizations, each with one peer and CA, as illustrated in the below diagram. All peers other than the one in the Carrier's organization uses a CouchDB instance as its backing database. (The carrier peer uses the default LevelDB).
+The initial network has four organizations, each with one peer and CA, as illustrated in the below diagram. All peers other than the one in the Senecas's organization uses a CouchDB instance as its backing database. (The senecas peer uses the default LevelDB).
 
 ![alt text](../images/Initial-Network.png)
 
@@ -46,8 +46,8 @@ We can use either a solo or a Raft ordering service using either of the followin
 Cryptographic material specifications are provided in [crypto-config.yaml](crypto-config.yaml), with the additional Raft ordering nodes specified in [multiple_orderers/crypto-config.yaml](multiple_orderers/crypto-config.yaml)
 
 We use two channels, each supporting a different consortium as follows (see [configtx.yaml](configtx.yaml) for solo orderer and [multiple_orderers/configtx.yaml](multiple_orderers/configtx.yaml) for raft orderer):
-- `tradechannel`: `TradeConsortium` (3 organizations: exporter, importer, regulator)
-- `shippingchannel`: `ShippingConsortium` (4 organizations: exporter, importer, regulator, carrier)
+- `tradechannel`: `TradeConsortium` (3 organizations: impreAndesUsers, printer, regulator)
+- `shippingchannel`: `ShippingConsortium` (4 organizations: impreAndesUsers, printer, regulator, senecas)
 
 **The instructions below use default options. For a complete list of commands and options, run:** `./trade.sh -h`
 
@@ -64,20 +64,20 @@ The following files and folders should be created:
 |   └── genesis.block
 |   └── tradechannel
 |       └── channel.tx
-|       └── ExporterOrgMSPanchors.tx
-|       └── ImporterOrgMSPanchors.tx
+|       └── ImpreAndesUsersOrgMSPanchors.tx
+|       └── PrinterOrgMSPanchors.tx
 |       └── RegulatorOrgMSPanchors.tx
 |   └── shippingchannel
 |       └── channel.tx
-|       └── ExporterOrgMSPanchors.tx
-|       └── ImporterOrgMSPanchors.tx
+|       └── ImpreAndesUsersOrgMSPanchors.tx
+|       └── PrinterOrgMSPanchors.tx
 |       └── RegulatorOrgMSPanchors.tx
-|       └── CarrierOrgMSPanchors.tx
+|       └── SenecasOrgMSPanchors.tx
 ├── crypto-config
 |   └── ordererOrganizations
 └   └── peerOrganizations
 ```
-- `crypto-config/ordererOrganizations/trade.com/orderers/` may have one (solo) or five (Raft) subfolders, each corresponding to an ordering node
+- `crypto-config/ordererOrganizations/impreAndes.com/orderers/` may have one (solo) or five (Raft) subfolders, each corresponding to an ordering node
 - `crypto-config/peerOrganizations/`: will have 4 subfolders, one corresponding to each org
 
 ## Launch the Network
@@ -115,19 +115,19 @@ Create the following folder structure in preparation to store identities and con
 ```
 trade-network
 ├── wallets
-|   └── exporterorg
-|   └── importerorg
+|   └── impreAndesUsersorg
+|   └── printerorg
 |   └── regulatororg
-|   └── carrierorg
+|   └── senecasorg
 ├── gateways
-|   └── exporterorg
-|   └── importerorg
+|   └── impreAndesUsersorg
+|   └── printerorg
 |   └── regulatororg
-└   └── carrierorg
+└   └── senecasorg
 ```
 
 ### Create Connection Profiles
-Create a connection profile within each subfolder under `gateways`. For example: `gateways/exporterorg/connection.json`.   
+Create a connection profile within each subfolder under `gateways`. For example: `gateways/impreAndesUsersorg/connection.json`.   
 To create these profiles, use scripts in the [utils](utils/) folder. Prepare to run the scripts by running the following commands:
 ```
 cd utils
@@ -136,12 +136,12 @@ npm install
 You can export connection profiles for the organizations from the VSCode IBP Extension, and fix their attributes by running the following commands:
 ```
 cd utils
-node manage-connection-profile.js --update <vscode-exporterorg-connection-profile> ../../gateways/exporterorg/connection.json ca-exporterorg
-node manage-connection-profile.js --update <vscode-importerorg-connection-profile> ../../gateways/importerorg/connection.json ca-importerorg
+node manage-connection-profile.js --update <vscode-impreAndesUsersorg-connection-profile> ../../gateways/impreAndesUsersorg/connection.json ca-impreAndesUsersorg
+node manage-connection-profile.js --update <vscode-printerorg-connection-profile> ../../gateways/printerorg/connection.json ca-printerorg
 node manage-connection-profile.js --update <vscode-regulatororg-connection-profile> ../../gateways/regulatororg/connection.json ca-regulatororg
-node manage-connection-profile.js --update <vscode-carrierorg-connection-profile> ../../gateways/carrierorg/connection.json ca-carrierorg
+node manage-connection-profile.js --update <vscode-senecasorg-connection-profile> ../../gateways/senecasorg/connection.json ca-senecasorg
 ```
-The arguments `<vscode-exporterorg-connection-profile>`, etc., should point to paths of the connection profiles exported from VSCode to your filesystem.   
+The arguments `<vscode-impreAndesUsersorg-connection-profile>`, etc., should point to paths of the connection profiles exported from VSCode to your filesystem.   
 Alternatively, you can generate the four connection profiles in one go using the following command:
 ```
 cd utils
@@ -184,8 +184,8 @@ This will allow you to rebuild a network from scratch. You will need start start
 # Trade Network Upgrades
 Certain forms of network changes are supported, though in circumscribed ways. You can easily modify the scripts to run other kinds of upgrades though.
 
-## Add a New Peer to the Importer Organization
-The configuration for this new peer lies in the [add_peer_importer](add_peer_importer/) folder.   
+## Add a New Peer to the Printer Organization
+The configuration for this new peer lies in the [add_peer_printer](add_peer_printer/) folder.   
 To launch the peer container and its backing CouchDB container, run:
 ```
 ./trade.sh startnewpeer
@@ -201,7 +201,7 @@ docker exec -it trade_cli bash
 ```
 Set the environment variables to appropriate values, and run the following package and install processes for each contract you wish to run on this peer. Use the [cli_scripts/chaincode.sh](cli_scripts/chaincode.sh) to run these processes.
 
-### Remove the New Peer from the Importer Organization
+### Remove the New Peer from the Printer Organization
 To remove the peer from the network, run:
 ```
 ./trade.sh stopnewpeer

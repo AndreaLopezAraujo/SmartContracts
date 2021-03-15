@@ -26,7 +26,7 @@ PeerOrgs:
   # ImpreAndesUsers
   # ---------------------------------------------------------------------------
   - Name: ImpreAndesUsersOrd
-    Domain: impreAndesUsers.impreAndes.com
+    Domain: impreAndesUsersorg.impreAndes.com
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
     # "Specs"
@@ -45,8 +45,8 @@ PeerOrgs:
     #                 Org.Domain, respectively.
     # ---------------------------------------------------------------------------
     # Specs:
-    #   - Hostname: foo # implicitly "foo.org1.trade.com"
-    #     CommonName: foo27.org5.trade.com # overrides Hostname-based FQDN set above
+    #   - Hostname: foo # implicitly "foo.org1.impreAndes.com"
+    #     CommonName: foo27.org5.impreAndes.com # overrides Hostname-based FQDN set above
     #   - Hostname: bar
     #   - Hostname: baz
     # ---------------------------------------------------------------------------
@@ -73,27 +73,27 @@ PeerOrgs:
     Users:
       Count: 2
   # ---------------------------------------------------------------------------
-  # PrinterOrg: See "ExporterOrg" for full specification
+  # PrinterOrg: See "ImpreAndesUsersOrg" for full specification
   # ---------------------------------------------------------------------------
   - Name: PrinterOrg
-    Domain: printerOrg.impreAndes.com
+    Domain: printerorg.impreAndes.com
     EnableNodeOUs: true
     Template:
       Count: 1
     Users:
       Count: 2
   # ---------------------------------------------------------------------------
-  # SenecasOrg: See "ExporterOrg" for full specification
+  # SenecasOrg: See "ImpreAndesUsersOrg" for full specification
   # ---------------------------------------------------------------------------
   - Name: SenecasOrg
-    Domain: senecasOrg.impreAndes.com
+    Domain: senecasorg.impreAndes.com
     EnableNodeOUs: true
     Template:
       Count: 1
     Users:
       Count: 1
   # ---------------------------------------------------------------------------
-  # RegulatorOrg: See "ExporterOrg" for full specification
+  # RegulatorOrg: See "ImpreAndesUsersOrg" for full specification
   # ---------------------------------------------------------------------------
   - Name: RegulatorOrg
     Domain: regulatororg.impreAndes.com

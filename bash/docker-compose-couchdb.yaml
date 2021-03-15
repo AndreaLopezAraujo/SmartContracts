@@ -8,8 +8,8 @@ networks:
   trade:
 
 services:
-  couchdb-peer0.exporterorg.trade.com:
-    container_name: couchdb-peer0.exporterorg.trade.com
+  couchdb-peer0.impreAndesUsersorg.impreAndes.com:
+    container_name: couchdb-peer0.impreAndesUsersorg.impreAndes.com
     image: couchdb:2.3
     platform: $PLATFORM
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
@@ -24,20 +24,20 @@ services:
     networks:
       - trade
 
-  peer0.exporterorg.trade.com:
+  peer0.impreAndesUsersorg.impreAndes.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer0.exporterorg.trade.com:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer0.impreAndesUsersorg.impreAndes.com:5984
       # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
       # provide the credentials for ledger to connect to CouchDB.  The username and password must
       # match the username and password set for the associated CouchDB.
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     depends_on:
-      - couchdb-peer0.exporterorg.trade.com
+      - couchdb-peer0.impreAndesUsersorg.impreAndes.com
 
-  couchdb-peer0.importerorg.trade.com:
-    container_name: couchdb-peer0.importerorg.trade.com
+  couchdb-peer0.printerorg.impreAndes.com:
+    container_name: couchdb-peer0.printerorg.impreAndes.com
     image: couchdb:2.3
     platform: $PLATFORM
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
@@ -52,20 +52,20 @@ services:
     networks:
       - trade
 
-  peer0.importerorg.trade.com:
+  peer0.printerorg.impreAndes.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer0.importerorg.trade.com:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer0.printerorg.impreAndes.com:5984
       # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
       # provide the credentials for ledger to connect to CouchDB.  The username and password must
       # match the username and password set for the associated CouchDB.
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     depends_on:
-      - couchdb-peer0.importerorg.trade.com
+      - couchdb-peer0.printerorg.impreAndes.com
 
-  couchdb-peer0.regulatororg.trade.com:
-    container_name: couchdb-peer0.regulatororg.trade.com
+  couchdb-peer0.regulatororg.impreAndes.com:
+    container_name: couchdb-peer0.regulatororg.impreAndes.com
     image: couchdb:2.3
     platform: $PLATFORM
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
@@ -80,14 +80,14 @@ services:
     networks:
       - trade
 
-  peer0.regulatororg.trade.com:
+  peer0.regulatororg.impreAndes.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer0.regulatororg.trade.com:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer0.regulatororg.impreAndes.com:5984
       # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
       # provide the credentials for ledger to connect to CouchDB.  The username and password must
       # match the username and password set for the associated CouchDB.
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     depends_on:
-      - couchdb-peer0.regulatororg.trade.com
+      - couchdb-peer0.regulatororg.impreAndes.com

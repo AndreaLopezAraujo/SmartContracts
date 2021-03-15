@@ -10,7 +10,7 @@ PeerOrgs:
   # ExportingEntityOrg
   # ---------------------------------------------------------------------------
   - Name: ExportingEntityOrg
-    Domain: exportingentityorg.trade.com
+    Domain: exportingentityorg.impreAndes.com
     EnableNodeOUs: true
     Template:
       Count: 1

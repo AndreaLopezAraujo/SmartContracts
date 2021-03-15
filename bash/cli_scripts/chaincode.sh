@@ -10,9 +10,9 @@ PEERORGLIST=$PEERORGLIST
 DELAY=3
 COUNTER=1
 MAX_RETRY=5
-ORDERER_HOST=orderer.trade.com
+ORDERER_HOST=orderer.impreAndes.com
 ORDERER_PORT=7050
-ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/trade.com/orderers/orderer.trade.com/msp/tlscacerts/tlsca.trade.com-cert.pem
+ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/impreAndes.com/orderers/orderer.impreAndes.com/msp/tlscacerts/tlsca.impreAndes.com-cert.pem
 
 CC_LANGUAGE=$CC_LANGUAGE
 CC_LABEL=${CC_LABEL}
@@ -33,9 +33,9 @@ verifyResult() {
   fi
 }
 
-exporterorg_PORT=7051
-importerorg_PORT=8051
-carrierorg_PORT=9051
+impreAndesUsersorg_PORT=7051
+printerorg_PORT=8051
+senecasorg_PORT=9051
 regulatororg_PORT=10051
 exportingentityorg_PORT=12051
 
@@ -52,18 +52,18 @@ setOrganization() {
     USER=$2
   fi
   MSP=
-  if [[ "$ORG" == "exporterorg" ]]
+  if [[ "$ORG" == "impreAndesUsersorg" ]]
   then
-    MSP=ExporterOrgMSP
-    PORT=$exporterorg_PORT
-  elif [[ "$ORG" == "importerorg" ]]
+    MSP=ImpreAndesUsersOrgMSP
+    PORT=$impreAndesUsersorg_PORT
+  elif [[ "$ORG" == "printerorg" ]]
   then
-    MSP=ImporterOrgMSP
-    PORT=$importerorg_PORT
-  elif [[ "$ORG" == "carrierorg" ]]
+    MSP=PrinterOrgMSP
+    PORT=$printerorg_PORT
+  elif [[ "$ORG" == "senecasorg" ]]
   then
-    MSP=CarrierOrgMSP
-    PORT=$carrierorg_PORT
+    MSP=SenecasOrgMSP
+    PORT=$senecasorg_PORT
   elif [[ "$ORG" == "regulatororg" ]]
   then
     MSP=RegulatorOrgMSP
@@ -77,15 +77,15 @@ setOrganization() {
     exit 1
   fi
   CORE_PEER_LOCALMSPID=$MSP
-  CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.trade.com/peers/peer0.$ORG.trade.com/tls/ca.crt
-  CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.trade.com/users/$USER@$ORG.trade.com/msp
-  CORE_PEER_ADDRESS=peer0.$ORG.trade.com:$PORT
-  CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.trade.com/peers/peer0.$ORG.trade.com/tls/server.crt
-  CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.trade.com/peers/peer0.$ORG.trade.com/tls/server.key
+  CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.impreAndes.com/peers/peer0.$ORG.impreAndes.com/tls/ca.crt
+  CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.impreAndes.com/users/$USER@$ORG.impreAndes.com/msp
+  CORE_PEER_ADDRESS=peer0.$ORG.impreAndes.com:$PORT
+  CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.impreAndes.com/peers/peer0.$ORG.impreAndes.com/tls/server.crt
+  CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.impreAndes.com/peers/peer0.$ORG.impreAndes.com/tls/server.key
 }
 
 packageChaincode() {
-  setOrganization exporterorg
+  setOrganization impreAndesUsersorg
 
   set -x
   peer lifecycle chaincode package $CC_PKG_FILE --path ./contracts/$CC_VERSION/$CC_LABEL/ --lang $CC_LANGUAGE --label $CC_LABEL >&log.txt
@@ -115,12 +115,12 @@ installChaincodeInOrg() {
     set +x
   fi
   cat log.txt
-  verifyResult $res "Failed to install chaincode on peer0.${ORG}.trade.com for channel '$CHANNEL_NAME' "
+  verifyResult $res "Failed to install chaincode on peer0.${ORG}.impreAndes.com for channel '$CHANNEL_NAME' "
 
   CC_PKG_ID_COUNT=$(peer lifecycle chaincode queryinstalled --connTimeout 120s | grep "Label: "$CC_LABEL | wc -l)
   if [ $CC_PKG_ID_COUNT != $CC_SEQUENCE_NUM ]
   then
-    verifyResult 1 "Failed to verify chaincode installation on peer0.${ORG}.trade.com for channel '$CHANNEL_NAME' "
+    verifyResult 1 "Failed to verify chaincode installation on peer0.${ORG}.impreAndes.com for channel '$CHANNEL_NAME' "
   fi
 }
 
@@ -128,7 +128,7 @@ installChaincode() {
   OLD_CC_PKG_IDS=$(peer lifecycle chaincode queryinstalled --connTimeout 120s | grep -v "Installed\ chaincodes\ on\ peer" | awk '{print $3}')
   for org in $PEERORGLIST; do
     installChaincodeInOrg $org
-    echo "===================== Installed chaincode on peer0.${org}.trade.com for channel '$CHANNEL_NAME' ===================== "
+    echo "===================== Installed chaincode on peer0.${org}.impreAndes.com for channel '$CHANNEL_NAME' ===================== "
     echo
   done
 }
@@ -158,13 +158,13 @@ approveChaincodeDefinitions() {
     CC_PKG_ID_COUNT=$(peer lifecycle chaincode queryinstalled --connTimeout 120s | grep "Label: "$CC_LABEL | wc -l)
     if [ $CC_PKG_ID_COUNT != $CC_SEQUENCE_NUM ]
     then
-      verifyResult 1 "Failed to verify chaincode installation on peer0.$org.trade.com for channel '$CHANNEL_NAME' "
+      verifyResult 1 "Failed to verify chaincode installation on peer0.$org.impreAndes.com for channel '$CHANNEL_NAME' "
     fi
   done
   ENDORSEMENT_POLICY=$ENDORSEMENT_POLICY")"
 
   # Get the package ID from an org peer that is guaranteed to run all of our chaincodes
-  setOrganization exporterorg
+  setOrganization impreAndesUsersorg
   peer lifecycle chaincode queryinstalled --connTimeout 120s | grep -v "Installed\ chaincodes\ on\ peer" | grep $CC_LABEL > install.tmp
   if [ "$OLD_CC_PKG_IDS" != "" ]
   then
@@ -181,9 +181,9 @@ approveChaincodeDefinitions() {
   # Approve definition by each peer on the channel
   if [ "$NUM_ORGS_IN_CHANNEL" == "3" ]
   then
-    ORG_LIST="exporterorg importerorg regulatororg"
+    ORG_LIST="impreAndesUsersorg printerorg regulatororg"
   else
-    ORG_LIST="exporterorg importerorg carrierorg regulatororg"
+    ORG_LIST="impreAndesUsersorg printerorg senecasorg regulatororg"
   fi
   if [ "$CC_SEQUENCE_NUM" == "2" ]
   then
@@ -197,15 +197,15 @@ approveChaincodeDefinitions() {
 }
 
 commitChaincodeDefinition() {
-  setOrganization exporterorg
+  setOrganization impreAndesUsersorg
 
   ORG_PEER_CONNECTION=""
   READINESS=$(peer lifecycle chaincode checkcommitreadiness --connTimeout 120s --channelID $CHANNEL_NAME --name $CC_LABEL --version $CC_VERSION --init-required --sequence $CC_SEQUENCE_NUM --tls true --cafile $ORDERER_CA --output json)
   if [ "$NUM_ORGS_IN_CHANNEL" == "3" ]
   then
-    ORG_LIST="exporterorg importerorg regulatororg"
+    ORG_LIST="impreAndesUsersorg printerorg regulatororg"
   else
-    ORG_LIST="exporterorg importerorg carrierorg regulatororg"
+    ORG_LIST="impreAndesUsersorg printerorg senecasorg regulatororg"
   fi
   if [ "$CC_SEQUENCE_NUM" == "2" ]
   then
@@ -219,7 +219,7 @@ commitChaincodeDefinition() {
     fi
     port_key=${org}_PORT
     echo "Chaincode definition approved by ${org}"
-    ORG_PEER_CONNECTION=$ORG_PEER_CONNECTION" --peerAddresses peer0.${org}.trade.com:${!port_key} --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/${org}.trade.com/peers/peer0.${org}.trade.com/tls/ca.crt"
+    ORG_PEER_CONNECTION=$ORG_PEER_CONNECTION" --peerAddresses peer0.${org}.impreAndes.com:${!port_key} --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/${org}.impreAndes.com/peers/peer0.${org}.impreAndes.com/tls/ca.crt"
   done
 
   ENDORSEMENT_POLICY=
@@ -251,12 +251,12 @@ commitChaincodeDefinition() {
 }
 
 initializeChaincode() {
-  setOrganization exporterorg User1
+  setOrganization impreAndesUsersorg User1
 
   ORG_PEER_CONNECTION=""
   for org in $PEERORGLIST; do
     port_key=${org}_PORT
-    ORG_PEER_CONNECTION=$ORG_PEER_CONNECTION" --peerAddresses peer0.${org}.trade.com:${!port_key} --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/${org}.trade.com/peers/peer0.${org}.trade.com/tls/ca.crt"
+    ORG_PEER_CONNECTION=$ORG_PEER_CONNECTION" --peerAddresses peer0.${org}.impreAndes.com:${!port_key} --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/${org}.impreAndes.com/peers/peer0.${org}.impreAndes.com/tls/ca.crt"
   done
 
   set -x
@@ -319,7 +319,7 @@ invokeChaincode() {
 
   ORG_PEER_CONNECTION=""
   for org in $PEERORGLIST; do
-    ORG_PEER_CONNECTION=$ORG_PEER_CONNECTION" --peerAddresses peer0.${org}.trade.com:${${org}_PORT} --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/${org}.trade.com/peers/peer0.${org}.trade.com/tls/ca.crt"
+    ORG_PEER_CONNECTION=$ORG_PEER_CONNECTION" --peerAddresses peer0.${org}.impreAndes.com:${${org}_PORT} --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/${org}.impreAndes.com/peers/peer0.${org}.impreAndes.com/tls/ca.crt"
   done
 
   set -x

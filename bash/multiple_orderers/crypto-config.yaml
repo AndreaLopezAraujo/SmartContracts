@@ -10,7 +10,7 @@ OrdererOrgs:
   # TradeOrderer
   # ---------------------------------------------------------------------------
   - Name: TradeOrderer
-    Domain: trade.com
+    Domain: impreAndes.com
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
     # "Specs" - See PeerOrgs below for complete description

@@ -5,14 +5,14 @@
 version: '2'
 
 volumes:
-  peer1.importerorg.trade.com:
+  peer1.printerorg.impreAndes.com:
 
 networks:
   trade:
 
 services:
-  couchdb-peer1.importerorg.trade.com:
-    container_name: couchdb-peer1.importerorg.trade.com
+  couchdb-peer1.printerorg.impreAndes.com:
+    container_name: couchdb-peer1.printerorg.impreAndes.com
     image: couchdb:2.3
     platform: $PLATFORM
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
@@ -27,34 +27,34 @@ services:
     networks:
       - trade
 
-  peer1.importerorg.trade.com:
-    container_name: peer1.importerorg.trade.com
+  peer1.printerorg.impreAndes.com:
+    container_name: peer1.printerorg.impreAndes.com
     extends:
       file: base/peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer1.importerorg.trade.com
-      - CORE_PEER_ADDRESS=peer1.importerorg.trade.com:11051
+      - CORE_PEER_ID=peer1.printerorg.impreAndes.com
+      - CORE_PEER_ADDRESS=peer1.printerorg.impreAndes.com:11051
       - CORE_PEER_LISTENADDRESS=0.0.0.0:11051
-      - CORE_PEER_CHAINCODEADDRESS=peer1.importerorg.trade.com:7052
+      - CORE_PEER_CHAINCODEADDRESS=peer1.printerorg.impreAndes.com:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.importerorg.trade.com:11051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.importerorg.trade.com:11051
-      - CORE_PEER_LOCALMSPID=ImporterOrgMSP
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.printerorg.impreAndes.com:11051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.printerorg.impreAndes.com:11051
+      - CORE_PEER_LOCALMSPID=PrinterOrgMSP
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer1.importerorg.trade.com:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer1.printerorg.impreAndes.com:5984
       # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
       # provide the credentials for ledger to connect to CouchDB.  The username and password must
       # match the username and password set for the associated CouchDB.
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     depends_on:
-      - couchdb-peer1.importerorg.trade.com
+      - couchdb-peer1.printerorg.impreAndes.com
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/importerorg.trade.com/peers/peer1.importerorg.trade.com/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/importerorg.trade.com/peers/peer1.importerorg.trade.com/tls:/etc/hyperledger/fabric/tls
-        - peer1.importerorg.trade.com:/var/hyperledger/production
+        - ./crypto-config/peerOrganizations/printerorg.impreAndes.com/peers/peer1.printerorg.impreAndes.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/printerorg.impreAndes.com/peers/peer1.printerorg.impreAndes.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.printerorg.impreAndes.com:/var/hyperledger/production
     ports:
       - 11051:11051
     networks:

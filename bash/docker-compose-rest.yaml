@@ -10,9 +10,9 @@ networks:
   trade:
 
 services:
-  exporter_rest:
-    container_name: exporter_rest
-    image: exporter-rest:latest
+  impreAndesUsers_rest:
+    container_name: impreAndesUsers_rest
+    image: impreAndesUsers-rest:latest
     environment:
       - CONFIG_PATH=/config
     working_dir: /usr/src/app
@@ -23,9 +23,9 @@ services:
     networks:
       - trade
 
-  importer_rest:
-    container_name: importer_rest
-    image: importer-rest:latest
+  printer_rest:
+    container_name: printer_rest
+    image: printer-rest:latest
     environment:
       - CONFIG_PATH=/config
     working_dir: /usr/src/app
@@ -49,9 +49,9 @@ services:
     networks:
       - trade
 
-  carrier_rest:
-    container_name: carrier_rest
-    image: carrier-rest:latest
+  senecas_rest:
+    container_name: senecas_rest
+    image: senecas-rest:latest
     environment:
       - CONFIG_PATH=/config
     working_dir: /usr/src/app

@@ -5,73 +5,73 @@
 version: '2'
 
 volumes:
-  orderer.trade.com:
-  peer0.exporterorg.trade.com:
-  peer0.importerorg.trade.com:
-  peer0.carrierorg.trade.com:
-  peer0.regulatororg.trade.com:
-  ca.exporterorg.trade.com:
-  ca.importerorg.trade.com:
-  ca.carrierorg.trade.com:
-  ca.regulatororg.trade.com:
+  orderer.impreAndes.com:
+  peer0.impreAndesUsersorg.impreAndes.com:
+  peer0.printerorg.impreAndes.com:
+  peer0.senecasorg.impreAndes.com:
+  peer0.regulatororg.impreAndes.com:
+  ca.impreAndesUsersorg.impreAndes.com:
+  ca.printerorg.impreAndes.com:
+  ca.senecasorg.impreAndes.com:
+  ca.regulatororg.impreAndes.com:
 
 networks:
   trade:
 services:
-  exporter-ca:
+  impreAndesUsers-ca:
     image: hyperledger/fabric-ca:$CA_IMAGE_TAG
     platform: $PLATFORM
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca-exporterorg
+      - FABRIC_CA_SERVER_CA_NAME=ca-impreAndesUsersorg
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.exporterorg.trade.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.impreAndesUsersorg.impreAndes.com-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.exporterorg.trade.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.impreAndesUsersorg.impreAndes.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/exporterorg.trade.com/ca/:/etc/hyperledger/fabric-ca-server-config
-      - ca.exporterorg.trade.com:/etc/hyperledger/fabric-ca-server
-    container_name: ca.exporterorg.trade.com
+      - ./crypto-config/peerOrganizations/impreAndesUsersorg.impreAndes.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ca.impreAndesUsersorg.impreAndes.com:/etc/hyperledger/fabric-ca-server
+    container_name: ca.impreAndesUsersorg.impreAndes.com
     networks:
       - trade
 
-  importer-ca:
+  printer-ca:
     image: hyperledger/fabric-ca:$CA_IMAGE_TAG
     platform: $PLATFORM
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca-importerorg
+      - FABRIC_CA_SERVER_CA_NAME=ca-printerorg
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.importerorg.trade.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.printerorg.impreAndes.com-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
     ports:
       - "8054:8054"
-    command: sh -c 'fabric-ca-server start --port 8054 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.importerorg.trade.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --port 8054 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.printerorg.impreAndes.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/importerorg.trade.com/ca/:/etc/hyperledger/fabric-ca-server-config
-      - ca.importerorg.trade.com:/etc/hyperledger/fabric-ca-server
-    container_name: ca.importerorg.trade.com
+      - ./crypto-config/peerOrganizations/printerorg.impreAndes.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ca.printerorg.impreAndes.com:/etc/hyperledger/fabric-ca-server
+    container_name: ca.printerorg.impreAndes.com
     networks:
       - trade
 
-  carrier-ca:
+  senecas-ca:
     image: hyperledger/fabric-ca:$CA_IMAGE_TAG
     platform: $PLATFORM
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca-carrierorg
+      - FABRIC_CA_SERVER_CA_NAME=ca-senecasorg
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.carrierorg.trade.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.senecasorg.impreAndes.com-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
     ports:
       - "9054:9054"
-    command: sh -c 'fabric-ca-server start --port 9054 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.carrierorg.trade.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --port 9054 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.senecasorg.impreAndes.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/carrierorg.trade.com/ca/:/etc/hyperledger/fabric-ca-server-config
-      - ca.carrierorg.trade.com:/etc/hyperledger/fabric-ca-server
-    container_name: ca.carrierorg.trade.com
+      - ./crypto-config/peerOrganizations/senecasorg.impreAndes.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ca.senecasorg.impreAndes.com:/etc/hyperledger/fabric-ca-server
+    container_name: ca.senecasorg.impreAndes.com
     networks:
       - trade
 
@@ -82,54 +82,54 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-regulatororg
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.regulatororg.trade.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.regulatororg.impreAndes.com-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
     ports:
       - "10054:10054"
-    command: sh -c 'fabric-ca-server start --port 10054 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.regulatororg.trade.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --port 10054 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.regulatororg.impreAndes.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/regulatororg.trade.com/ca/:/etc/hyperledger/fabric-ca-server-config
-      - ca.regulatororg.trade.com:/etc/hyperledger/fabric-ca-server
-    container_name: ca.regulatororg.trade.com
+      - ./crypto-config/peerOrganizations/regulatororg.impreAndes.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ca.regulatororg.impreAndes.com:/etc/hyperledger/fabric-ca-server
+    container_name: ca.regulatororg.impreAndes.com
     networks:
       - trade
 
-  orderer.trade.com:
+  orderer.impreAndes.com:
     extends:
       file:   base/docker-compose-base.yaml
-      service: orderer.trade.com
-    container_name: orderer.trade.com
+      service: orderer.impreAndes.com
+    container_name: orderer.impreAndes.com
     networks:
       - trade
 
-  peer0.exporterorg.trade.com:
-    container_name: peer0.exporterorg.trade.com
+  peer0.impreAndesUsersorg.impreAndes.com:
+    container_name: peer0.impreAndesUsersorg.impreAndes.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.exporterorg.trade.com
+      service: peer0.impreAndesUsersorg.impreAndes.com
     networks:
       - trade
 
-  peer0.importerorg.trade.com:
-    container_name: peer0.importerorg.trade.com
+  peer0.printerorg.impreAndes.com:
+    container_name: peer0.printerorg.impreAndes.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.importerorg.trade.com
+      service: peer0.printerorg.impreAndes.com
     networks:
       - trade
 
-  peer0.carrierorg.trade.com:
-    container_name: peer0.carrierorg.trade.com
+  peer0.senecasorg.impreAndes.com:
+    container_name: peer0.senecasorg.impreAndes.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.carrierorg.trade.com
+      service: peer0.senecasorg.impreAndes.com
     networks:
       - trade
 
-  peer0.regulatororg.trade.com:
-    container_name: peer0.regulatororg.trade.com
+  peer0.regulatororg.impreAndes.com:
+    container_name: peer0.regulatororg.impreAndes.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.regulatororg.trade.com
+      service: peer0.regulatororg.impreAndes.com
     networks:
       - trade

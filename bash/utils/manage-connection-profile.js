@@ -85,8 +85,8 @@ function generateConnectionProfile(baseDir, orgName, mspid, peer_port, ca_port) 
 	if (!fs.existsSync(outputPath)){
 		fs.mkdirSync(outputPath);
 	}
-	const peerName = `peer0.${orgName}.trade.com`;
-	const caName = `ca.${orgName}.trade.com`
+	const peerName = `peer0.${orgName}.impreAndes.com`;
+	const caName = `ca.${orgName}.impreAndes.com`
 	profileObj.client.organization = mspid;
 	profileObj.organizations[mspid] = { mspid: mspid, 
 										peers: [ peerName ],

@@ -11,7 +11,7 @@ NEW_PEER_ORG=$ORG
 DELAY=3
 COUNTER=1
 MAX_RETRY=5
-ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/trade.com/orderers/orderer.trade.com/msp/tlscacerts/tlsca.trade.com-cert.pem
+ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/impreAndes.com/orderers/orderer.impreAndes.com/msp/tlscacerts/tlsca.impreAndes.com-cert.pem
 
 # verify the result of the end-to-end test
 verifyResult() {
@@ -23,9 +23,9 @@ verifyResult() {
   fi
 }
 
-exporterorg_PORT=7051
-importerorg_PORT=8051
-carrierorg_PORT=9051
+impreAndesUsersorg_PORT=7051
+printerorg_PORT=8051
+senecasorg_PORT=9051
 regulatororg_PORT=10051
 exportingentityorg_PORT=12051
 
@@ -42,22 +42,22 @@ setEnvironment() {
     PEER=$2
   fi
   MSP=
-  if [[ "$ORG" == "exporterorg" ]]
+  if [[ "$ORG" == "impreAndesUsersorg" ]]
   then
-    MSP=ExporterOrgMSP
-    PORT=$exporterorg_PORT
-  elif [[ "$ORG" == "importerorg" ]]
+    MSP=ImpreAndesUsersOrgMSP
+    PORT=$impreAndesUsersorg_PORT
+  elif [[ "$ORG" == "printerorg" ]]
   then
-    MSP=ImporterOrgMSP
-    PORT=$importerorg_PORT
+    MSP=PrinterOrgMSP
+    PORT=$printerorg_PORT
     if [[ "$PEER" == "peer1" ]]
     then
       PORT=11051
     fi
-  elif [[ "$ORG" == "carrierorg" ]]
+  elif [[ "$ORG" == "senecasorg" ]]
   then
-    MSP=CarrierOrgMSP
-    PORT=$carrierorg_PORT
+    MSP=SenecasOrgMSP
+    PORT=$senecasorg_PORT
   elif [[ "$ORG" == "regulatororg" ]]
   then
     MSP=RegulatorOrgMSP
@@ -71,15 +71,15 @@ setEnvironment() {
     exit 1
   fi
   CORE_PEER_LOCALMSPID=$MSP
-  CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.trade.com/peers/$PEER.$ORG.trade.com/tls/ca.crt
-  CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.trade.com/users/Admin@$ORG.trade.com/msp
-  CORE_PEER_ADDRESS=$PEER.$ORG.trade.com:$PORT
-  CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.trade.com/peers/$PEER.$ORG.trade.com/tls/server.crt
-  CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.trade.com/peers/$PEER.$ORG.trade.com/tls/server.key
+  CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.impreAndes.com/peers/$PEER.$ORG.impreAndes.com/tls/ca.crt
+  CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.impreAndes.com/users/Admin@$ORG.impreAndes.com/msp
+  CORE_PEER_ADDRESS=$PEER.$ORG.impreAndes.com:$PORT
+  CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.impreAndes.com/peers/$PEER.$ORG.impreAndes.com/tls/server.crt
+  CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/$ORG.impreAndes.com/peers/$PEER.$ORG.impreAndes.com/tls/server.key
 }
 
 createChannel() {
-  setEnvironment exporterorg
+  setEnvironment impreAndesUsersorg
 
   set -x
   fetchChannelConfig
@@ -92,12 +92,12 @@ createChannel() {
 
   if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
     set -x
-    peer channel create -o orderer.trade.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CHANNEL_NAME}/channel.tx --connTimeout 120s >&log.txt
+    peer channel create -o orderer.impreAndes.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CHANNEL_NAME}/channel.tx --connTimeout 120s >&log.txt
     res=$?
     set +x
   else
     set -x
-    peer channel create -o orderer.trade.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CHANNEL_NAME}/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --connTimeout 120s >&log.txt
+    peer channel create -o orderer.impreAndes.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CHANNEL_NAME}/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --connTimeout 120s >&log.txt
     res=$?
     set +x
   fi
@@ -126,25 +126,25 @@ joinChannelWithRetry() {
   cat log.txt
   if [ $res -ne 0 -a $COUNTER -lt $MAX_RETRY ]; then
     COUNTER=$(expr $COUNTER + 1)
-    echo "${PEER}.${ORG}.trade.com failed to join the channel, Retry after $DELAY seconds"
+    echo "${PEER}.${ORG}.impreAndes.com failed to join the channel, Retry after $DELAY seconds"
     sleep $DELAY
     joinChannelWithRetry $ORG
   else
     COUNTER=1
   fi
-  verifyResult $res "After $MAX_RETRY attempts, ${PEER}.${ORG}.trade.com has failed to join channel '$CHANNEL_NAME' "
+  verifyResult $res "After $MAX_RETRY attempts, ${PEER}.${ORG}.impreAndes.com has failed to join channel '$CHANNEL_NAME' "
 }
 
 joinChannel() {
   if [ "$NUM_ORGS_IN_CHANNEL" == "3" ]
   then
-    ORG_LIST="exporterorg importerorg regulatororg"
+    ORG_LIST="impreAndesUsersorg printerorg regulatororg"
   else
-    ORG_LIST="exporterorg importerorg carrierorg regulatororg"
+    ORG_LIST="impreAndesUsersorg printerorg senecasorg regulatororg"
   fi
   for org in $ORG_LIST; do
     joinChannelWithRetry $org
-    echo "===================== peer0.${org}.trade.com joined channel '$CHANNEL_NAME' ===================== "
+    echo "===================== peer0.${org}.impreAndes.com joined channel '$CHANNEL_NAME' ===================== "
     sleep $DELAY
     echo
   done
@@ -153,13 +153,13 @@ joinChannel() {
 joinNewPeerToChannel() {
   fetchOldestBlock
   joinChannelWithRetry $NEW_PEER_ORG $NEW_PEER ${CHANNEL_NAME}_oldest.block
-  echo "===================== ${PEER}.${NEW_PEER_ORG}.trade.com joined channel '$CHANNEL_NAME' ===================== "
+  echo "===================== ${PEER}.${NEW_PEER_ORG}.impreAndes.com joined channel '$CHANNEL_NAME' ===================== "
 }
 
 # fetchOldestBlock <channel_id> <output_json>
 # Writes the oldest block for a given channel to a JSON file
 fetchOldestBlock() {
-  setEnvironment exporterorg
+  setEnvironment impreAndesUsersorg
 
   echo "Fetching the most recent configuration block for the channel"
   set -x
@@ -173,7 +173,7 @@ fetchOldestBlock() {
 # fetchChannelConfig <channel_id> <output_json>
 # Writes the current channel config for a given channel to a JSON file
 fetchChannelConfig() {
-  setEnvironment exporterorg
+  setEnvironment impreAndesUsersorg
 
   BLOCKFILE=$CHANNEL_NAME.block
   if [[ $# -eq 1 ]]
@@ -196,12 +196,12 @@ updateAnchorPeersForOrg() {
 
   if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
     set -x
-    peer channel update -o orderer.trade.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CHANNEL_NAME}/${CORE_PEER_LOCALMSPID}anchors.tx --connTimeout 120s >&log.txt
+    peer channel update -o orderer.impreAndes.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CHANNEL_NAME}/${CORE_PEER_LOCALMSPID}anchors.tx --connTimeout 120s >&log.txt
     res=$?
     set +x
   else
     set -x
-    peer channel update -o orderer.trade.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CHANNEL_NAME}/${CORE_PEER_LOCALMSPID}anchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --connTimeout 120s >&log.txt
+    peer channel update -o orderer.impreAndes.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CHANNEL_NAME}/${CORE_PEER_LOCALMSPID}anchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --connTimeout 120s >&log.txt
     res=$?
     set +x
   fi
@@ -213,13 +213,13 @@ updateAnchorPeersForOrg() {
 updateAnchorPeers() {
   if [ "$NUM_ORGS_IN_CHANNEL" == "3" ]
   then
-    ORG_LIST="exporterorg importerorg regulatororg"
+    ORG_LIST="impreAndesUsersorg printerorg regulatororg"
   else
-    ORG_LIST="exporterorg importerorg carrierorg regulatororg"
+    ORG_LIST="impreAndesUsersorg printerorg senecasorg regulatororg"
   fi
   for org in $ORG_LIST; do
     updateAnchorPeersForOrg $org
-    echo "===================== peer0.${org}.trade.com set as anchor in ${org} in channel '$CHANNEL_NAME' ===================== "
+    echo "===================== peer0.${org}.impreAndes.com set as anchor in ${org} in channel '$CHANNEL_NAME' ===================== "
     sleep $DELAY
     echo
   done
@@ -279,19 +279,19 @@ updateChannelConfiguration() {
   # Get the config signed by a majority of orgs in the channel
   if [ "$NUM_ORGS_IN_CHANNEL" == "3" ]
   then
-    ORG_LIST="exporterorg regulatororg"
+    ORG_LIST="impreAndesUsersorg regulatororg"
   else
-    ORG_LIST="exporterorg importerorg carrierorg"
+    ORG_LIST="impreAndesUsersorg printerorg senecasorg"
   fi
   for org in $ORG_LIST; do
     signConfigtxAsPeerOrg $org exportingEntityOrg_update_in_envelope.pb
-    echo "===================== peer0.${org}.trade.com signed update for channel '$CHANNEL_NAME' ===================== "
+    echo "===================== peer0.${org}.impreAndes.com signed update for channel '$CHANNEL_NAME' ===================== "
     echo
   done
 
   # Submit a channel configuration update transaction
   set -x
-  peer channel update -f exportingEntityOrg_update_in_envelope.pb -c $CHANNEL_NAME -o orderer.trade.com:7050 --tls --cafile $ORDERER_CA --connTimeout 120s >&log.txt
+  peer channel update -f exportingEntityOrg_update_in_envelope.pb -c $CHANNEL_NAME -o orderer.impreAndes.com:7050 --tls --cafile $ORDERER_CA --connTimeout 120s >&log.txt
   res=$?
   set +x
   cat log.txt
@@ -315,7 +315,7 @@ updateAnchorPeerForNewOrg() {
   configtxlator proto_decode --input ${CHANNEL_NAME}_config_block.pb --type common.Block | jq .data.data[0].payload.data.config > ${CHANNEL_NAME}_config.json
 
   # Add anchor peer specification to the configuration of our new org
-  jq '.channel_group.groups.Application.groups.ExportingEntityOrg.values += {"AnchorPeers":{"mod_policy": "Admins","value":{"anchor_peers": [{"host": "peer0.exportingentityorg.trade.com","port": 12051}]},"version": "0"}}' ${CHANNEL_NAME}_config.json > ${CHANNEL_NAME}_modified_config.json
+  jq '.channel_group.groups.Application.groups.ExportingEntityOrg.values += {"AnchorPeers":{"mod_policy": "Admins","value":{"anchor_peers": [{"host": "peer0.exportingentityorg.impreAndes.com","port": 12051}]},"version": "0"}}' ${CHANNEL_NAME}_config.json > ${CHANNEL_NAME}_modified_config.json
 
   # Convert config JSON to protobuf format
   configtxlator proto_encode --input ${CHANNEL_NAME}_config.json --type common.Config --output ${CHANNEL_NAME}_config.pb
@@ -337,12 +337,12 @@ updateAnchorPeerForNewOrg() {
 
   # Get the config signed by an admin of the new org
   signConfigtxAsPeerOrg exportingentityorg exportingEntityOrg_anchor_update_in_envelope.pb
-  echo "===================== peer0.exportingentityorg.trade.com signed update for channel '$CHANNEL_NAME' ===================== "
+  echo "===================== peer0.exportingentityorg.impreAndes.com signed update for channel '$CHANNEL_NAME' ===================== "
   echo
 
   # Submit a channel configuration update transaction
   set -x
-  peer channel update -f exportingEntityOrg_anchor_update_in_envelope.pb -c $CHANNEL_NAME -o orderer.trade.com:7050 --tls --cafile $ORDERER_CA --connTimeout 120s >&log.txt
+  peer channel update -f exportingEntityOrg_anchor_update_in_envelope.pb -c $CHANNEL_NAME -o orderer.impreAndes.com:7050 --tls --cafile $ORDERER_CA --connTimeout 120s >&log.txt
   res=$?
   set +x
   cat log.txt

@@ -24,7 +24,7 @@ Organizations:
         ID: TradeOrdererOrgMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: ../crypto-config/ordererOrganizations/trade.com/msp
+        MSPDir: ../crypto-config/ordererOrganizations/impreAndes.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -41,21 +41,21 @@ Organizations:
                 Rule: "OR('TradeOrdererOrgMSP.admin')"
 
         OrdererEndpoints:
-            - orderer.trade.com:7050
-            - orderer2.trade.com:7050
-            - orderer3.trade.com:7050
-            - orderer4.trade.com:7050
-            - orderer5.trade.com:7050
+            - orderer.impreAndes.com:7050
+            - orderer2.impreAndes.com:7050
+            - orderer3.impreAndes.com:7050
+            - orderer4.impreAndes.com:7050
+            - orderer5.impreAndes.com:7050
 
-    - &ExporterOrg
+    - &ImpreAndesUsersOrg
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: ExporterOrg
+        Name: ImpreAndesUsersOrg
 
         # ID to load the MSP definition as
-        ID: ExporterOrgMSP
+        ID: ImpreAndesUsersOrgMSP
 
-        MSPDir: ../crypto-config/peerOrganizations/exporterorg.trade.com/msp
+        MSPDir: ../crypto-config/peerOrganizations/impreAndesUsersorg.impreAndes.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -63,34 +63,34 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('ExporterOrgMSP.admin', 'ExporterOrgMSP.peer', 'ExporterOrgMSP.client')"
+                Rule: "OR('ImpreAndesUsersOrgMSP.admin', 'ImpreAndesUsersOrgMSP.peer', 'ImpreAndesUsersOrgMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('ExporterOrgMSP.admin', 'ExporterOrgMSP.client')"
+                Rule: "OR('ImpreAndesUsersOrgMSP.admin', 'ImpreAndesUsersOrgMSP.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('ExporterOrgMSP.admin')"
+                Rule: "OR('ImpreAndesUsersOrgMSP.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('ExporterOrgMSP.peer')"
+                Rule: "OR('ImpreAndesUsersOrgMSP.peer')"
 
         # leave this flag set to true.
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0.exporterorg.trade.com
+            - Host: peer0.impreAndesUsersorg.impreAndes.com
               Port: 7051
 
-    - &ImporterOrg
+    - &PrinterOrg
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: ImporterOrg
+        Name: PrinterOrg
 
         # ID to load the MSP definition as
-        ID: ImporterOrgMSP
+        ID: PrinterOrgMSP
 
-        MSPDir: ../crypto-config/peerOrganizations/importerorg.trade.com/msp
+        MSPDir: ../crypto-config/peerOrganizations/printerorg.impreAndes.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -98,33 +98,33 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('ImporterOrgMSP.admin', 'ImporterOrgMSP.peer', 'ImporterOrgMSP.client')"
+                Rule: "OR('PrinterOrgMSP.admin', 'PrinterOrgMSP.peer', 'PrinterOrgMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('ImporterOrgMSP.admin', 'ImporterOrgMSP.client')"
+                Rule: "OR('PrinterOrgMSP.admin', 'PrinterOrgMSP.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('ImporterOrgMSP.admin')"
+                Rule: "OR('PrinterOrgMSP.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('ImporterOrgMSP.peer')"
+                Rule: "OR('PrinterOrgMSP.peer')"
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0.importerorg.trade.com
+            - Host: peer0.printerorg.impreAndes.com
               Port: 8051
 
-    - &CarrierOrg
+    - &SenecasOrg
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: CarrierOrg
+        Name: SenecasOrg
 
         # ID to load the MSP definition as
-        ID: CarrierOrgMSP
+        ID: SenecasOrgMSP
 
-        MSPDir: ../crypto-config/peerOrganizations/carrierorg.trade.com/msp
+        MSPDir: ../crypto-config/peerOrganizations/senecasorg.impreAndes.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -132,22 +132,22 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('CarrierOrgMSP.admin', 'CarrierOrgMSP.peer', 'CarrierOrgMSP.client')"
+                Rule: "OR('SenecasOrgMSP.admin', 'SenecasOrgMSP.peer', 'SenecasOrgMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('CarrierOrgMSP.admin', 'CarrierOrgMSP.client')"
+                Rule: "OR('SenecasOrgMSP.admin', 'SenecasOrgMSP.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('CarrierOrgMSP.admin')"
+                Rule: "OR('SenecasOrgMSP.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('CarrierOrgMSP.peer')"
+                Rule: "OR('SenecasOrgMSP.peer')"
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0.carrierorg.trade.com
+            - Host: peer0.senecasorg.impreAndes.com
               Port: 9051
 
     - &RegulatorOrg
@@ -158,7 +158,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: RegulatorOrgMSP
 
-        MSPDir: ../crypto-config/peerOrganizations/regulatororg.trade.com/msp
+        MSPDir: ../crypto-config/peerOrganizations/regulatororg.impreAndes.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -181,7 +181,7 @@ Organizations:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0.regulatororg.trade.com
+            - Host: peer0.regulatororg.impreAndes.com
               Port: 10051
 
 ################################################################################
@@ -385,14 +385,14 @@ Profiles:
         Consortiums:
             TradeConsortium:
                 Organizations:
-                    - *ExporterOrg
-                    - *ImporterOrg
+                    - *ImpreAndesUsersOrg
+                    - *PrinterOrg
                     - *RegulatorOrg
             ShippingConsortium:
                 Organizations:
-                    - *ExporterOrg
-                    - *ImporterOrg
-                    - *CarrierOrg
+                    - *ImpreAndesUsersOrg
+                    - *PrinterOrg
+                    - *SenecasOrg
                     - *RegulatorOrg
     ThreeOrgsTradeChannel:
         Consortium: TradeConsortium
@@ -400,8 +400,8 @@ Profiles:
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *ExporterOrg
-                - *ImporterOrg
+                - *ImpreAndesUsersOrg
+                - *PrinterOrg
                 - *RegulatorOrg
             Capabilities:
                 <<: *ApplicationCapabilities
@@ -411,9 +411,9 @@ Profiles:
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *ExporterOrg
-                - *ImporterOrg
-                - *CarrierOrg
+                - *ImpreAndesUsersOrg
+                - *PrinterOrg
+                - *SenecasOrg
                 - *RegulatorOrg
             Capabilities:
                 <<: *ApplicationCapabilities
@@ -427,7 +427,7 @@ Profiles:
             OrdererType: kafka
             Kafka:
                 Brokers:
-                - kafka.trade.com:9092
+                - kafka.impreAndes.com:9092
 
             Organizations:
             - *TradeOrdererOrg
@@ -440,14 +440,14 @@ Profiles:
         Consortiums:
             TradeConsortium:
                 Organizations:
-                - *ExporterOrg
-                - *ImporterOrg
+                - *ImpreAndesUsersOrg
+                - *PrinterOrg
                 - *RegulatorOrg
             ShippingConsortium:
                 Organizations:
-                - *ExporterOrg
-                - *ImporterOrg
-                - *CarrierOrg
+                - *ImpreAndesUsersOrg
+                - *PrinterOrg
+                - *SenecasOrg
                 - *RegulatorOrg
 
     TradeMultiNodeEtcdRaft:
@@ -459,32 +459,32 @@ Profiles:
             OrdererType: etcdraft
             EtcdRaft:
                 Consenters:
-                - Host: orderer.trade.com
+                - Host: orderer.impreAndes.com
                   Port: 7050
-                  ClientTLSCert: ../crypto-config/ordererOrganizations/trade.com/orderers/orderer.trade.com/tls/server.crt
-                  ServerTLSCert: ../crypto-config/ordererOrganizations/trade.com/orderers/orderer.trade.com/tls/server.crt
-                - Host: orderer2.trade.com
+                  ClientTLSCert: ../crypto-config/ordererOrganizations/impreAndes.com/orderers/orderer.impreAndes.com/tls/server.crt
+                  ServerTLSCert: ../crypto-config/ordererOrganizations/impreAndes.com/orderers/orderer.impreAndes.com/tls/server.crt
+                - Host: orderer2.impreAndes.com
                   Port: 7050
-                  ClientTLSCert: ../crypto-config/ordererOrganizations/trade.com/orderers/orderer2.trade.com/tls/server.crt
-                  ServerTLSCert: ../crypto-config/ordererOrganizations/trade.com/orderers/orderer2.trade.com/tls/server.crt
-                - Host: orderer3.trade.com
+                  ClientTLSCert: ../crypto-config/ordererOrganizations/impreAndes.com/orderers/orderer2.impreAndes.com/tls/server.crt
+                  ServerTLSCert: ../crypto-config/ordererOrganizations/impreAndes.com/orderers/orderer2.impreAndes.com/tls/server.crt
+                - Host: orderer3.impreAndes.com
                   Port: 7050
-                  ClientTLSCert: ../crypto-config/ordererOrganizations/trade.com/orderers/orderer3.trade.com/tls/server.crt
-                  ServerTLSCert: ../crypto-config/ordererOrganizations/trade.com/orderers/orderer3.trade.com/tls/server.crt
-                - Host: orderer4.trade.com
+                  ClientTLSCert: ../crypto-config/ordererOrganizations/impreAndes.com/orderers/orderer3.impreAndes.com/tls/server.crt
+                  ServerTLSCert: ../crypto-config/ordererOrganizations/impreAndes.com/orderers/orderer3.impreAndes.com/tls/server.crt
+                - Host: orderer4.impreAndes.com
                   Port: 7050
-                  ClientTLSCert: ../crypto-config/ordererOrganizations/trade.com/orderers/orderer4.trade.com/tls/server.crt
-                  ServerTLSCert: ../crypto-config/ordererOrganizations/trade.com/orderers/orderer4.trade.com/tls/server.crt
-                - Host: orderer5.trade.com
+                  ClientTLSCert: ../crypto-config/ordererOrganizations/impreAndes.com/orderers/orderer4.impreAndes.com/tls/server.crt
+                  ServerTLSCert: ../crypto-config/ordererOrganizations/impreAndes.com/orderers/orderer4.impreAndes.com/tls/server.crt
+                - Host: orderer5.impreAndes.com
                   Port: 7050
-                  ClientTLSCert: ../crypto-config/ordererOrganizations/trade.com/orderers/orderer5.trade.com/tls/server.crt
-                  ServerTLSCert: ../crypto-config/ordererOrganizations/trade.com/orderers/orderer5.trade.com/tls/server.crt
+                  ClientTLSCert: ../crypto-config/ordererOrganizations/impreAndes.com/orderers/orderer5.impreAndes.com/tls/server.crt
+                  ServerTLSCert: ../crypto-config/ordererOrganizations/impreAndes.com/orderers/orderer5.impreAndes.com/tls/server.crt
             Addresses:
-                - orderer.trade.com:7050
-                - orderer2.trade.com:7050
-                - orderer3.trade.com:7050
-                - orderer4.trade.com:7050
-                - orderer5.trade.com:7050
+                - orderer.impreAndes.com:7050
+                - orderer2.impreAndes.com:7050
+                - orderer3.impreAndes.com:7050
+                - orderer4.impreAndes.com:7050
+                - orderer5.impreAndes.com:7050
 
             Organizations:
             - *TradeOrdererOrg
@@ -497,12 +497,12 @@ Profiles:
         Consortiums:
             TradeConsortium:
                 Organizations:
-                - *ExporterOrg
-                - *ImporterOrg
+                - *ImpreAndesUsersOrg
+                - *PrinterOrg
                 - *RegulatorOrg
             ShippingConsortium:
                 Organizations:
-                - *ExporterOrg
-                - *ImporterOrg
-                - *CarrierOrg
+                - *ImpreAndesUsersOrg
+                - *PrinterOrg
+                - *SenecasOrg
                 - *RegulatorOrg

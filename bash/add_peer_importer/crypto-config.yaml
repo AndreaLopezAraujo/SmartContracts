@@ -7,10 +7,10 @@
 # ---------------------------------------------------------------------------
 PeerOrgs:
   # ---------------------------------------------------------------------------
-  # ImporterOrg
+  # PrinterOrg
   # ---------------------------------------------------------------------------
-  - Name: ImporterOrg
-    Domain: importerorg.trade.com
+  - Name: PrinterOrg
+    Domain: printerorg.impreAndes.com
     EnableNodeOUs: true
     Template:
       Count: 2
