@@ -9,7 +9,7 @@ OrdererOrgs:
   # ---------------------------------------------------------------------------
   # ImpreAndes
   # ---------------------------------------------------------------------------
-  - Name: ImpreAndes
+  - Name: ImpreAndesOrd
     Domain: impreAndes.com
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
@@ -25,8 +25,8 @@ PeerOrgs:
   # ---------------------------------------------------------------------------
   # ImpreAndesUsers
   # ---------------------------------------------------------------------------
-  - Name: ImpreAndesUsers
-    Domain: impreAndesUsers.trade.com
+  - Name: ImpreAndesUsersOrd
+    Domain: impreAndesUsers.impreAndes.com
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
     # "Specs"
@@ -76,7 +76,7 @@ PeerOrgs:
   # PrinterOrg: See "ExporterOrg" for full specification
   # ---------------------------------------------------------------------------
   - Name: PrinterOrg
-    Domain: printerOrg.trade.com
+    Domain: printerOrg.impreAndes.com
     EnableNodeOUs: true
     Template:
       Count: 1
@@ -86,7 +86,7 @@ PeerOrgs:
   # SenecasOrg: See "ExporterOrg" for full specification
   # ---------------------------------------------------------------------------
   - Name: SenecasOrg
-    Domain: SenecasOrg.trade.com
+    Domain: senecasOrg.impreAndes.com
     EnableNodeOUs: true
     Template:
       Count: 1
@@ -96,7 +96,7 @@ PeerOrgs:
   # RegulatorOrg: See "ExporterOrg" for full specification
   # ---------------------------------------------------------------------------
   - Name: RegulatorOrg
-    Domain: regulatororg.trade.com
+    Domain: regulatororg.impreAndes.com
     EnableNodeOUs: true
     Template:
       Count: 1
