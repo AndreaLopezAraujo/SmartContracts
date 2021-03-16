@@ -198,7 +198,7 @@
         gateways: "{{ output_dir }}/gateways/regulatororg"
       - &OrdererOrg
         msp:
-          id: "TradeOrdererOrgMSP"
+          id: "ImpreAndesOrgMSP"
           admin:
             identity: "ordererAdmin"
             secret: "ordererAdminpw"
@@ -239,7 +239,7 @@
             display_name: "Orderer1"
             cluster_name: "OrdererCluster"
         nodes: "{{ output_dir }}/nodes/orderer"
-        wallet: "{{ output_dir }}/wallets/orderer/TradeOrdererOrgMSP"
+        wallet: "{{ output_dir }}/wallets/orderer/ImpreAndesOrgMSP"
         gateways: "{{ output_dir }}/gateways/ordererorg"
     channels:
       - &TradeChannel

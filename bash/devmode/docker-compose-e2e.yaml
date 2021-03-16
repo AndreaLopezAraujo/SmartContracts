@@ -14,7 +14,7 @@ services:
       - ORDERER_GENERAL_LISTENADDRESS=orderer
       - ORDERER_GENERAL_BOOTSTRAPMETHOD=file
       - ORDERER_GENERAL_BOOTSTRAPFILE=genesis.block
-      - ORDERER_GENERAL_LOCALMSPID=TradeOrdererOrgMSP
+      - ORDERER_GENERAL_LOCALMSPID=ImpreAndesOrgMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/msp
       - GRPC_TRACE=all=true,
       - GRPC_VERBOSITY=debug

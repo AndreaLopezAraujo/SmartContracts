@@ -1,7 +1,7 @@
 {
 	"trade-network": {
 		"orderer": {
-			"mspid": "TradeOrdererOrgMSP",
+			"mspid": "ImpreAndesOrgMSP",
 			"url": "grpcs://orderer.trade.com:7050",
 			"server-hostname": "orderer.trade.com",
 			"tls_cacerts": "../bash/crypto-config/ordererOrganizations/trade.com/orderers/orderer.trade.com/msp/tlscacerts/tlsca.trade.com-cert.pem"

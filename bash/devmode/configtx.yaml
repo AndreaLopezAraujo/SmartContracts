@@ -14,13 +14,13 @@ Organizations:
 
     # SampleOrg defines an MSP using the sampleconfig.  It should never be used
     # in production but may be used as a template for other definitions
-    - &TradeOrdererOrg
+    - &ImpreAndesOrg
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: TradeOrdererOrg
+        Name: ImpreAndesOrg
 
         # ID to load the MSP definition as
-        ID: TradeOrdererOrgMSP
+        ID: ImpreAndesOrgMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
         MSPDir: crypto-config/ordererOrganizations/impreAndes.com/msp
@@ -31,13 +31,13 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('TradeOrdererOrgMSP.member')"
+                Rule: "OR('ImpreAndesOrgMSP.member')"
             Writers:
                 Type: Signature
-                Rule: "OR('TradeOrdererOrgMSP.member')"
+                Rule: "OR('ImpreAndesOrgMSP.member')"
             Admins:
                 Type: Signature
-                Rule: "OR('TradeOrdererOrgMSP.admin')"
+                Rule: "OR('ImpreAndesOrgMSP.admin')"
 
     - &DevOrg
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -290,12 +290,12 @@ Channel: &ChannelDefaults
 ################################################################################
 Profiles:
 
-    OneOrgTradeOrdererGenesis:
+    OneOrgImpreAndesGenesis:
         <<: *ChannelDefaults
         Orderer:
             <<: *OrdererDefaults
             Organizations:
-                - *TradeOrdererOrg
+                - *ImpreAndesOrg
             Capabilities:
                 <<: *OrdererCapabilities
         Consortiums:

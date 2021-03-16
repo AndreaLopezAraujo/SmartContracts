@@ -1153,7 +1153,7 @@ function generateChannelArtifacts() {
   mkdir -p channel-artifacts/${CHANNEL_NAME}
 
   if [ "$DEV_MODE" = true ] ; then
-    PROFILE=OneOrgTradeOrdererGenesis
+    PROFILE=OneOrgImpreAndesGenesis
     CHANNEL_PROFILE=OneOrgTradeChannel
   elif [ "$ORDERER_MODE" = "prod" ]
   then
@@ -1170,7 +1170,7 @@ function generateChannelArtifacts() {
     fi
     FABRIC_CFG_PATH=${PWD}/multiple_orderers
   else
-    PROFILE=FourOrgsTradeOrdererGenesis
+    PROFILE=FourOrgsImpreAndesGenesis
     if [ "$NUM_ORGS_IN_CHANNEL" == "3" ]
     then
       CHANNEL_PROFILE=ThreeOrgsTradeChannel

@@ -31,7 +31,7 @@ var FOUR_ORG_MEMBERS_AND_ADMIN = [{
 }, {
 	role: {
 		name: 'admin',
-		mspId: 'TradeOrdererOrgMSP'
+		mspId: 'ImpreAndesOrgMSP'
 	}
 }];
 
@@ -63,7 +63,7 @@ var FIVE_ORG_MEMBERS_AND_ADMIN = [{
 }, {
 	role: {
 		name: 'admin',
-		mspId: 'TradeOrdererOrgMSP'
+		mspId: 'ImpreAndesOrgMSP'
 	}
 }];
 

@@ -1,7 +1,7 @@
 [
     {
         "name": "orderer.impreAndes.com",
-        "msp_id": "TradeOrdererOrgMSP",
+        "msp_id": "ImpreAndesOrgMSP",
         "api_url": "grpcs://localhost:7050",
         "type": "fabric-orderer",
         "ssl_target_name_override": "orderer.impreAndes.com",

@@ -23,7 +23,7 @@ OrdererOrgs:
 # ---------------------------------------------------------------------------
 PeerOrgs:
   # ---------------------------------------------------------------------------
-  # ImpreAndesUsers
+  # ImpreAndesUsersOrd
   # ---------------------------------------------------------------------------
   - Name: ImpreAndesUsersOrd
     Domain: impreAndesUsersorg.impreAndes.com
