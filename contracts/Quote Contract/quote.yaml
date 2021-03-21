@@ -2,17 +2,22 @@
 #https://swagger.io/docs/specification/basic-structure/
 openapi: 3.0.0
 info:
-  title: ToDo API.
-  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  title: Quote contract.
+  description: Here are the methoods of the quote contract
   version: 0.0.1
+  contact:
+    email: ac.lopez@uniandes.edu.co
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
   - url: /api
     description: API server
 paths:
-  /:
+  /quote:
     get:
-      summary: Return ToDo's
-      description: 
+      summary: Return quote's
+      description: Get all the quotes
       responses:
         '200':    # status code
           description: Some description
@@ -23,8 +28,8 @@ paths:
                 items:
                   type: object
     post:
-      summary: Create ToDo
-      description:
+      summary: Add a new quotation to blockchain
+      description: Create a quote
       requestBody:
         required: true
         content:
@@ -35,22 +40,28 @@ paths:
                 text:
                   type: string
             example:
-              text: some Text
+              moneyPrice: 100
+              materialPrice: 20
+              timePrice: 200
+              docName: trabajoFinal
+              date: 20/03/2021
+              userId: 123123
+              printerId: 8372
       responses:
         '200':    # status code
-          description: 
+          description: Respose
           content:
             application/json:
               schema:
                 type: object
   /{id}:
     get:
-      summary: Returns a ToDo by ID
+      summary: Returns a quote by ID
       parameters:
         - name: id
           in: path
           required: true
-          description: The ID of the ToDo to return.
+          description: The ID of the quote to return.
           schema:
             type: integer
             format: int64
@@ -59,40 +70,20 @@ paths:
             10
       responses:
           '200':    # status code
-            description: 
+            description: The quote
             content:
               application/json:
                 schema:
                   type: object
-    put:
-      summary: Update a ToDo by ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the ToDo to return.
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-          example:
-            10
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                text:
-                  type: string
-            example:
-              text: New Text
-      responses:
-          '200':    # status code
-            description: 
-            content:
-              application/json:
-                schema:
-                  type: object
+                  properties:
+                    text:
+                      type: string
+                example:
+                  moneyPrice: 100
+                  materialPrice: 20
+                  timePrice: 200
+                  docName: trabajoFinal
+                  date: 20/03/2021
+                  userId: 123123
+                  printerId: 8372
 
