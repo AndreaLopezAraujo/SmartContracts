@@ -1,22 +1,22 @@
 var express = require('express');
 var router = express.Router();
 const {
-  getAllQuote, 
-  getQuote, 
-  postQuote, 
-  putQuote,
-  getQuoteHistory
+  getAllPrint, 
+  getPrint, 
+  postPrint, 
+  putPrint,
+  getPrintHistory
 } = require('../controllers/print');
 const {authTransactionMiddleware} = require('../controllers/transaction');
 
 
-router.get('/', getAllQuote);
-router.get('/:id', getQuote);
-router.post('/', authTransactionMiddleware, postQuote);
-router.put('/', authTransactionMiddleware, putQuote);
+router.get('/', getAllPrint);
+router.get('/:id', getPrint);
+router.post('/', authTransactionMiddleware, postPrint);
+router.put('/', authTransactionMiddleware, putPrint);
 
 
-router.get('/:id/:history', getQuoteHistory)
+router.get('/:id/:history', getPrintHistory)
 
 router.use('/*', function(req, res){
   res.status(404).json({msg: 'Resource not found'});

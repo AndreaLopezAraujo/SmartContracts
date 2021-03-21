@@ -25,7 +25,7 @@ function buildAddress(transactionFamily){
 
 const address = buildAddress(TRANSACTION_FAMILY);
 
-module.exports.getAllQuote = async function(req, res) {
+module.exports.getAllPrint = async function(req, res) {
 
   let params = {
     headers: {'Content-Type': 'application/json'}
@@ -33,7 +33,7 @@ module.exports.getAllQuote = async function(req, res) {
 
   let query = await axios.get(`${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`, params);
   console.log(query.data.data);
-  let allQuote = _.chain(query.data.data)
+  let allPrint = _.chain(query.data.data)
     .map((d) => {
       let base = JSON.parse(Buffer.from(d.data, 'base64'));
       return base;
@@ -41,11 +41,11 @@ module.exports.getAllQuote = async function(req, res) {
     .flatten()
     .value();
 
-  res.json(allQuote);
+  res.json(allPrint);
 
 };
 
-module.exports.getQuote = async function(req, res) {
+module.exports.getPrint = async function(req, res) {
   try{
     let values = await queryState(address(req.params.id + ""));
     let value = _.find(values, v => v.key == req.params.id + "");
@@ -61,7 +61,7 @@ module.exports.getQuote = async function(req, res) {
     return res.status(500).json({error:e})
   }
 }
-module.exports.postQuote = async function(req, res) {
+module.exports.postPrint = async function(req, res) {
   const {transaction, txid} = req.body;
   const address = getAddress(TRANSACTION_FAMILY, txid);
 
@@ -82,7 +82,7 @@ module.exports.postQuote = async function(req, res) {
   }
 };
 
-module.exports.putQuote = async function(req, res) {
+module.exports.putPrint = async function(req, res) {
   const {transaction, txid} = req.body;
 
   const input = getAddress(TRANSACTION_FAMILY, JSON.parse(transaction).input);
@@ -139,7 +139,7 @@ function readFile(file){
   });
 }
 
-module.exports.getQuoteHistory = async function(req, res) {
+module.exports.getPrintHistory = async function(req, res) {
   let state = await readFile('./data/current_state.json');
 
   if(!(req.params.id in state)){
