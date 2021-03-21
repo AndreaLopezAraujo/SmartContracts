@@ -1,8 +1,0 @@
-{
-    "index": {
-        "fields": [ "tradeID" ]
-    },
-    "ddoc": "regulatorIndexDoc",
-    "name": "regulatorIndex",
-    "type": "json"
-}

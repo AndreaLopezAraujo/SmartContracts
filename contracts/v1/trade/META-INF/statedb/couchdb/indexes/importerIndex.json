@@ -1,8 +1,0 @@
-{
-    "index": {
-        "fields": [ "importerMSP"]
-    },
-    "ddoc": "importerIndexDoc",
-    "name": "importerIndex",
-    "type": "json"
-}

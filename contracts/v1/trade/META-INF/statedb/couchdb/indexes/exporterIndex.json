@@ -1,8 +1,0 @@
-{
-    "index": {
-        "fields": [ "exporterMSP"]
-    },
-    "ddoc": "exporterIndexDoc",
-    "name": "exporterIndex",
-    "type": "json"
-}
