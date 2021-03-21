@@ -61,6 +61,7 @@ const publicKey = Buffer.from(pubKey).toString('hex');
     input: null,
     output:{
       value: message + "3",
+      status: "quote",
       owner: publicKey
     }
   };
@@ -71,6 +72,7 @@ const publicKey = Buffer.from(pubKey).toString('hex');
     input: null,
     output:{
       value: message,
+      status: "quote",
       owner: publicKey
     }
   };

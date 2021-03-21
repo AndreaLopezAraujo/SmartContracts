@@ -61,8 +61,6 @@ module.exports.getQuote = async function(req, res) {
     return res.status(500).json({error:e})
   }
 }
-
-
 module.exports.postQuote = async function(req, res) {
   const {transaction, txid} = req.body;
   const address = getAddress(TRANSACTION_FAMILY, txid);
@@ -122,7 +120,6 @@ module.exports.putQuote = async function(req, res) {
     return res.status(500).json({msg: errMsg});
   }
 };
-
 
 
 function readFile(file){
