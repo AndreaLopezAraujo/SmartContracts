@@ -11,7 +11,7 @@ const { default: axios } = require("axios");
 const hash512 = (x) =>
   crypto.createHash('sha512').update(x).digest('hex');
 
-const TRANSACTION_FAMILY = 'todos';
+const TRANSACTION_FAMILY = 'quotes';
 const TRANSACTION_FAMILY_VERSION = '1.0';
 const INT_KEY_NAMESPACE = hash512(TRANSACTION_FAMILY).substring(0, 6);
 
@@ -23,7 +23,7 @@ const INT_KEY_NAMESPACE = hash512(TRANSACTION_FAMILY).substring(0, 6);
   };
 
   let query = await axios.get(`${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`, params);
-  let allTodos = _.chain(query.data.data)
+  let allQuote = _.chain(query.data.data)
     .map((d) => {
       return {
         address: d.address,
@@ -34,6 +34,6 @@ const INT_KEY_NAMESPACE = hash512(TRANSACTION_FAMILY).substring(0, 6);
     // .map(d => d.value)
     .value();
 
-  console.dir(allTodos, {depth: null, colors: true})
+  console.dir(allQuote, {depth: null, colors: true})
 
 })();

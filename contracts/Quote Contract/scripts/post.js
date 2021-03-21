@@ -11,7 +11,7 @@ const { default: axios } = require("axios");
 const hash512 = (x) =>
   crypto.createHash('sha512').update(x).digest('hex');
 
-const TRANSACTION_FAMILY = 'todos';
+const TRANSACTION_FAMILY = 'quotes';
 const TRANSACTION_FAMILY_VERSION = '1.0';
 const INT_KEY_NAMESPACE = hash512(TRANSACTION_FAMILY).substring(0, 6)
 
@@ -43,7 +43,7 @@ else{
   return;
 }
 
-let message = "default message";
+let message = "moneyPrice: 100,materialPrice: 20,timePrice: 200,docName: trabajoFinal,date: 20/03/2021,userId: 123123,printerId: 8372";
 if(process.argv[3]){
   message = process.argv[3];
 }
@@ -54,9 +54,8 @@ let pubKey = secp256k1.publicKeyConvert(Uint8Array.from(Buffer.from(wallet.publi
 const publicKey = Buffer.from(pubKey).toString('hex');
 
 (async () => {
-
   const payload1 = {
-    type: 'todo',
+    type: 'quote',
     id: 10,
     
     input: null,
@@ -66,7 +65,7 @@ const publicKey = Buffer.from(pubKey).toString('hex');
     }
   };
   const payload2 = {
-    type: 'todo',
+    type: 'quote',
     id: 10,
     
     input: null,
