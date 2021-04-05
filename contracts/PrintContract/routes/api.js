@@ -6,14 +6,14 @@ const {
   postPrint, 
   putPrint,
   getPrintHistory
-} = require('../controllers/print');
+} = require('../controllers/Print');
 const {authTransactionMiddleware} = require('../controllers/transaction');
 
 
-router.get('/', getAllPrint);
-router.get('/:id', getPrint);
-router.post('/', authTransactionMiddleware, postPrint);
-router.put('/', authTransactionMiddleware, putPrint);
+router.get('/print', getAllPrint);
+router.get('/print:id', getPrint);
+router.post('/print', postPrint);
+router.put('/print', putPrint);
 
 
 router.get('/:id/:history', getPrintHistory)

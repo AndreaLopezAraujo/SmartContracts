@@ -2,8 +2,8 @@
 #https://swagger.io/docs/specification/basic-structure/
 openapi: 3.0.0
 info:
-  title: Quote contract.
-  description: Here are the methoods of the quote contract
+  title: Print contract.
+  description: Here are the methoods of the print contract
   version: 0.0.1
   contact:
     email: ac.lopez@uniandes.edu.co
@@ -14,10 +14,10 @@ servers:
   - url: /api
     description: API server
 paths:
-  /quote:
+  /print:
     get:
-      summary: Return quote's
-      description: Get all the quotes
+      summary: Return prints's
+      description: Get all the prints
       responses:
         '200':    # status code
           description: Some description
@@ -29,7 +29,7 @@ paths:
                   type: object
     post:
       summary: Add a new quotation to blockchain
-      description: Create a quote
+      description: Create a print
       requestBody:
         required: true
         content:
@@ -56,12 +56,12 @@ paths:
                 type: object
   /{id}:
     get:
-      summary: Returns a quote by ID
+      summary: Returns a print by ID
       parameters:
         - name: id
           in: path
           required: true
-          description: The ID of the quote to return.
+          description: The ID of the print to return.
           schema:
             type: integer
             format: int64
@@ -70,7 +70,7 @@ paths:
             10
       responses:
           '200':    # status code
-            description: The quote
+            description: The print
             content:
               application/json:
                 schema:

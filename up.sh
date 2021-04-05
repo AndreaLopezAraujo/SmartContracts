@@ -7,6 +7,7 @@ gnome-terminal --tab -- bash -c "cd ./contracts/tp1; npm start; bash"
 # gnome-terminal --tab -- bash -c "cd ./containers/client; npm start; bash"
 
 gnome-terminal --tab -- bash -c "cd ./contracts/QuoteContract; npm start; bash"
+gnome-terminal --tab -- bash -c "cd ./contracts/PrintContract; npm start; bash"
 #gnome-terminal --tab -- bash -c "cd ./containers/app/client; npm start; bash"
 
 rm ./contracts/QuoteContract/data/blocks.json
