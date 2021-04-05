@@ -4,7 +4,7 @@ const {
   InvalidTransaction
 } = require('sawtooth-sdk/processor/exceptions');
 
-const TP_FAMILY = 'todos';
+const TP_FAMILY = 'quote';
 const TP_VERSION = '1.0';
 
 const hash512 = (x) =>
@@ -25,8 +25,8 @@ const handlers = {
 
     const {type, id, input, output} = JSON.parse(transaction);
     
-    if (!type || type !== 'todo') {
-      throw new InvalidTransaction('type must be "todo"')
+    if (!type || type !== 'quote') {
+      throw new InvalidTransaction('type must be "quote"')
     }
 
     if (!id) {
@@ -50,8 +50,8 @@ const handlers = {
 
     const {type, input, output} = JSON.parse(transaction);
     
-    if (!type || type !== 'todo') {
-      throw new InvalidTransaction('type must be "todo"')
+    if (!type || type !== 'quote') {
+      throw new InvalidTransaction('type must be "quote"')
     }
 
     if(input == null){

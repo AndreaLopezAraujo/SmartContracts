@@ -7,13 +7,13 @@ const {
   putQuote,
   getQuoteHistory
 } = require('../controllers/quote');
-const {authTransactionMiddleware} = require('../controllers/transaction');
+//const {authTransactionMiddleware} = require('../controllers/transaction');
 
 
-router.get('/', getAllQuote);
-router.get('/:id', getQuote);
-router.post('/', authTransactionMiddleware, postQuote);
-router.put('/', authTransactionMiddleware, putQuote);
+router.get('/quote', getAllQuote);
+router.get('/quote:id', getQuote);
+router.post('/quote', postQuote);
+router.put('/quote', putQuote);
 
 
 router.get('/:id/:history', getQuoteHistory)
