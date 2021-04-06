@@ -30,8 +30,12 @@ module.exports.getAllQuote = async function(req, res) {
   let params = {
     headers: {'Content-Type': 'application/json'}
   };
-
-  let query = await axios.get(`${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`, params);
+  const query = await axios.get(
+    `${
+      process.env.SAWTOOTH_REST || "http://localhost:8008"
+    }/state?address=${INT_KEY_NAMESPACE}&limit=${20}`,
+    params
+  );
   console.log(query.data.data);
   let allQuote = _.chain(query.data.data)
     .map((d) => {
@@ -62,10 +66,12 @@ module.exports.getQuote = async function(req, res) {
   }
 }
 module.exports.postQuote = async function(req, res) {
-  const {transaction, txid} = req.body;
-  const address = getAddress(TRANSACTION_FAMILY, txid);
+  const txid1="0x7f664d71e4200b4a2989558d1f6006d0dac9771a36a546b1a47c384ec9c4f04b"
+  const quote = req.body;
+  const address = getAddress(TRANSACTION_FAMILY, txid1);
 
-  const payload = JSON.stringify({func: 'post', args:{transaction, txid}});
+  const payload = JSON.stringify({func: 'post', args:{quote}});
+  const re =res.json({msg:quote});
   
   try{
     await sendTransaction([{
@@ -73,9 +79,9 @@ module.exports.postQuote = async function(req, res) {
       transactionFamilyVersion: TRANSACTION_FAMILY_VERSION,
       inputs: [address],
       outputs: [address],
-      payload
+      payload:[payload]
     }]);
-    return res.json({msg:'ok'});
+    return re;
   }
   catch(err){
     return res.status(500).json({err});

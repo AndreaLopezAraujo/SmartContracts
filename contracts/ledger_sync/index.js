@@ -16,9 +16,9 @@ const { default: axios } = require('axios');
 const { reject } = require('underscore');
 const { resolve } = require('path');
 
-const BLOCKS_FILE = '../server/data/blocks.json';
-const STATE_FILE = '../server/data/state.json';
-const CURRENT_STATE_FILE = '../server/data/current_state.json';
+const BLOCKS_FILE = '../QuoteContract/data/blocks.json';
+const STATE_FILE = '../QuoteContract/data/state.json';
+const CURRENT_STATE_FILE = '../QuoteContract/data/current_state.json';
 
 
 let blocks = [];
