@@ -66,12 +66,13 @@ module.exports.getQuote = async function(req, res) {
   }
 }
 module.exports.postQuote = async function(req, res) {
-  const txid1="0x7f664d71e4200b4a2989558d1f6006d0dac9771a36a546b1a47c384ec9c4f04b"
-  const quote = req.body;
+  const transaction = req.body;
+  const txid1="12123232434"
+  const status ="quote"
   const address = getAddress(TRANSACTION_FAMILY, txid1);
 
-  const payload = JSON.stringify({func: 'post', args:{quote}});
-  const re =res.json({msg:quote});
+  const payload = JSON.stringify({func: 'post', args:{transaction, txid1,status}});
+  const re =res.json({msg:payload});
   
   try{
     await sendTransaction([{
