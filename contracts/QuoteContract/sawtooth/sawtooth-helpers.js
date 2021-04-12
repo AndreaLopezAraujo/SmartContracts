@@ -128,16 +128,19 @@ module.exports.sendTransaction = async function ( transactions, cancelToken /*Op
   });
   console.log(txs);
   const batchListBytes = buildBatch(txs);
-  const val=t;
   let params = {
     headers: {'Content-Type': 'application/octet-stream'}
   };
   if(cancelToken){
     params.cancelToken = cancelToken;
   }
-  let r=axios.post(`${process.env.SAWTOOTH_REST}/batches`, batchListBytes ,params);
-  console.log(r);
-  return true;
+  const url=`${process.env.SAWTOOTH_REST}/batches`;
+  const r=axios
+    .post(url, batchListBytes,params)
+    .then((response) => {
+    console.log(response.data.token);});
+    console.log(r);
+    return true;
 }
 
 const TIMEOUT = 1000*10;
@@ -297,7 +300,8 @@ const {
   // StateChangeList,
   ClientEventsSubscribeRequest,
   ClientEventsSubscribeResponse
-} = require('sawtooth-sdk/protobuf')
+} = require('sawtooth-sdk/protobuf');
+const { response } = require('../app');
 
 
 const PREFIX = hash512("intkey").substring(0, 6);

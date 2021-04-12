@@ -31,7 +31,7 @@ module.exports.getAllQuote = async function(req, res) {
   let params = {
     headers: {'Content-Type': 'application/json'}
   };
-  console.log(`${process.env.SAWTOOTH_REST}/batches`)
+  console.log(`${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`)
   const query = await axios.get(
     `${process.env.SAWTOOTH_REST}/batches`,
     params
@@ -67,16 +67,13 @@ module.exports.getQuote = async function(req, res) {
 }
 module.exports.postQuote = async function(req, res) {
   const transaction = req.body;
-  const txid1=req.body.quoteCode;
+  const txid1=req.body.userId;
   const quote=true;
   const separate=false;
   const printing=false;
   const paidOut=false;
   const refund=false;
   const address = getAddress(TRANSACTION_FAMILY, txid1);
-  let params = {
-    headers: {'Content-Type': 'application/json'}
-  };
   const payload = JSON.stringify({address: txid1, args:{transaction, quote,separate,printing,paidOut,refund}});
   const re =res.json({msg:payload});
   
