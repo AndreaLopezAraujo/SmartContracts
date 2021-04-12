@@ -110,7 +110,6 @@ function buildBatch(transactions)
 
 
 module.exports.sendTransaction = async function ( transactions, cancelToken /*Optional*/){
-
   const txs = _.map(transactions, (t) => {
     const {
       transactionFamily, 
@@ -119,6 +118,7 @@ module.exports.sendTransaction = async function ( transactions, cancelToken /*Op
       outputs,
       payload, 
     } = t;
+    console.log(t);
     return buildTransaction(
       transactionFamily, 
       transactionFamilyVersion, 
@@ -126,16 +126,18 @@ module.exports.sendTransaction = async function ( transactions, cancelToken /*Op
       outputs,
       payload);
   });
-
+  console.log(txs);
   const batchListBytes = buildBatch(txs);
-  
+  const val=t;
   let params = {
     headers: {'Content-Type': 'application/octet-stream'}
   };
   if(cancelToken){
     params.cancelToken = cancelToken;
-  } 
-  return axios.post(`${process.env.SAWTOOTH_REST}/batches`, batchListBytes, params);
+  }
+  let r=axios.post(`${process.env.SAWTOOTH_REST}/batches`, batchListBytes ,params);
+  console.log(r);
+  return true;
 }
 
 const TIMEOUT = 1000*10;

@@ -1,5 +1,6 @@
 var _ = require('underscore');
 const crypto = require('crypto');
+const mongo = require('../mongodb/mongo')
 const protobuf = require('sawtooth-sdk/protobuf');
 const { 
   sendTransaction, 
@@ -30,22 +31,21 @@ module.exports.getAllQuote = async function(req, res) {
   let params = {
     headers: {'Content-Type': 'application/json'}
   };
+  console.log(`${process.env.SAWTOOTH_REST}/batches`)
   const query = await axios.get(
-    `${
-      process.env.SAWTOOTH_REST || "http://localhost:8008"
-    }/state?address=${INT_KEY_NAMESPACE}&limit=${20}`,
+    `${process.env.SAWTOOTH_REST}/batches`,
     params
   );
   console.log(query.data.data);
-  let allQuote = _.chain(query.data.data)
-    .map((d) => {
-      let base = JSON.parse(Buffer.from(d.data, 'base64'));
-      return base;
-    })
-    .flatten()
-    .value();
-
-  res.json(allQuote);
+  //let allQuote = _.chain(query.data.data)
+    //.map((d) => {
+     // let base = JSON.parse(Buffer.from(d.data, 'base64'));
+      //return base;
+    //})
+    //.flatten()
+    //.value();
+    //console.log(allQuote);
+  res.json(query.data.data);
 
 };
 
@@ -67,22 +67,28 @@ module.exports.getQuote = async function(req, res) {
 }
 module.exports.postQuote = async function(req, res) {
   const transaction = req.body;
-  const txid1="12123232434"
-  const status ="quote"
+  const txid1=req.body.quoteCode;
+  const quote=true;
+  const separate=false;
+  const printing=false;
+  const paidOut=false;
+  const refund=false;
   const address = getAddress(TRANSACTION_FAMILY, txid1);
-
-  const payload = JSON.stringify({func: 'post', args:{transaction, txid1,status}});
+  let params = {
+    headers: {'Content-Type': 'application/json'}
+  };
+  const payload = JSON.stringify({address: txid1, args:{transaction, quote,separate,printing,paidOut,refund}});
   const re =res.json({msg:payload});
   
   try{
-    await sendTransaction([{
+    let resc= await sendTransaction([{
       transactionFamily: TRANSACTION_FAMILY, 
       transactionFamilyVersion: TRANSACTION_FAMILY_VERSION,
       inputs: [address],
       outputs: [address],
-      payload:[payload]
+      payload
     }]);
-    return re;
+    return resc;
   }
   catch(err){
     return res.status(500).json({err});

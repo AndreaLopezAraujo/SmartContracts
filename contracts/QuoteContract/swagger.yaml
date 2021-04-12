@@ -43,9 +43,9 @@ paths:
               moneyPrice: 100
               materialPrice: 20
               timePrice: 200
-              docName: trabajoFinal
+              quoteCode: 12345
               date: 20/03/2021
-              userId: 123123
+              userId: ac.lopez
               printerId: 8372
       responses:
         '200':    # status code
