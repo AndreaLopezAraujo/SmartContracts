@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Quote contract.",
+    "title": "PrintMoney contract.",
     "description": "Here are the methoods of the quote contract",
     "version": "0.0.1",
     "contact": {

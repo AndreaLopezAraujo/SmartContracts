@@ -26,7 +26,7 @@ function buildAddress(transactionFamily){
 
 const address = buildAddress(TRANSACTION_FAMILY);
 
-module.exports.getAllPrint = async function(req, res) {
+module.exports.getAllPrintMoney = async function(req, res) {
 
   let params = {
     headers: {'Content-Type': 'application/json'}
@@ -37,19 +37,19 @@ module.exports.getAllPrint = async function(req, res) {
     params
   );
   console.log(query.data.data);
-  //let allPrint = _.chain(query.data.data)
+  //let allPrintMoney = _.chain(query.data.data)
     //.map((d) => {
      // let base = JSON.parse(Buffer.from(d.data, 'base64'));
       //return base;
     //})
     //.flatten()
     //.value();
-    //console.log(allPrint);
+    //console.log(allPrintMoney);
   res.json(query.data.data);
 
 };
 
-module.exports.getPrint = async function(req, res) {
+module.exports.getPrintMoney = async function(req, res) {
   try{
     let values = await queryState(address(req.params.id + ""));
     let value = _.find(values, v => v.key == req.params.id + "");
@@ -65,14 +65,14 @@ module.exports.getPrint = async function(req, res) {
     return res.status(500).json({error:e})
   }
 }
-module.exports.postPrint = async function(req, res) {
+module.exports.postPrintMoney = async function(req, res) {
   const transaction = req.body;
   const txid1=req.body.userId;
   const quote=true;
-  const separate=false;
+  const separate=true;
   const printing=true;
-  const paidOut=false;
-  const refund=false;
+  const paidOut=true;
+  const refund=true;
   const address = getAddress(TRANSACTION_FAMILY, txid1);
   const payload = JSON.stringify({address: txid1, args:{transaction, quote,separate,printing,paidOut,refund}});
   const re =res.json({msg:payload});
@@ -92,7 +92,7 @@ module.exports.postPrint = async function(req, res) {
   }
 };
 
-module.exports.putPrint = async function(req, res) {
+module.exports.putPrintMoney = async function(req, res) {
   const {transaction, txid} = req.body;
 
   const input = getAddress(TRANSACTION_FAMILY, JSON.parse(transaction).input);
@@ -149,7 +149,7 @@ function readFile(file){
   });
 }
 
-module.exports.getPrintHistory = async function(req, res) {
+module.exports.getPrintMoneyHistory = async function(req, res) {
   let state = await readFile('./data/current_state.json');
 
   if(!(req.params.id in state)){

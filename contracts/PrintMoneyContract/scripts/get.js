@@ -23,7 +23,7 @@ const INT_KEY_NAMESPACE = hash512(TRANSACTION_FAMILY).substring(0, 6);
   };
 
   let query = await axios.get(`${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`, params);
-  let allQuote = _.chain(query.data.data)
+  let allPrintMoney = _.chain(query.data.data)
     .map((d) => {
       return {
         address: d.address,
@@ -34,6 +34,6 @@ const INT_KEY_NAMESPACE = hash512(TRANSACTION_FAMILY).substring(0, 6);
     // .map(d => d.value)
     .value();
 
-  console.dir(allQuote, {depth: null, colors: true})
+  console.dir(allPrintMoney, {depth: null, colors: true})
 
 })();

@@ -1,5 +1,6 @@
 var _ = require('underscore');
 const crypto = require('crypto');
+const mongo = require('../mongodb/mongo')
 const protobuf = require('sawtooth-sdk/protobuf');
 const { 
   sendTransaction, 
@@ -25,31 +26,30 @@ function buildAddress(transactionFamily){
 
 const address = buildAddress(TRANSACTION_FAMILY);
 
-module.exports.getAllQuote = async function(req, res) {
+module.exports.getAllSeparationMoney = async function(req, res) {
 
   let params = {
     headers: {'Content-Type': 'application/json'}
   };
+  console.log(`${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`)
   const query = await axios.get(
-    `${
-      process.env.SAWTOOTH_REST || "http://localhost:8008"
-    }/state?address=${INT_KEY_NAMESPACE}&limit=${20}`,
+    `${process.env.SAWTOOTH_REST}/batches`,
     params
   );
   console.log(query.data.data);
-  let allQuote = _.chain(query.data.data)
-    .map((d) => {
-      let base = JSON.parse(Buffer.from(d.data, 'base64'));
-      return base;
-    })
-    .flatten()
-    .value();
-
-  res.json(allQuote);
+  //let allSeparationMoney = _.chain(query.data.data)
+    //.map((d) => {
+     // let base = JSON.parse(Buffer.from(d.data, 'base64'));
+      //return base;
+    //})
+    //.flatten()
+    //.value();
+    //console.log(allSeparationMoney);
+  res.json(query.data.data);
 
 };
 
-module.exports.getQuote = async function(req, res) {
+module.exports.getSeparationMoney = async function(req, res) {
   try{
     let values = await queryState(address(req.params.id + ""));
     let value = _.find(values, v => v.key == req.params.id + "");
@@ -65,30 +65,34 @@ module.exports.getQuote = async function(req, res) {
     return res.status(500).json({error:e})
   }
 }
-module.exports.postQuote = async function(req, res) {
-  const txid1="0x7f664d71e4200b4a2989558d1f6006d0dac9771a36a546b1a47c384ec9c4f04b"
-  const quote = req.body;
+module.exports.postSeparationMoney = async function(req, res) {
+  const transaction = req.body;
+  const txid1=req.body.userId;
+  const quote=true;
+  const separate=false;
+  const printing=false;
+  const paidOut=false;
+  const refund=false;
   const address = getAddress(TRANSACTION_FAMILY, txid1);
-
-  const payload = JSON.stringify({func: 'post', args:{quote}});
-  const re =res.json({msg:quote});
+  const payload = JSON.stringify({address: txid1, args:{transaction, quote,separate,printing,paidOut,refund}});
+  const re =res.json({msg:payload});
   
   try{
-    await sendTransaction([{
+    let resc= await sendTransaction([{
       transactionFamily: TRANSACTION_FAMILY, 
       transactionFamilyVersion: TRANSACTION_FAMILY_VERSION,
       inputs: [address],
       outputs: [address],
-      payload:[payload]
+      payload
     }]);
-    return re;
+    return resc;
   }
   catch(err){
     return res.status(500).json({err});
   }
 };
 
-module.exports.putQuote = async function(req, res) {
+module.exports.putSeparationMoney = async function(req, res) {
   const {transaction, txid} = req.body;
 
   const input = getAddress(TRANSACTION_FAMILY, JSON.parse(transaction).input);
@@ -145,7 +149,7 @@ function readFile(file){
   });
 }
 
-module.exports.getQuoteHistory = async function(req, res) {
+module.exports.getSeparationMoneyHistory = async function(req, res) {
   let state = await readFile('./data/current_state.json');
 
   if(!(req.params.id in state)){
