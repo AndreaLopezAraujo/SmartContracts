@@ -73,6 +73,7 @@ module.exports.postSeparationMoney = async function(req, res) {
   const printing=false;
   const paidOut=false;
   const refund=false;
+  
   const address = getAddress(TRANSACTION_FAMILY, txid1);
   const payload = JSON.stringify({address: txid1, args:{transaction, quote,separate,printing,paidOut,refund}});
   const re =res.json({msg:payload});
@@ -93,12 +94,14 @@ module.exports.postSeparationMoney = async function(req, res) {
 };
 
 module.exports.putSeparationMoney = async function(req, res) {
-  const {transaction, txid} = req.body;
+  const transaction= req.body.text;
+  let txid1 = req.body.id;
+  //const input = getAddress(TRANSACTION_FAMILY, transaction);
+  const address = getAddress(TRANSACTION_FAMILY, txid1);
+  let values = await queryState(address);
+  console.log(values);
 
-  const input = getAddress(TRANSACTION_FAMILY, JSON.parse(transaction).input);
-  const address = getAddress(TRANSACTION_FAMILY, txid);
-
-  const payload = JSON.stringify({func: 'put', args:{transaction, txid}});
+  const payload = JSON.stringify({func: 'put', args:{transaction, txid1}});
   
   try{
     await sendTransactionWithAwait([

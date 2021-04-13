@@ -27,6 +27,27 @@ paths:
                 type: array
                 items:
                   type: object
+    put:
+      summary: Update a quote ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+            example:
+              id: "1827172y2ws2w2"
+              text: New Text
+      responses:
+          '200':    # status code
+            description: 
+            content:
+              application/json:
+                schema:
+                  type: object
     post:
       summary: Add a new quotation to blockchain
       description: Create a quote

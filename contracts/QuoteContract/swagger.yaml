@@ -41,9 +41,7 @@ paths:
                   type: string
             example:
               moneyPrice: 100
-              materialPrice: 20
-              timePrice: 200
-              quoteCode: 12345
+              id: "1827172y2ws2w2" 
               date: 20/03/2021
               userId: ac.lopez
               printerId: 8372

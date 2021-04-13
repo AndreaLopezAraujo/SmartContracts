@@ -33,7 +33,7 @@ module.exports.getAllQuote = async function(req, res) {
   };
   console.log(`${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`)
   const query = await axios.get(
-    `${process.env.SAWTOOTH_REST}/batches`,
+    `http://localhost:8008/batch_statuses?id=e39bac6af622f40b65d8f864baf7b86b893c761cf48c18dc58e3d0ea3502e96a2e57ab912a59ea2a27ee246a43f20e83a4778bd643ec3a24ce1ea742f45a1a24`,
     params
   );
   console.log(query.data.data);
@@ -67,14 +67,14 @@ module.exports.getQuote = async function(req, res) {
 }
 module.exports.postQuote = async function(req, res) {
   const transaction = req.body;
-  const txid1=req.body.userId;
+  const txid1=req.body.id;
   const quote=true;
   const separate=false;
   const printing=false;
   const paidOut=false;
   const refund=false;
   const address = getAddress(TRANSACTION_FAMILY, txid1);
-  const payload = JSON.stringify({address: txid1, args:{transaction, quote,separate,printing,paidOut,refund}});
+  const payload = JSON.stringify({address: address, args:{transaction, quote,separate,printing,paidOut,refund}});
   const re =res.json({msg:payload});
   
   try{
@@ -85,6 +85,7 @@ module.exports.postQuote = async function(req, res) {
       outputs: [address],
       payload
     }]);
+    console.log(resc)
     return resc;
   }
   catch(err){
@@ -97,7 +98,6 @@ module.exports.putQuote = async function(req, res) {
 
   const input = getAddress(TRANSACTION_FAMILY, JSON.parse(transaction).input);
   const address = getAddress(TRANSACTION_FAMILY, txid);
-
   const payload = JSON.stringify({func: 'put', args:{transaction, txid}});
   
   try{
