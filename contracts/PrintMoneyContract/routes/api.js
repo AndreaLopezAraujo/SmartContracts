@@ -6,7 +6,7 @@ const {
   postPrintMoney, 
   putPrintMoney,
   getPrintMoneyHistory
-} = require('../controllers/quote');
+} = require('../controllers/print');
 //const {authTransactionMiddleware} = require('../controllers/transaction');
 router.get('/quote', getAllPrintMoney);
 router.get('/quote:id', getPrintMoney);
