@@ -77,9 +77,9 @@ module.exports.postSeparationMoney = async function(req, res) {
   const address = getAddress(TRANSACTION_FAMILY, txid1);
   const payload = JSON.stringify({address: txid1, args:{transaction, quote,separate,printing,paidOut,refund}});
   //const re =res.json({msg:payload});
-  const {manufacturerId,amount, userId}=req.body;
+  const {manufacturerId,price, clientId}=req.body.quotation;
   const signature=uuidv4();
-  const je={recipient:manufacturerId,amount, sender:userId,signature,pending:true};
+  const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
   try{
     console.log("aqui");
     const j=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
