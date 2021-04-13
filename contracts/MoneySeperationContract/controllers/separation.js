@@ -2,6 +2,7 @@ var _ = require('underscore');
 const crypto = require('crypto');
 const mongo = require('../mongodb/mongo')
 const protobuf = require('sawtooth-sdk/protobuf');
+const { v4: uuidv4 } = require('uuid');
 const { 
   sendTransaction, 
   getAddress, 
@@ -73,12 +74,16 @@ module.exports.postSeparationMoney = async function(req, res) {
   const printing=false;
   const paidOut=false;
   const refund=false;
-  
   const address = getAddress(TRANSACTION_FAMILY, txid1);
   const payload = JSON.stringify({address: txid1, args:{transaction, quote,separate,printing,paidOut,refund}});
-  const re =res.json({msg:payload});
-  
+  //const re =res.json({msg:payload});
+  const {manufacturerId,amount, userId}=req.body;
+  const signature=uuidv4();
+  const je={recipient:manufacturerId,amount, sender:userId,signature,pending:true};
   try{
+    console.log("aqui");
+    const j=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
+    //const x=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}?approve=true`);
     let resc= await sendTransaction([{
       transactionFamily: TRANSACTION_FAMILY, 
       transactionFamilyVersion: TRANSACTION_FAMILY_VERSION,
@@ -86,9 +91,11 @@ module.exports.postSeparationMoney = async function(req, res) {
       outputs: [address],
       payload
     }]);
-    return resc;
+    console.log(j);
+    return res.status(200).json("ok");
   }
   catch(err){
+    console.log(err);
     return res.status(500).json({err});
   }
 };
