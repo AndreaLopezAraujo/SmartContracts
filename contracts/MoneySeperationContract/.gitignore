@@ -3,7 +3,7 @@ data/
 
 .vscode/
 public/
-.env
+
 
 #https://github.com/github/gitignore/blob/master/Node.gitignore
 
@@ -78,7 +78,6 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
 .env.test
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -125,5 +124,4 @@ dist
 .pnp.*
 
 
-.env
 
