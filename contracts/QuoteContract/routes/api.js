@@ -1,14 +1,15 @@
 var express = require('express');
 var router = express.Router();
 const {
-  getAllQuote, 
+  getAllQuote,
+  getAll, 
   getQuote, 
   postQuote, 
-  putQuote,
   getQuoteHistory
 } = require('../controllers/quote');
 //const {authTransactionMiddleware} = require('../controllers/transaction');
 router.get('/quote', getAllQuote);
+router.get('/all', getAll);
 router.get('/quote/:id', getQuote);
 router.post('/quote', postQuote);
 

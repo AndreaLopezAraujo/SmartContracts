@@ -14,6 +14,19 @@ servers:
   - url: /api
     description: API server
 paths:
+  /all:
+    get:
+      summary: Return all the elements in blockchain
+      description: Get all the elements in blockchain
+      responses:
+        '200':    # status code
+          description: Some description
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
   /quote:
     get:
       summary: Return quote's

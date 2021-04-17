@@ -53,7 +53,28 @@ module.exports.getAllQuote = async function(req, res) {
   res.json(allQuote);
 
 };
+module.exports.getAll = async function(req, res) {
 
+  let params = {
+    headers: {'Content-Type': 'application/json'}
+  };
+  const query = await axios.get(
+    `${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`,
+    params
+  );
+  console.log(query.data.data);
+  let all = _.chain(query.data.data)
+    .map((d) => {
+     let base = JSON.parse(Buffer.from(d.data, 'base64'));
+     var tr=base;
+      return tr[0].value;
+    })
+    .flatten()
+    .value();
+    console.log(all);
+  res.json(all);
+
+};
 module.exports.getQuote = async function(req, res) {
   try{
     let values = await queryState(address(req.params.id + ""));
