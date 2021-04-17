@@ -2,6 +2,7 @@ var _ = require('underscore');
 const crypto = require('crypto');
 const mongo = require('../mongodb/mongo')
 const protobuf = require('sawtooth-sdk/protobuf');
+const { v4: uuidv4 } = require('uuid');
 const { 
   sendTransaction, 
   getAddress, 
@@ -17,6 +18,7 @@ const INT_KEY_NAMESPACE = hash512(TRANSACTION_FAMILY).substring(0, 6)
 
 const { default: axios } = require("axios");
 const fs = require('fs');
+const { values } = require('underscore');
 
 function buildAddress(transactionFamily){
   return (key) => {
@@ -31,21 +33,29 @@ module.exports.getAllPrint = async function(req, res) {
   let params = {
     headers: {'Content-Type': 'application/json'}
   };
-  console.log(`${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`)
   const query = await axios.get(
-    `${process.env.SAWTOOTH_REST}/batches`,
+    `${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`,
     params
   );
   console.log(query.data.data);
-  //let allPrint = _.chain(query.data.data)
-    //.map((d) => {
-     // let base = JSON.parse(Buffer.from(d.data, 'base64'));
-      //return base;
-    //})
-    //.flatten()
-    //.value();
-    //console.log(allPrint);
-  res.json(query.data.data);
+  let allQuote = _.chain(query.data.data)
+    .map((d) => {
+     let base = JSON.parse(Buffer.from(d.data, 'base64'));
+     var tr=base;
+     const separate=tr[0].value.separate;
+     const printing=tr[0].value.printing;
+     const paidOut=tr[0].value.paidOut;
+     const refund=tr[0].value.refund;
+     if(printing||paidOut||refund||!separate)
+     {
+       return "";
+     }
+      return tr[0].value;
+    })
+    .flatten()
+    .value();
+    console.log(allQuote);
+  res.json(allQuote);
 
 };
 
@@ -56,7 +66,16 @@ module.exports.getPrint = async function(req, res) {
     if(!value){
       return res.status(404).json("not found"); 
     }
-    return res.json(value);
+    var tr=value;
+    const separate=tr.value.separate;
+    const printing=tr.value.printing;
+    const paidOut=tr.value.paidOut;
+    const refund=tr.value.refund;
+     if(!separate||printing||paidOut||refund)
+     {
+       return res.status(201).json("The quote exists, but it is no longer just a order");
+     }
+    return res.status(200).json(value.value);
   }
   catch(e){
     if(e.response && e.response.status === 404){
@@ -65,43 +84,28 @@ module.exports.getPrint = async function(req, res) {
     return res.status(500).json({error:e})
   }
 }
-module.exports.postPrint = async function(req, res) {
-  const transaction = req.body;
-  const txid1=req.body.userId;
-  const quote=true;
-  const separate=false;
-  const printing=true;
-  const paidOut=false;
-  const refund=false;
-  const address = getAddress(TRANSACTION_FAMILY, txid1);
-  const payload = JSON.stringify({address: txid1, args:{transaction, quote,separate,printing,paidOut,refund}});
-  const re =res.json({msg:payload});
-  
-  try{
-    let resc= await sendTransaction([{
-      transactionFamily: TRANSACTION_FAMILY, 
-      transactionFamilyVersion: TRANSACTION_FAMILY_VERSION,
-      inputs: [address],
-      outputs: [address],
-      payload
-    }]);
-    return resc;
-  }
-  catch(err){
-    return res.status(500).json({err});
-  }
-};
-
 module.exports.putPrint = async function(req, res) {
-  const {transaction, txid} = req.body;
-
-  const input = getAddress(TRANSACTION_FAMILY, JSON.parse(transaction).input);
-  const address = getAddress(TRANSACTION_FAMILY, txid);
-
-  const payload = JSON.stringify({func: 'put', args:{transaction, txid}});
   
   try{
-    await sendTransactionWithAwait([
+    const txid1=req.body.id
+    const order=req.body.orderId;
+    //Look for the quote
+    const j=await axios.get(`http://localhost:3001/api/quote/${txid1}`);
+    const tran=j.data;
+    console.log(tran);
+    //Separate the money
+    //const {manufacturerId,price,clientId}=values;
+    //const signature=uuidv4();
+    //const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
+    //const j=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
+    //Update the status of quote to order
+    const {values,quote,printing,paidOut,refund}=tran;
+    const separate=true;
+    const transaction={values,quote,separate,printing,paidOut,refund};
+    const input = getAddress(TRANSACTION_FAMILY, order);
+    const address = getAddress(TRANSACTION_FAMILY, txid1);
+    const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});
+    const resc= await sendTransactionWithAwait([
       {
         transactionFamily: TRANSACTION_FAMILY, 
         transactionFamilyVersion: TRANSACTION_FAMILY_VERSION, 
@@ -110,8 +114,7 @@ module.exports.putPrint = async function(req, res) {
         payload
       }
     ]);
-    return res.json({msg:'ok'});
-
+    return res.json({resc});
   }
   catch(err){
     let errMsg;
@@ -130,6 +133,7 @@ module.exports.putPrint = async function(req, res) {
     return res.status(500).json({msg: errMsg});
   }
 };
+
 
 
 function readFile(file){

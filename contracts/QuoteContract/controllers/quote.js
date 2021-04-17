@@ -40,11 +40,8 @@ module.exports.getAllQuote = async function(req, res) {
     .map((d) => {
      let base = JSON.parse(Buffer.from(d.data, 'base64'));
      var tr=base;
-     const separate=tr[0].value.separate;
-     const printing=tr[0].value.printing;
-     const paidOut=tr[0].value.paidOut;
-     const refund=tr[0].value.refund;
-     if(separate||printing||paidOut||refund)
+     const status=tr[0].value.status;
+     if(!(status==="quote"))
      {
        return "";
      }
@@ -65,11 +62,8 @@ module.exports.getQuote = async function(req, res) {
       return res.status(404).json("not found"); 
     }
     var tr=value;
-     const separate=tr.value.separate;
-     const printing=tr.value.printing;
-     const paidOut=tr.value.paidOut;
-     const refund=tr.value.refund;
-     if(separate||printing||paidOut||refund)
+    const status=tr.value.status;
+     if(!(status==="quote"))
      {
       res.status(201).json("The quote exists, but it is no longer just a quote");
      }
@@ -85,13 +79,11 @@ module.exports.getQuote = async function(req, res) {
 module.exports.postQuote = async function(req, res) {
   const values = req.body;
   const txid1=req.body.id;
-  const quote=true;
-  const separate=false;
-  const printing=false;
-  const paidOut=false;
-  const refund=false;
+  const status="quote";
+  const fecha = new Date();
+  const date_quote= new Date(fecha);
   const address = getAddress(TRANSACTION_FAMILY, txid1);
-  const payload = JSON.stringify({func: 'post', args:{transaction:{values,quote,separate,printing,paidOut,refund}, txid:txid1}});
+  const payload = JSON.stringify({func: 'post', args:{transaction:{values,date_quote,status}, txid:txid1}});
   try{
     let resc= await sendTransaction([{
       transactionFamily: TRANSACTION_FAMILY, 
@@ -101,7 +93,7 @@ module.exports.postQuote = async function(req, res) {
       payload
     }]);
     console.log(resc)
-    return res.status(200).json(payload);
+    return res.status(200).json("The quote was made on date: "+date_quote+ "correctly, with the id: "+txid1);
   }
   catch(err){
     console.log(err);

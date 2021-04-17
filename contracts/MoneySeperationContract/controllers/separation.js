@@ -42,11 +42,8 @@ module.exports.getAllSeparationMoney = async function(req, res) {
     .map((d) => {
      let base = JSON.parse(Buffer.from(d.data, 'base64'));
      var tr=base;
-     const separate=tr[0].value.separate;
-     const printing=tr[0].value.printing;
-     const paidOut=tr[0].value.paidOut;
-     const refund=tr[0].value.refund;
-     if(printing||paidOut||refund||!separate)
+     const status=tr[0].value.status;
+     if(!(status==="order"))
      {
        return "";
      }
@@ -67,13 +64,11 @@ module.exports.getSeparationMoney = async function(req, res) {
       return res.status(404).json("not found"); 
     }
     var tr=value;
-    const separate=tr.value.separate;
-    const printing=tr.value.printing;
-    const paidOut=tr.value.paidOut;
-    const refund=tr.value.refund;
-     if(!separate||printing||paidOut||refund)
+    const status=tr.value.status;
+     if(!(status==="order"))
      {
-       return res.status(201).json("The quote exists, but it is no longer just a order");
+       const resp="The data exists, but it is not a order is a "+ status;
+       return res.status(201).json(resp);
      }
     return res.status(200).json(value.value);
   }
@@ -99,9 +94,11 @@ module.exports.putSeparationMoney = async function(req, res) {
     //const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
     //const j=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
     //Update the status of quote to order
-    const {values,quote,printing,paidOut,refund}=tran;
-    const separate=true;
-    const transaction={values,quote,separate,printing,paidOut,refund};
+    const {values,date_quote}=tran;
+    const status="order";
+    const fecha = new Date();
+    const date_order= new Date(fecha);
+    const transaction={values,status,date_quote,date_order};
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});

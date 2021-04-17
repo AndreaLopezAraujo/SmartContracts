@@ -2,8 +2,8 @@
 #https://swagger.io/docs/specification/basic-structure/
 openapi: 3.0.0
 info:
-  title: SeparationMoney contract.
-  description: Here are the methoods of the quote contract
+  title: Separation Money contract.
+  description: Here are the methoods of the Separation Money contract
   version: 0.0.1
   contact:
     email: ac.lopez@uniandes.edu.co
@@ -16,8 +16,8 @@ servers:
 paths:
   /order:
     get:
-      summary: Return quote's
-      description: Get all the quotes
+      summary: Return order's
+      description: Get all the orders
       responses:
         '200':    # status code
           description: Some description
@@ -28,7 +28,7 @@ paths:
                 items:
                   type: object
     put:
-      summary: Update a quote ID
+      summary: Update a order ID
       requestBody:
         required: true
         content:
@@ -40,7 +40,7 @@ paths:
                   type: string
             example:
               id: "1827172y2ws2w2"
-              text: New Text
+              orderId: "dwwedwe323ede"
       responses:
           '200':    # status code
             description: 
@@ -50,18 +50,18 @@ paths:
                   type: object
   /order/{id}:
     get:
-      summary: Returns a quote by ID
+      summary: Returns a order by ID
       parameters:
         - name: id
           in: path
           required: true
-          description: The ID of the quote to return.
+          description: The ID of the order to return.
           schema:
           example:
             10
       responses:
           '200':    # status code
-            description: The quote
+            description: The order
             content:
               application/json:
                 schema:
