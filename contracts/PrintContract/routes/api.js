@@ -11,8 +11,7 @@ const {authTransactionMiddleware} = require('../controllers/transaction');
 
 
 router.get('/print', getAllPrint);
-router.get('/print:id', getPrint);
-router.post('/print', postPrint);
+router.get('/print/:id', getPrint);
 router.put('/print', putPrint);
 
 

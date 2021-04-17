@@ -111,7 +111,8 @@ module.exports.putSeparationMoney = async function(req, res) {
         payload
       }
     ]);
-    return res.json({resc});
+    const resp="The status of the quote with id: "+txid1+"was changed to order";
+    return res.status(200).json(resp);
   }
   catch(err){
     let errMsg;
@@ -127,7 +128,7 @@ module.exports.putSeparationMoney = async function(req, res) {
     else{
       errMsg = err;
     }
-    return res.status(500).json({msg: errMsg});
+    return res.status(500).json(errMsg);
   }
 };
 

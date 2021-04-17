@@ -16,7 +16,7 @@ servers:
 paths:
   /print:
     get:
-      summary: Return prints's
+      summary: Return print's
       description: Get all the prints
       responses:
         '200':    # status code
@@ -27,9 +27,8 @@ paths:
                 type: array
                 items:
                   type: object
-    post:
-      summary: Add a new quotation to blockchain
-      description: Create a print
+    put:
+      summary: Update a print by ID
       requestBody:
         required: true
         content:
@@ -40,21 +39,16 @@ paths:
                 text:
                   type: string
             example:
-              moneyPrice: 100
-              materialPrice: 20
-              timePrice: 200
-              docName: trabajoFinal
-              date: 20/03/2021
-              userId: 123123
-              printerId: 8372
+              id: "1827172y2ws2w2"
+              orderId: "dwwedwe323ede"
       responses:
-        '200':    # status code
-          description: Respose
-          content:
-            application/json:
-              schema:
-                type: object
-  /{id}:
+          '200':    # status code
+            description: 
+            content:
+              application/json:
+                schema:
+                  type: object
+  /print/{id}:
     get:
       summary: Returns a print by ID
       parameters:
@@ -63,9 +57,6 @@ paths:
           required: true
           description: The ID of the print to return.
           schema:
-            type: integer
-            format: int64
-            minimum: 1
           example:
             10
       responses:
@@ -86,4 +77,3 @@ paths:
                   date: 20/03/2021
                   userId: 123123
                   printerId: 8372
-

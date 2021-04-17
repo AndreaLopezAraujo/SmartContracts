@@ -42,11 +42,8 @@ module.exports.getAllPrint = async function(req, res) {
     .map((d) => {
      let base = JSON.parse(Buffer.from(d.data, 'base64'));
      var tr=base;
-     const separate=tr[0].value.separate;
-     const printing=tr[0].value.printing;
-     const paidOut=tr[0].value.paidOut;
-     const refund=tr[0].value.refund;
-     if(printing||paidOut||refund||!separate)
+     const status=tr[0].value.status;
+     if(!(status==="printing"))
      {
        return "";
      }
@@ -67,13 +64,11 @@ module.exports.getPrint = async function(req, res) {
       return res.status(404).json("not found"); 
     }
     var tr=value;
-    const separate=tr.value.separate;
-    const printing=tr.value.printing;
-    const paidOut=tr.value.paidOut;
-    const refund=tr.value.refund;
-     if(!separate||printing||paidOut||refund)
+    const status=tr.value.status;
+     if(!(status==="printing"))
      {
-       return res.status(201).json("The quote exists, but it is no longer just a order");
+       const resp="The data exists, but it is not a printing is a "+ status;
+       return res.status(201).json(resp);
      }
     return res.status(200).json(value.value);
   }
@@ -89,19 +84,16 @@ module.exports.putPrint = async function(req, res) {
   try{
     const txid1=req.body.id
     const order=req.body.orderId;
-    //Look for the quote
-    const j=await axios.get(`http://localhost:3001/api/quote/${txid1}`);
+    //Look for the order
+    const j=await axios.get(`http://localhost:3003/api/order/${txid1}`);
     const tran=j.data;
     console.log(tran);
-    //Separate the money
-    //const {manufacturerId,price,clientId}=values;
-    //const signature=uuidv4();
-    //const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
-    //const j=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
-    //Update the status of quote to order
-    const {values,quote,printing,paidOut,refund}=tran;
-    const separate=true;
-    const transaction={values,quote,separate,printing,paidOut,refund};
+    //Update the status of order to printing
+    const {values,date_quote,date_order}=tran;
+    const status="printing";
+    const fecha = new Date();
+    const date_printing= new Date(fecha);
+    const transaction={values,status,date_quote,date_order,date_printing};
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});
@@ -114,7 +106,8 @@ module.exports.putPrint = async function(req, res) {
         payload
       }
     ]);
-    return res.json({resc});
+    const resp="The status of the order with id: "+txid1+"was changed to printing";
+    return res.status(200).json(resp);
   }
   catch(err){
     let errMsg;
@@ -130,12 +123,9 @@ module.exports.putPrint = async function(req, res) {
     else{
       errMsg = err;
     }
-    return res.status(500).json({msg: errMsg});
+    return res.status(500).json(errMsg);
   }
 };
-
-
-
 function readFile(file){
   return new Promise((resolve, reject) => {
     fs.readFile(file, (err, data) =>{
@@ -152,7 +142,6 @@ function readFile(file){
     });
   });
 }
-
 module.exports.getPrintHistory = async function(req, res) {
   let state = await readFile('./data/current_state.json');
 
