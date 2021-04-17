@@ -88,6 +88,10 @@ module.exports.putSeparationMoney = async function(req, res) {
     const j=await axios.get(`http://localhost:3001/api/quote/${txid1}`);
     const tran=j.data;
     console.log(tran);
+    if(tran==="The quote exists, but it is no longer just a quote")
+    {
+      return res.status(210).json(tran);
+    }
     //Separate the money
     //const {manufacturerId,price,clientId}=values;
     //const signature=uuidv4();

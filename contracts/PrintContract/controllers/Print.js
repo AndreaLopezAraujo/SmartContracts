@@ -88,6 +88,13 @@ module.exports.putPrint = async function(req, res) {
     const j=await axios.get(`http://localhost:3003/api/order/${txid1}`);
     const tran=j.data;
     console.log(tran);
+    if(tran==="The data exists, but it is not a order is a quote"
+    ||tran==="The data exists, but it is not a order is a printing"
+    ||tran==="The data exists, but it is not a order is a printed"
+    ||tran==="The data exists, but it is not a order is a return")
+    {
+      return res.status(210).json(tran);
+    }
     //Update the status of order to printing
     const {values,date_quote,date_order}=tran;
     const status="printing";

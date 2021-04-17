@@ -58,7 +58,7 @@ paths:
           description: The ID of the print to return.
           schema:
           example:
-            10
+            1827172y2ws2w2
       responses:
           '200':    # status code
             description: The print

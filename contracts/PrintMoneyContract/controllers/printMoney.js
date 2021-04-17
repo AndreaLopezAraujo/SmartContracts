@@ -88,6 +88,13 @@ module.exports.putPrintMoney = async function(req, res) {
     const j=await axios.get(`http://localhost:3002/api/print/${txid1}`);
     const tran=j.data;
     console.log(tran);
+    if(tran==="The data exists, but it is not a printing is a quote"
+    ||tran==="The data exists, but it is not a printing is a printed"
+    ||tran==="The data exists, but it is not a printing is a order"
+    ||tran==="The data exists, but it is not a printing is a return")
+    {
+      return res.status(210).json(tran);
+    }
     //Pay the money to the printer
     //const {manufacturerId,price,clientId}=values;
     //const signature=uuidv4();
