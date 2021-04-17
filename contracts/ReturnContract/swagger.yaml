@@ -1,0 +1,79 @@
+#Swagger docs:
+#https://swagger.io/docs/specification/basic-structure/
+openapi: 3.0.0
+info:
+  title: Return contract.
+  description: Here are the methoods of the return contract
+  version: 0.0.1
+  contact:
+    email: ac.lopez@uniandes.edu.co
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: /api
+    description: API server
+paths:
+  /return:
+    get:
+      summary: Return print's that had been return
+      description: Get all the prints that had been return
+      responses:
+        '200':    # status code
+          description: Some description
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+    put:
+      summary: Update a print by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+            example:
+              id: "1827172y2ws2w2"
+              orderId: "dwwedwe323ede"
+      responses:
+          '200':    # status code
+            description: 
+            content:
+              application/json:
+                schema:
+                  type: object
+  /return/{id}:
+    get:
+      summary: Returns a print that had been return by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the print finish to return.
+          schema:
+          example:
+            10
+      responses:
+          '200':    # status code
+            description: The print that had been return
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                example:
+                  moneyPrice: 100
+                  materialPrice: 20
+                  timePrice: 200
+                  docName: trabajoFinal
+                  date: 20/03/2021
+                  userId: 123123
+                  printerId: 8372

@@ -1,0 +1,129 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Return contract.",
+    "description": "Here are the methoods of the quote contract",
+    "version": "0.0.1",
+    "contact": {
+      "email": "ac.lopez@uniandes.edu.co"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "/api",
+      "description": "API server"
+    }
+  ],
+  "paths": {
+    "/quote": {
+      "get": {
+        "summary": "Return quote's",
+        "description": "Get all the quotes",
+        "responses": {
+          "200": {
+            "description": "Some description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new quotation to blockchain",
+        "description": "Create a quote",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "moneyPrice": 100,
+                "materialPrice": 20,
+                "timePrice": 200,
+                "docName": "trabajoFinal",
+                "date": "20/03/2021",
+                "userId": 123123,
+                "printerId": 8372
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Respose",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{id}": {
+      "get": {
+        "summary": "Returns a quote by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the quote to return.",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            },
+            "example": 10
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The quote",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "moneyPrice": 100,
+                  "materialPrice": 20,
+                  "timePrice": 200,
+                  "docName": "trabajoFinal",
+                  "date": "20/03/2021",
+                  "userId": 123123,
+                  "printerId": 8372
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
