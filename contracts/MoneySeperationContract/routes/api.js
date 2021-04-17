@@ -8,10 +8,9 @@ const {
   getSeparationMoneyHistory
 } = require('../controllers/separation');
 //const {authTransactionMiddleware} = require('../controllers/transaction');
-router.get('/quote', getAllSeparationMoney);
-router.get('/quote:id', getSeparationMoney);
-router.post('/quote', postSeparationMoney);
-router.put('/quote', putSeparationMoney);
+router.get('/order', getAllSeparationMoney);
+router.get('/order/:id', getSeparationMoney);
+router.put('/order', putSeparationMoney);
 
 
 router.get('/:id/:history', getSeparationMoneyHistory)

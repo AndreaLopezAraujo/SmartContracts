@@ -18,6 +18,7 @@ const INT_KEY_NAMESPACE = hash512(TRANSACTION_FAMILY).substring(0, 6)
 
 const { default: axios } = require("axios");
 const fs = require('fs');
+const { values } = require('underscore');
 
 function buildAddress(transactionFamily){
   return (key) => {
@@ -65,7 +66,16 @@ module.exports.getSeparationMoney = async function(req, res) {
     if(!value){
       return res.status(404).json("not found"); 
     }
-    return res.json(value);
+    var tr=value;
+    const separate=tr.value.separate;
+    const printing=tr.value.printing;
+    const paidOut=tr.value.paidOut;
+    const refund=tr.value.refund;
+     if(!separate||printing||paidOut||refund)
+     {
+       return res.status(201).json("The quote exists, but it is no longer just a order");
+     }
+    return res.status(200).json(value.value);
   }
   catch(e){
     if(e.response && e.response.status === 404){
@@ -74,52 +84,28 @@ module.exports.getSeparationMoney = async function(req, res) {
     return res.status(500).json({error:e})
   }
 }
-module.exports.postSeparationMoney = async function(req, res) {
-  const transaction = req.body;
-  const txid1=req.body.userId;
-  const quote=true;
-  const separate=true;
-  const printing=false;
-  const paidOut=false;
-  const refund=false;
-  const address = getAddress(TRANSACTION_FAMILY, txid1);
-  const payload = JSON.stringify({address: txid1, args:{transaction, quote,separate,printing,paidOut,refund}});
-  //const re =res.json({msg:payload});
-  const {manufacturerId,price, clientId}=req.body.quotation;
-  const signature=uuidv4();
-  const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
-  try{
-    console.log("aqui");
-    const j=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
-    //const x=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}?approve=true`);
-    let resc= await sendTransaction([{
-      transactionFamily: TRANSACTION_FAMILY, 
-      transactionFamilyVersion: TRANSACTION_FAMILY_VERSION,
-      inputs: [address],
-      outputs: [address],
-      payload
-    }]);
-    console.log(j);
-    return res.status(200).json("ok");
-  }
-  catch(err){
-    console.log(err);
-    return res.status(500).json({err});
-  }
-};
-
 module.exports.putSeparationMoney = async function(req, res) {
-  const transaction= req.body.text;
-  let txid1 = req.body.id;
-  //const input = getAddress(TRANSACTION_FAMILY, transaction);
-  const address = getAddress(TRANSACTION_FAMILY, txid1);
-  let values = await queryState(address);
-  console.log(values);
-
-  const payload = JSON.stringify({func: 'put', args:{transaction, txid1}});
   
   try{
-    await sendTransactionWithAwait([
+    const txid1=req.body.id
+    const order=req.body.orderId;
+    //Look for the quote
+    const j=await axios.get(`http://localhost:3001/api/quote/${txid1}`);
+    const tran=j.data;
+    console.log(tran);
+    //Separate the money
+    //const {manufacturerId,price,clientId}=values;
+    //const signature=uuidv4();
+    //const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
+    //const j=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
+    //Update the status of quote to order
+    const {values,quote,printing,paidOut,refund}=tran;
+    const separate=true;
+    const transaction={values,quote,separate,printing,paidOut,refund};
+    const input = getAddress(TRANSACTION_FAMILY, order);
+    const address = getAddress(TRANSACTION_FAMILY, txid1);
+    const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});
+    const resc= await sendTransactionWithAwait([
       {
         transactionFamily: TRANSACTION_FAMILY, 
         transactionFamilyVersion: TRANSACTION_FAMILY_VERSION, 
@@ -128,8 +114,7 @@ module.exports.putSeparationMoney = async function(req, res) {
         payload
       }
     ]);
-    return res.json({msg:'ok'});
-
+    return res.json({resc});
   }
   catch(err){
     let errMsg;
@@ -148,6 +133,7 @@ module.exports.putSeparationMoney = async function(req, res) {
     return res.status(500).json({msg: errMsg});
   }
 };
+
 
 
 function readFile(file){

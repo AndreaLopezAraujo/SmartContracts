@@ -11,7 +11,6 @@ const {
 router.get('/quote', getAllQuote);
 router.get('/quote/:id', getQuote);
 router.post('/quote', postQuote);
-router.put('/quote', putQuote);
 
 
 router.get('/:id/:history', getQuoteHistory)

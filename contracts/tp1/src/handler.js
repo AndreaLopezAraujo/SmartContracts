@@ -34,13 +34,8 @@ const handlers = {
     return;
   },
   async put([context], {transaction, txid}){
-
-    //const {type, input, output} = JSON.parse(transaction);
-    let stateValue = await context.getState(input);
-
-    await context.deleteState(transaction);
+    await context.deleteState(txid);
     await context.putState(txid, transaction);
-
     return;
   }
 };

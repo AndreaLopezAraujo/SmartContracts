@@ -14,7 +14,7 @@ servers:
   - url: /api
     description: API server
 paths:
-  /quote:
+  /order:
     get:
       summary: Return quote's
       description: Get all the quotes
@@ -48,34 +48,7 @@ paths:
               application/json:
                 schema:
                   type: object
-    post:
-      summary: Add a new quotation to blockchain
-      description: Create a quote
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                text:
-                  type: string
-            example:
-              moneyPrice: 100
-              materialPrice: 20
-              timePrice: 200
-              quoteCode: 12345
-              date: 20/03/2021
-              userId: ac.lopez
-              printerId: 8372
-      responses:
-        '200':    # status code
-          description: Respose
-          content:
-            application/json:
-              schema:
-                type: object
-  /{id}:
+  /order/{id}:
     get:
       summary: Returns a quote by ID
       parameters:
@@ -84,9 +57,6 @@ paths:
           required: true
           description: The ID of the quote to return.
           schema:
-            type: integer
-            format: int64
-            minimum: 1
           example:
             10
       responses:
@@ -107,4 +77,3 @@ paths:
                   date: 20/03/2021
                   userId: 123123
                   printerId: 8372
-

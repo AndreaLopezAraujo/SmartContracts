@@ -71,7 +71,7 @@ module.exports.getQuote = async function(req, res) {
      const refund=tr.value.refund;
      if(separate||printing||paidOut||refund)
      {
-       return "The quote exists, but it is no longer just a quote";
+      res.status(201).json("The quote exists, but it is no longer just a quote");
      }
     return res.status(200).json(value.value);
   }
@@ -108,46 +108,6 @@ module.exports.postQuote = async function(req, res) {
     return res.status(500).json({err});
   }
 };
-
-module.exports.putQuote = async function(req, res) {
-  const {transaction, txid} = req.body;
-
-  const input = getAddress(TRANSACTION_FAMILY, JSON.parse(transaction).input);
-  const address = getAddress(TRANSACTION_FAMILY, txid);
-  const payload = JSON.stringify({func: 'put', args:{transaction, txid}});
-  
-  try{
-    await sendTransactionWithAwait([
-      {
-        transactionFamily: TRANSACTION_FAMILY, 
-        transactionFamilyVersion: TRANSACTION_FAMILY_VERSION, 
-        inputs: [input, address],
-        outputs: [input, address],
-        payload
-      }
-    ]);
-    return res.json({msg:'ok'});
-
-  }
-  catch(err){
-    let errMsg;
-    if(err.data){
-      errMsg = err.data;
-      if(err.message == 'Invalid transaction'){
-        errMsg = "Invalid Transaction: " + err.data.data[0].invalid_transactions[0].message;
-      }
-      else {
-        errMsg = err;
-      }
-    }
-    else{
-      errMsg = err;
-    }
-    return res.status(500).json({msg: errMsg});
-  }
-};
-
-
 function readFile(file){
   return new Promise((resolve, reject) => {
     fs.readFile(file, (err, data) =>{
