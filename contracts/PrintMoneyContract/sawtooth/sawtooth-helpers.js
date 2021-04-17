@@ -135,12 +135,8 @@ module.exports.sendTransaction = async function ( transactions, cancelToken /*Op
     params.cancelToken = cancelToken;
   }
   const url=`${process.env.SAWTOOTH_REST}/batches`;
-  const r=axios
-    .post(url, batchListBytes,params)
-    .then((response) => {
-    console.log(response.data.token);});
-    console.log(r);
-    return true;
+  const r=axios.post(url, batchListBytes,params);
+    return r;
 }
 
 const TIMEOUT = 1000*10;

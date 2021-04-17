@@ -2,6 +2,7 @@ var _ = require('underscore');
 const crypto = require('crypto');
 const mongo = require('../mongodb/mongo')
 const protobuf = require('sawtooth-sdk/protobuf');
+const { v4: uuidv4 } = require('uuid');
 const { 
   sendTransaction, 
   getAddress, 
@@ -17,6 +18,7 @@ const INT_KEY_NAMESPACE = hash512(TRANSACTION_FAMILY).substring(0, 6)
 
 const { default: axios } = require("axios");
 const fs = require('fs');
+const { values } = require('underscore');
 
 function buildAddress(transactionFamily){
   return (key) => {
@@ -31,21 +33,26 @@ module.exports.getAllPrintMoney = async function(req, res) {
   let params = {
     headers: {'Content-Type': 'application/json'}
   };
-  console.log(`${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`)
   const query = await axios.get(
-    `${process.env.SAWTOOTH_REST}/batches`,
+    `${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`,
     params
   );
   console.log(query.data.data);
-  //let allPrintMoney = _.chain(query.data.data)
-    //.map((d) => {
-     // let base = JSON.parse(Buffer.from(d.data, 'base64'));
-      //return base;
-    //})
-    //.flatten()
-    //.value();
-    //console.log(allPrintMoney);
-  res.json(query.data.data);
+  let allQuote = _.chain(query.data.data)
+    .map((d) => {
+     let base = JSON.parse(Buffer.from(d.data, 'base64'));
+     var tr=base;
+     const status=tr[0].value.status;
+     if(!(status==="printed"))
+     {
+       return "";
+     }
+      return tr[0].value;
+    })
+    .flatten()
+    .value();
+    console.log(allQuote);
+  res.json(allQuote);
 
 };
 
@@ -56,7 +63,14 @@ module.exports.getPrintMoney = async function(req, res) {
     if(!value){
       return res.status(404).json("not found"); 
     }
-    return res.json(value);
+    var tr=value;
+    const status=tr.value.status;
+     if(!(status==="printed"))
+     {
+       const resp="The data exists, but it is not a printed is a "+ status;
+       return res.status(201).json(resp);
+     }
+    return res.status(200).json(value.value);
   }
   catch(e){
     if(e.response && e.response.status === 404){
@@ -65,43 +79,30 @@ module.exports.getPrintMoney = async function(req, res) {
     return res.status(500).json({error:e})
   }
 }
-module.exports.postPrintMoney = async function(req, res) {
-  const transaction = req.body;
-  const txid1=req.body.userId;
-  const quote=true;
-  const separate=true;
-  const printing=true;
-  const paidOut=true;
-  const refund=false;
-  const address = getAddress(TRANSACTION_FAMILY, txid1);
-  const payload = JSON.stringify({address: txid1, args:{transaction, quote,separate,printing,paidOut,refund}});
-  const re =res.json({msg:payload});
-  
-  try{
-    let resc= await sendTransaction([{
-      transactionFamily: TRANSACTION_FAMILY, 
-      transactionFamilyVersion: TRANSACTION_FAMILY_VERSION,
-      inputs: [address],
-      outputs: [address],
-      payload
-    }]);
-    return resc;
-  }
-  catch(err){
-    return res.status(500).json({err});
-  }
-};
-
 module.exports.putPrintMoney = async function(req, res) {
-  const {transaction, txid} = req.body;
-
-  const input = getAddress(TRANSACTION_FAMILY, JSON.parse(transaction).input);
-  const address = getAddress(TRANSACTION_FAMILY, txid);
-
-  const payload = JSON.stringify({func: 'put', args:{transaction, txid}});
   
   try{
-    await sendTransactionWithAwait([
+    const txid1=req.body.id
+    const order=req.body.orderId;
+    //Look for the printing
+    const j=await axios.get(`http://localhost:3002/api/print/${txid1}`);
+    const tran=j.data;
+    console.log(tran);
+    //Pay the money to the printer
+    //const {manufacturerId,price,clientId}=values;
+    //const signature=uuidv4();
+    //const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
+    //const j=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
+    //Update the status of order to printing
+    const {values,date_quote,date_order,date_printing}=tran;
+    const status="printed";
+    const fecha = new Date();
+    const date_printed= new Date(fecha);
+    const transaction={values,status,date_quote,date_order,date_printing,date_printed};
+    const input = getAddress(TRANSACTION_FAMILY, order);
+    const address = getAddress(TRANSACTION_FAMILY, txid1);
+    const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});
+    const resc= await sendTransactionWithAwait([
       {
         transactionFamily: TRANSACTION_FAMILY, 
         transactionFamilyVersion: TRANSACTION_FAMILY_VERSION, 
@@ -110,8 +111,8 @@ module.exports.putPrintMoney = async function(req, res) {
         payload
       }
     ]);
-    return res.json({msg:'ok'});
-
+    const resp="The status of the printing with id: "+txid1+"was changed to printed";
+    return res.status(200).json(resp);
   }
   catch(err){
     let errMsg;
@@ -127,11 +128,9 @@ module.exports.putPrintMoney = async function(req, res) {
     else{
       errMsg = err;
     }
-    return res.status(500).json({msg: errMsg});
+    return res.status(500).json(errMsg);
   }
 };
-
-
 function readFile(file){
   return new Promise((resolve, reject) => {
     fs.readFile(file, (err, data) =>{
@@ -148,7 +147,6 @@ function readFile(file){
     });
   });
 }
-
 module.exports.getPrintMoneyHistory = async function(req, res) {
   let state = await readFile('./data/current_state.json');
 

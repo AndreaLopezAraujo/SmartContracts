@@ -2,8 +2,8 @@
 #https://swagger.io/docs/specification/basic-structure/
 openapi: 3.0.0
 info:
-  title: PrintMoney contract.
-  description: Here are the methoods of the quote contract
+  title: Print Money contract.
+  description: Here are the methoods of the print money contract
   version: 0.0.1
   contact:
     email: ac.lopez@uniandes.edu.co
@@ -14,10 +14,10 @@ servers:
   - url: /api
     description: API server
 paths:
-  /quote:
+  /printFinish:
     get:
-      summary: Return quote's
-      description: Get all the quotes
+      summary: Return print's
+      description: Get all the prints finish
       responses:
         '200':    # status code
           description: Some description
@@ -27,9 +27,8 @@ paths:
                 type: array
                 items:
                   type: object
-    post:
-      summary: Add a new quotation to blockchain
-      description: Create a quote
+    put:
+      summary: Update a print by ID
       requestBody:
         required: true
         content:
@@ -40,37 +39,29 @@ paths:
                 text:
                   type: string
             example:
-              moneyPrice: 100
-              materialPrice: 20
-              timePrice: 200
-              quoteCode: 12345
-              date: 20/03/2021
-              userId: ac.lopez
-              printerId: 8372
+              id: "1827172y2ws2w2"
+              orderId: "dwwedwe323ede"
       responses:
-        '200':    # status code
-          description: Respose
-          content:
-            application/json:
-              schema:
-                type: object
-  /{id}:
+          '200':    # status code
+            description: 
+            content:
+              application/json:
+                schema:
+                  type: object
+  /printFinish/{id}:
     get:
-      summary: Returns a quote by ID
+      summary: Returns a print finish by ID
       parameters:
         - name: id
           in: path
           required: true
-          description: The ID of the quote to return.
+          description: The ID of the print finish to return.
           schema:
-            type: integer
-            format: int64
-            minimum: 1
           example:
             10
       responses:
           '200':    # status code
-            description: The quote
+            description: The print finish
             content:
               application/json:
                 schema:
@@ -86,4 +77,3 @@ paths:
                   date: 20/03/2021
                   userId: 123123
                   printerId: 8372
-
