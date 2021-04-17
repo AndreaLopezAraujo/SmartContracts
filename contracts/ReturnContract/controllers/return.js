@@ -85,7 +85,7 @@ module.exports.putReturn = async function(req, res) {
     const txid1=req.body.id
     const order=req.body.orderId;
     //Look for the printing
-    const j=await axios.get(`http://localhost:3002/api/print/${txid1}`);
+    const j=await axios.get(`http://localhost:3004/api/printFinish/${txid1}`);
     const tran=j.data;
     console.log(tran);
     //Return the money to the user

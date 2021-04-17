@@ -111,7 +111,7 @@ module.exports.putPrintMoney = async function(req, res) {
         payload
       }
     ]);
-    const resp="The status of the printing with id: "+txid1+"was changed to printed";
+    const resp="The status of the printing with id: "+txid1+" was changed to printed";
     return res.status(200).json(resp);
   }
   catch(err){

@@ -106,7 +106,7 @@ module.exports.putPrint = async function(req, res) {
         payload
       }
     ]);
-    const resp="The status of the order with id: "+txid1+"was changed to printing";
+    const resp="The status of the order with id: "+txid1+" was changed to printing";
     return res.status(200).json(resp);
   }
   catch(err){

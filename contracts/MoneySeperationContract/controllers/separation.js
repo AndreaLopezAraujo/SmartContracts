@@ -111,7 +111,7 @@ module.exports.putSeparationMoney = async function(req, res) {
         payload
       }
     ]);
-    const resp="The status of the quote with id: "+txid1+"was changed to order";
+    const resp="The status of the quote with id: "+txid1+" was changed to order";
     return res.status(200).json(resp);
   }
   catch(err){
