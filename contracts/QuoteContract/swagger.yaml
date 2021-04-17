@@ -52,7 +52,7 @@ paths:
             application/json:
               schema:
                 type: object
-  /{id}:
+  /quote/{id}:
     get:
       summary: Returns a quote by ID
       parameters:

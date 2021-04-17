@@ -6,7 +6,7 @@ const axios =  require('axios').create({});
 axios.defaults.timeout = 10*1000;
 const CancelToken = require('axios').CancelToken;
 
-const privateKey = Buffer.from(process.env.SAWTOOTH_PRIVATE_KEY.slice(2), 'hex');
+const privateKey = Buffer.from((process.env.SAWTOOTH_PRIVATE_KEY||"0x7f664d71e4200b4a2989558d1f6006d0dac9771a36a546b1a47c384ec9c4f04b").slice(2), 'hex');
 const publicKey = secp256k1.publicKeyCreate(privateKey);
 const publicKeyHex = Buffer.from(publicKey).toString('hex');
 
@@ -134,7 +134,7 @@ module.exports.sendTransaction = async function ( transactions, cancelToken /*Op
   if(cancelToken){
     params.cancelToken = cancelToken;
   }
-  const url=`${process.env.SAWTOOTH_REST}/batches`;
+  const url=`${(process.env.SAWTOOTH_REST||"http://localhost:8008")}/batches`;
   const r=axios.post(url, batchListBytes,params);
     return r;
 }
@@ -280,7 +280,7 @@ module.exports.queryState = async function (address, cancelToken){
   if(cancelToken){
     params.cancelToken = cancelToken;
   } 
-  let response = await axios.get(`${process.env.SAWTOOTH_REST}/state/${address}`, params);
+  let response = await axios.get(`${(process.env.SAWTOOTH_REST||"http://localhost:8008")}/state/${address}`, params);
   let base = Buffer.from(response.data.data, 'base64');
   let stateValue = JSON.parse(base.toString('utf8'));
   return stateValue;
@@ -303,7 +303,7 @@ const { response } = require('../app');
 const PREFIX = hash512("intkey").substring(0, 6);
 const NULL_BLOCK_ID = '0000000000000000'
 
-const VALIDATOR_HOST = process.env.VALIDATOR_HOST;
+const VALIDATOR_HOST = (process.env.VALIDATOR_HOST||"tcp://localhost:4004");
 // const VALIDATOR_HOST = 'tcp://localhost:4004';
 console.log('connecting to ', VALIDATOR_HOST);
 const stream = new Stream(VALIDATOR_HOST);

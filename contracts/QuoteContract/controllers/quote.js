@@ -33,19 +33,19 @@ module.exports.getAllQuote = async function(req, res) {
   };
   console.log(`${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`)
   const query = await axios.get(
-    `http://localhost:8008/batch_statuses?id=e39bac6af622f40b65d8f864baf7b86b893c761cf48c18dc58e3d0ea3502e96a2e57ab912a59ea2a27ee246a43f20e83a4778bd643ec3a24ce1ea742f45a1a24`,
+    `${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`,
     params
   );
   console.log(query.data.data);
-  //let allQuote = _.chain(query.data.data)
-    //.map((d) => {
-     // let base = JSON.parse(Buffer.from(d.data, 'base64'));
-      //return base;
-    //})
-    //.flatten()
-    //.value();
-    //console.log(allQuote);
-  res.json(query.data.data);
+  let allQuote = _.chain(query.data.data)
+    .map((d) => {
+     let base = JSON.parse(Buffer.from(d.data, 'base64'));
+      return base;
+    })
+    .flatten()
+    .value();
+    console.log(allQuote);
+  res.json(allQuote);
 
 };
 
@@ -74,9 +74,7 @@ module.exports.postQuote = async function(req, res) {
   const paidOut=false;
   const refund=false;
   const address = getAddress(TRANSACTION_FAMILY, txid1);
-  const payload = JSON.stringify({address: address, args:{transaction, quote,separate,printing,paidOut,refund}});
-  const re =res.json({msg:payload});
-  
+  const payload = JSON.stringify({func: 'post', args:{transaction, txid:txid1}});
   try{
     let resc= await sendTransaction([{
       transactionFamily: TRANSACTION_FAMILY, 
@@ -86,9 +84,10 @@ module.exports.postQuote = async function(req, res) {
       payload
     }]);
     console.log(resc)
-    return resc;
+    return res.status(200).json(resc.body);
   }
   catch(err){
+    console.log(err);
     return res.status(500).json({err});
   }
 };

@@ -9,7 +9,7 @@ const {
 } = require('../controllers/quote');
 //const {authTransactionMiddleware} = require('../controllers/transaction');
 router.get('/quote', getAllQuote);
-router.get('/quote:id', getQuote);
+router.get('/quote/:id', getQuote);
 router.post('/quote', postQuote);
 router.put('/quote', putQuote);
 

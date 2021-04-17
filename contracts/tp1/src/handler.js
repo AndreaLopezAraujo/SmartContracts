@@ -4,7 +4,7 @@ const {
   InvalidTransaction
 } = require('sawtooth-sdk/processor/exceptions');
 
-const TP_FAMILY = 'quote';
+const TP_FAMILY = 'quotes';
 const TP_VERSION = '1.0';
 
 const hash512 = (x) =>
@@ -20,24 +20,12 @@ addressIntKey.keysCanCollide = true;
 
 const handlers = {
   async post([context], {transaction, txid}){
+    console.log("holi",transaction, txid);
 
     // await context.addEvent("myevent", [['name', 'handlerCalled']], Buffer.from("event", "utf8"));
 
-    const {type, id, input, output} = JSON.parse(transaction);
-    
-    if (!type || type !== 'quote') {
-      throw new InvalidTransaction('type must be "quote"')
-    }
-
-    if (!id) {
-      throw new InvalidTransaction('id is required')
-    }
-
-    if(input != null){
-      throw new InvalidTransaction('input must be null')
-    }
-
-    await context.putState(txid, output);
+    //const {type, id, input, output} = JSON.parse(transaction);
+    await context.putState(txid, transaction);
 
     // console.log(output.value);
     // await context.putState("1", output.value);
