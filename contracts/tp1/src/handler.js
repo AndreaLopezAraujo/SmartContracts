@@ -20,7 +20,6 @@ addressIntKey.keysCanCollide = true;
 
 const handlers = {
   async post([context], {transaction, txid}){
-    console.log("holi",transaction, txid);
 
     // await context.addEvent("myevent", [['name', 'handlerCalled']], Buffer.from("event", "utf8"));
 
@@ -36,27 +35,11 @@ const handlers = {
   },
   async put([context], {transaction, txid}){
 
-    const {type, input, output} = JSON.parse(transaction);
-    
-    if (!type || type !== 'quote') {
-      throw new InvalidTransaction('type must be "quote"')
-    }
-
-    if(input == null){
-      throw new InvalidTransaction('input must not be null')
-    }
-
+    //const {type, input, output} = JSON.parse(transaction);
     let stateValue = await context.getState(input);
 
-    if(!stateValue){
-      throw new InvalidTransaction('UTXO does not exist')
-    }
-    if(stateValue.owner !== context.publicKey){
-      throw new InvalidTransaction('not owner of UTXO')
-    }
-
-    await context.deleteState(input);
-    await context.putState(txid, output);
+    await context.deleteState(transaction);
+    await context.putState(txid, transaction);
 
     return;
   }

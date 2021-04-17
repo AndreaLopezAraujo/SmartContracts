@@ -31,7 +31,6 @@ module.exports.getAllQuote = async function(req, res) {
   let params = {
     headers: {'Content-Type': 'application/json'}
   };
-  console.log(`${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`)
   const query = await axios.get(
     `${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`,
     params
@@ -40,7 +39,16 @@ module.exports.getAllQuote = async function(req, res) {
   let allQuote = _.chain(query.data.data)
     .map((d) => {
      let base = JSON.parse(Buffer.from(d.data, 'base64'));
-      return base;
+     var tr=base;
+     const separate=tr[0].value.separate;
+     const printing=tr[0].value.printing;
+     const paidOut=tr[0].value.paidOut;
+     const refund=tr[0].value.refund;
+     if(separate||printing||paidOut||refund)
+     {
+       return "";
+     }
+      return tr[0].value;
     })
     .flatten()
     .value();
@@ -56,7 +64,16 @@ module.exports.getQuote = async function(req, res) {
     if(!value){
       return res.status(404).json("not found"); 
     }
-    return res.json(value);
+    var tr=value;
+     const separate=tr.value.separate;
+     const printing=tr.value.printing;
+     const paidOut=tr.value.paidOut;
+     const refund=tr.value.refund;
+     if(separate||printing||paidOut||refund)
+     {
+       return "The quote exists, but it is no longer just a quote";
+     }
+    return res.status(200).json(value.value);
   }
   catch(e){
     if(e.response && e.response.status === 404){
@@ -66,7 +83,7 @@ module.exports.getQuote = async function(req, res) {
   }
 }
 module.exports.postQuote = async function(req, res) {
-  const transaction = req.body;
+  const values = req.body;
   const txid1=req.body.id;
   const quote=true;
   const separate=false;
@@ -74,7 +91,7 @@ module.exports.postQuote = async function(req, res) {
   const paidOut=false;
   const refund=false;
   const address = getAddress(TRANSACTION_FAMILY, txid1);
-  const payload = JSON.stringify({func: 'post', args:{transaction, txid:txid1}});
+  const payload = JSON.stringify({func: 'post', args:{transaction:{values,quote,separate,printing,paidOut,refund}, txid:txid1}});
   try{
     let resc= await sendTransaction([{
       transactionFamily: TRANSACTION_FAMILY, 
@@ -84,7 +101,7 @@ module.exports.postQuote = async function(req, res) {
       payload
     }]);
     console.log(resc)
-    return res.status(200).json(resc.body);
+    return res.status(200).json(payload);
   }
   catch(err){
     console.log(err);

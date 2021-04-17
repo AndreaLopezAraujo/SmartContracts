@@ -32,21 +32,29 @@ module.exports.getAllSeparationMoney = async function(req, res) {
   let params = {
     headers: {'Content-Type': 'application/json'}
   };
-  console.log(`${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`)
   const query = await axios.get(
-    `${process.env.SAWTOOTH_REST}/batches`,
+    `${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`,
     params
   );
   console.log(query.data.data);
-  //let allSeparationMoney = _.chain(query.data.data)
-    //.map((d) => {
-     // let base = JSON.parse(Buffer.from(d.data, 'base64'));
-      //return base;
-    //})
-    //.flatten()
-    //.value();
-    //console.log(allSeparationMoney);
-  res.json(query.data.data);
+  let allQuote = _.chain(query.data.data)
+    .map((d) => {
+     let base = JSON.parse(Buffer.from(d.data, 'base64'));
+     var tr=base;
+     const separate=tr[0].value.separate;
+     const printing=tr[0].value.printing;
+     const paidOut=tr[0].value.paidOut;
+     const refund=tr[0].value.refund;
+     if(printing||paidOut||refund||!separate)
+     {
+       return "";
+     }
+      return tr[0].value;
+    })
+    .flatten()
+    .value();
+    console.log(allQuote);
+  res.json(allQuote);
 
 };
 
