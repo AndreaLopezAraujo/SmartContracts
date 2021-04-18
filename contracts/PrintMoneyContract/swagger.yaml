@@ -14,6 +14,28 @@ servers:
   - url: /api
     description: API server
 paths:
+  /deliver:
+    put:
+      summary: Update a print by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+            example:
+              id: "dwwedwe323ede"
+              quotationId: "1827172y2ws2w2"
+      responses:
+          '200':    # status code
+            description: 
+            content:
+              application/json:
+                schema:
+                  type: object
   /printFinish:
     get:
       summary: Return print's

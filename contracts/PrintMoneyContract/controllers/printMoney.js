@@ -95,17 +95,21 @@ module.exports.putPrintMoney = async function(req, res) {
     {
       return res.status(210).json(tran);
     }
+    const {status}=tran;
+    if(!(status==="deliver"))
+    {
+      return res.status(210).json("To finalize the order, the product must be delivered beforehand.");
+    }
     //Pay the money to the printer
-    const {signature}=tran;
-    console.log(tran);
-    const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:true}});
-    console.log(jk);
+      const {signature}=tran;
+      //const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:true}});
+      //console.log(jk);
     //Update the status of order to printing
-    const {values,date_quote,date_order,date_printing}=tran;
-    const status="printed";
+    const {values,date_quote,date_order,date_printing,date_deliver}=tran;
+    const status1="printed";
     const fecha = new Date();
     const date_printed= new Date(fecha);
-    const transaction={values,status,date_quote,date_order,date_printing,date_printed};
+    const transaction={values,status:status1,date_quote,date_order,date_printing,date_deliver,date_printed,signature};
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});
@@ -118,7 +122,7 @@ module.exports.putPrintMoney = async function(req, res) {
         payload
       }
     ]);
-    const resp="The status of the printing with id: "+txid1+" was changed to printed";
+    const resp="The status of the deliver with id: "+txid1+" was changed to printed";
     return res.status(200).json(resp);
   }
   catch(err){
@@ -154,6 +158,61 @@ function readFile(file){
     });
   });
 }
+module.exports.putDeliver = async function(req, res) {
+  
+  try{
+    const txid1=req.body.quotationId
+    const order=req.body.id;
+    //Look for the printing
+    const j=await axios.get(`http://localhost:3002/api/print/${txid1}`);
+    const tran=j.data;
+    console.log(tran);
+    if(tran==="The data exists, but it is not a printing is a quote"
+    ||tran==="The data exists, but it is not a printing is a printed"
+    ||tran==="The data exists, but it is not a printing is a order"
+    ||tran==="The data exists, but it is not a printing is a return"
+    ||tran==="The data exists, but it is not a printing is a deliver")
+    {
+      return res.status(210).json(tran);
+    }
+    //Update the status of order to printing
+    const {values,date_quote,date_order,date_printing,signature}=tran;
+    const status="deliver";
+    const fecha = new Date();
+    const date_deliver= new Date(fecha);
+    const transaction={values,status,date_quote,date_order,date_printing,date_deliver,signature};
+    const input = getAddress(TRANSACTION_FAMILY, order);
+    const address = getAddress(TRANSACTION_FAMILY, txid1);
+    const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});
+    const resc= await sendTransactionWithAwait([
+      {
+        transactionFamily: TRANSACTION_FAMILY, 
+        transactionFamilyVersion: TRANSACTION_FAMILY_VERSION, 
+        inputs: [input, address],
+        outputs: [input, address],
+        payload
+      }
+    ]);
+    const resp="The status of the printing with id: "+txid1+" was changed to deliver";
+    return res.status(200).json(resp);
+  }
+  catch(err){
+    let errMsg;
+    if(err.data){
+      errMsg = err.data;
+      if(err.message == 'Invalid transaction'){
+        errMsg = "Invalid Transaction: " + err.data.data[0].invalid_transactions[0].message;
+      }
+      else {
+        errMsg = err;
+      }
+    }
+    else{
+      errMsg = err;
+    }
+    return res.status(500).json(errMsg);
+  }
+};
 module.exports.getPrintMoneyHistory = async function(req, res) {
   let state = await readFile('./data/current_state.json');
 

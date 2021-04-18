@@ -3,7 +3,7 @@ var router = express.Router();
 const {
   getAllPrintMoney, 
   getPrintMoney, 
-  postPrintMoney, 
+  putDeliver, 
   putPrintMoney,
   getPrintMoneyHistory
 } = require('../controllers/printMoney');
@@ -11,6 +11,7 @@ const {
 router.get('/printFinish', getAllPrintMoney);
 router.get('/printFinish/:id', getPrintMoney);
 router.put('/printFinish', putPrintMoney);
+router.put('/deliver', putDeliver);
 
 
 router.get('/:id/:history', getPrintMoneyHistory)

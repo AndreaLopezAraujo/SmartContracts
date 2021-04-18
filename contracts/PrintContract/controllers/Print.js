@@ -67,8 +67,11 @@ module.exports.getPrint = async function(req, res) {
     const status=tr.value.status;
      if(!(status==="printing"))
      {
-       const resp="The data exists, but it is not a printing is a "+ status;
-       return res.status(201).json(resp);
+       if(!(status==="deliver"))
+       {
+        const resp="The data exists, but it is not a printing is a "+ status;
+        return res.status(201).json(resp);
+       }
      }
     return res.status(200).json(value.value);
   }
@@ -91,6 +94,7 @@ module.exports.putPrint = async function(req, res) {
     if(tran==="The data exists, but it is not a order is a quote"
     ||tran==="The data exists, but it is not a order is a printing"
     ||tran==="The data exists, but it is not a order is a printed"
+    ||tran==="The data exists, but it is not a order is a deliver"
     ||tran==="The data exists, but it is not a order is a return")
     {
       return res.status(210).json(tran);

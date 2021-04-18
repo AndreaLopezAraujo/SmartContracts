@@ -88,26 +88,26 @@ module.exports.putReturn = async function(req, res) {
     const j=await axios.get(`http://localhost:3002/api/print/${txid1}`);
     const tran=j.data;
     console.log(tran);
-    if(tran==="The data exists, but it is not a printed is a quote"
-    ||tran==="The data exists, but it is not a printed is a printing"
-    ||tran==="The data exists, but it is not a printed is a order"
-    ||tran==="The data exists, but it is not a printed is a return")
+    if(tran==="The data exists, but it is not a printing is a quote"
+    ||tran==="The data exists, but it is not a printing is a printed"
+    ||tran==="The data exists, but it is not a printing is a order"
+    ||tran==="The data exists, but it is not a printing is a return")
     {
       return res.status(210).json(tran);
     }
     //Return the money to the user
-    const {signature}=tran;
-    console.log(tran);
-    const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:false}});
-    console.log(jk);
+      const {signature}=tran;
+      //const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:false}});
+      //console.log(jk);
     //Update the status of data to return
-    const {values,date_quote,date_order,date_printing,date_printed}=tran;
+    const {values,date_quote,date_order,date_printing,date_deliver}=tran;
     const status="return";
     const fecha = new Date();
     const date_return= new Date(fecha);
-    const transaction={values,status,date_quote,date_order,date_printing,date_printed,date_return};
+    const transaction={values,status,date_quote,date_order,date_printing,date_deliver,date_return};
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
+    console.log(transaction);
     const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});
     const resc= await sendTransactionWithAwait([
       {
