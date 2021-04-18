@@ -93,11 +93,15 @@ module.exports.putSeparationMoney = async function(req, res) {
       return res.status(210).json(tran);
     }
     //Separate the money
-      const {manufacturerId,price,clientId}=values;
+      const {manufacturerId,price,clientId}=tran.values;
+      console.log(manufacturerId);
       const signature=uuidv4();
       const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
-      const j=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
-      const jk=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency/${signature}?approve=true`);
+      console.log("aqui");
+      const jg=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
+      console.log(jg);
+      //const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:true}});
+      //console.log(jk);
     //Update the status of quote to order
     const {values,date_quote}=tran;
     const status="order";
@@ -120,6 +124,7 @@ module.exports.putSeparationMoney = async function(req, res) {
     return res.status(200).json(resp);
   }
   catch(err){
+    console.log(err);
     let errMsg;
     if(err.data){
       errMsg = err.data;
