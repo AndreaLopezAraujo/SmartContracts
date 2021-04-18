@@ -97,7 +97,6 @@ module.exports.putSeparationMoney = async function(req, res) {
       console.log(manufacturerId);
       const signature=uuidv4();
       const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
-      console.log("aqui");
       const jg=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
       console.log(jg);
       //const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:true}});
@@ -107,7 +106,7 @@ module.exports.putSeparationMoney = async function(req, res) {
     const status="order";
     const fecha = new Date();
     const date_order= new Date(fecha);
-    const transaction={values,status,date_quote,date_order};
+    const transaction={values,status,date_quote,date_order,signature};
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});

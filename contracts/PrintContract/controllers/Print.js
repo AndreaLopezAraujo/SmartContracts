@@ -96,11 +96,11 @@ module.exports.putPrint = async function(req, res) {
       return res.status(210).json(tran);
     }
     //Update the status of order to printing
-    const {values,date_quote,date_order}=tran;
+    const {values,date_quote,date_order,signature}=tran;
     const status="printing";
     const fecha = new Date();
     const date_printing= new Date(fecha);
-    const transaction={values,status,date_quote,date_order,date_printing};
+    const transaction={values,status,date_quote,date_order,date_printing,signature};
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});

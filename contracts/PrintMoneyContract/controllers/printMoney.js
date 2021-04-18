@@ -96,10 +96,10 @@ module.exports.putPrintMoney = async function(req, res) {
       return res.status(210).json(tran);
     }
     //Pay the money to the printer
-    //const {manufacturerId,price,clientId}=values;
-    //const signature=uuidv4();
-    //const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
-    //const j=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
+    const {signature}=tran;
+    console.log(tran);
+    const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:true}});
+    //console.log(jk);
     //Update the status of order to printing
     const {values,date_quote,date_order,date_printing}=tran;
     const status="printed";
