@@ -96,10 +96,10 @@ module.exports.putReturn = async function(req, res) {
       return res.status(210).json(tran);
     }
     //Return the money to the user
-    //const {manufacturerId,price,clientId}=values;
-    //const signature=uuidv4();
-    //const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
-    //const j=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
+    const {signature}=tran;
+    console.log(tran);
+    const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:false}});
+    console.log(jk);
     //Update the status of data to return
     const {values,date_quote,date_order,date_printing,date_printed}=tran;
     const status="return";

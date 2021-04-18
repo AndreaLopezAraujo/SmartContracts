@@ -99,7 +99,7 @@ module.exports.putPrintMoney = async function(req, res) {
     const {signature}=tran;
     console.log(tran);
     const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:true}});
-    //console.log(jk);
+    console.log(jk);
     //Update the status of order to printing
     const {values,date_quote,date_order,date_printing}=tran;
     const status="printed";
