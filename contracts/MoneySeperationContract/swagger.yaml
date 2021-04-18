@@ -39,8 +39,8 @@ paths:
                 text:
                   type: string
             example:
-              id: "1827172y2ws2w2"
-              orderId: "dwwedwe323ede"
+              id: "dwwedwe323ede"
+              quotationId: "1827172y2ws2w2"
       responses:
           '200':    # status code
             description: 
@@ -70,10 +70,9 @@ paths:
                     text:
                       type: string
                 example:
-                  moneyPrice: 100
-                  materialPrice: 20
-                  timePrice: 200
-                  docName: trabajoFinal
-                  date: 20/03/2021
-                  userId: 123123
+                  price: 100
+                  id: "1827172y2ws2w2" 
+                  deliveryDate: 20/03/2021
+                  clientId: ac.lopez
                   printerId: 8372
+                  manufacturerId: "rer2323342"
