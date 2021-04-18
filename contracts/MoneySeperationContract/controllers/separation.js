@@ -82,8 +82,8 @@ module.exports.getSeparationMoney = async function(req, res) {
 module.exports.putSeparationMoney = async function(req, res) {
   
   try{
-    const txid1=req.body.id
-    const order=req.body.orderId;
+    const txid1=req.body.quotationId
+    const order=req.body.id;
     //Look for the quote
     const j=await axios.get(`http://localhost:3001/api/quote/${txid1}`);
     const tran=j.data;

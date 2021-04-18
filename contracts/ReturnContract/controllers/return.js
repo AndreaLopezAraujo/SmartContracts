@@ -82,8 +82,8 @@ module.exports.getReturn = async function(req, res) {
 module.exports.putReturn = async function(req, res) {
   
   try{
-    const txid1=req.body.id
-    const order=req.body.orderId;
+    const txid1=req.body.quotationId
+    const order=req.body.id;
     //Look for the printing
     const j=await axios.get(`http://localhost:3002/api/print/${txid1}`);
     const tran=j.data;
