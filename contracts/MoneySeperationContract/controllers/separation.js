@@ -93,11 +93,11 @@ module.exports.putSeparationMoney = async function(req, res) {
       return res.status(210).json(tran);
     }
     //Separate the money
-      //const {manufacturerId,price,clientId}=tran.values;
+      const {manufacturerId,price,clientId}=tran.values;
       const signature=uuidv4();
-      //const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
-      //const jg=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
-      //console.log(jg);
+      const je={recipient:manufacturerId,amount:price, sender:clientId,signature,pending:true};
+      const jg=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`,je);
+      console.log(jg);
     //Update the status of quote to order
     const {values,date_quote}=tran;
     const status="order";
