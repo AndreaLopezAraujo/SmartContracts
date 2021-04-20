@@ -103,7 +103,7 @@ module.exports.putSeparationMoney = async function(req, res) {
     }
       catch(e)
       {
-        return res.status(500).json(e.response.data);
+        //return res.status(500).json(e.response.data);
       }
     //Update the status of quote to order
     const {values,date_quote}=tran;

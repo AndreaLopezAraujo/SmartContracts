@@ -2,15 +2,15 @@
 //https://www.chaijs.com/guide/styles/#assert
 const assert = require('chai').assert;
 
-const TPHandler = require('../src/handler')
-const contextMock = require('../src/helpers/contextMock')
+const TPHandler = require('../controller/quote')
+//const contextMock = require('../src/helpers/contextMock')
 
 
 describe('simple', ()=>{
   it('constants are defined', ()=>{
-    assert.equal(TPHandler.TP_FAMILY, 'quotes');
-    assert.equal(TPHandler.TP_VERSION, '1.0');
-    assert.equal(TPHandler.TP_NAMESPACE.length, 6);
+    assert.equal(TPHandler.TRANSACTION_FAMILY, 'quotes');
+    assert.equal(TPHandler.TRANSACTION_FAMILY_VERSION, '1.0');
+    assert.equal(TPHandler.TINT_KEY_NAMESPACE.length, 6);
   })
 
   it('address works', ()=>{
@@ -20,11 +20,10 @@ describe('simple', ()=>{
   })
 });
 
-describe('put handler', ()=>{
+describe('pst handler', ()=>{
   it('no id', async ()=>{
-    let contexts = [contextMock()];
     try{
-      await TPHandler.handlers.put(contexts, {value:'value1'})
+      await TPHandler.postQuote({value:'value1'},{})
       assert.fail('Should Throw');
     }
     catch(e){
