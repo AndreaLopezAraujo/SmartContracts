@@ -180,6 +180,7 @@ module.exports.putPrintMoney = async function(req, res) {
     return res.status(200).json(resp);
   }
   catch(err){
+    console.log(err);
     let errMsg;
     if(err.data){
       errMsg = err.data;
