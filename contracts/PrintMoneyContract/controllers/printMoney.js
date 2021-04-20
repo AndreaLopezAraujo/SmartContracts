@@ -148,9 +148,9 @@ module.exports.putPrintMoney = async function(req, res) {
     {
       return res.status(210).json("To finalize the order, the product must be delivered beforehand.");
     }
+    const {signature}=tran;
     //Pay the money to the printer
     try{
-      const {signature}=tran;
       const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:true}});
       console.log(jk);
     }
