@@ -5,11 +5,15 @@ const {
   getPrintMoney, 
   putDeliver, 
   putPrintMoney,
-  getPrintMoneyHistory
+  getPrintMoneyHistory,
+  getAllDelivered,
+  getDelivered
 } = require('../controllers/printMoney');
 //const {authTransactionMiddleware} = require('../controllers/transaction');
 router.get('/printFinish', getAllPrintMoney);
+router.get('/deliver', getAllDelivered);
 router.get('/printFinish/:id', getPrintMoney);
+router.get('/printFinish/:id', getDelivered);
 router.put('/printFinish', putPrintMoney);
 router.put('/deliver', putDeliver);
 

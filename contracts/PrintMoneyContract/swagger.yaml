@@ -36,6 +36,18 @@ paths:
               application/json:
                 schema:
                   type: object
+      get:
+        summary: Return deliver's
+        description: Get all the prints delivered
+        responses:
+          '200':    # status code
+            description: Some description
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: object
   /printFinish:
     get:
       summary: Return print's
@@ -84,6 +96,34 @@ paths:
       responses:
           '200':    # status code
             description: The print finish
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                example:
+                  price: 100
+                  id: "1827172y2ws2w2" 
+                  deliveryDate: 20/03/2021
+                  clientId: ac.lopez
+                  printerId: 8372
+                  manufacturerId: "rer2323342"
+    /deliver/{id}:
+    get:
+      summary: Returns a print delivered by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the print delivered to return.
+          schema:
+          example:
+            1827172y2ws2w2
+      responses:
+          '200':    # status code
+            description: The print delivered
             content:
               application/json:
                 schema:

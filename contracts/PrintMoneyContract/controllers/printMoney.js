@@ -53,7 +53,32 @@ module.exports.getAllPrintMoney = async function(req, res) {
     .value();
     console.log(allQuote);
   res.json(allQuote);
+};
+module.exports.getAllDelivered = async function(req, res) {
 
+  let params = {
+    headers: {'Content-Type': 'application/json'}
+  };
+  const query = await axios.get(
+    `${process.env.SAWTOOTH_REST}/state?address=${INT_KEY_NAMESPACE}&limit=${20}`,
+    params
+  );
+  console.log(query.data.data);
+  let allQuote = _.chain(query.data.data)
+    .map((d) => {
+     let base = JSON.parse(Buffer.from(d.data, 'base64'));
+     var tr=base;
+     const status=tr[0].value.status;
+     if(!(status==="deliver"))
+     {
+       return "";
+     }
+      return tr[0].value;
+    })
+    .flatten()
+    .value();
+    console.log(allQuote);
+  res.json(allQuote);
 };
 
 module.exports.getPrintMoney = async function(req, res) {
@@ -68,6 +93,29 @@ module.exports.getPrintMoney = async function(req, res) {
      if(!(status==="printed"))
      {
        const resp="The data exists, but it is not a printed is a "+ status;
+       return res.status(201).json(resp);
+     }
+    return res.status(200).json(value.value);
+  }
+  catch(e){
+    if(e.response && e.response.status === 404){
+      return res.status(404).json(e.response.data) 
+    }
+    return res.status(500).json({error:e})
+  }
+}
+module.exports.getDelivered = async function(req, res) {
+  try{
+    let values = await queryState(address(req.params.id + ""));
+    let value = _.find(values, v => v.key == req.params.id + "");
+    if(!value){
+      return res.status(404).json("not found"); 
+    }
+    var tr=value;
+    const status=tr.value.status;
+     if(!(status==="Deliver"))
+     {
+       const resp="The data exists, but it is not a deliver is a "+ status;
        return res.status(201).json(resp);
      }
     return res.status(200).json(value.value);
@@ -101,9 +149,15 @@ module.exports.putPrintMoney = async function(req, res) {
       return res.status(210).json("To finalize the order, the product must be delivered beforehand.");
     }
     //Pay the money to the printer
+    try{
       const {signature}=tran;
       const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:true}});
       console.log(jk);
+    }
+    catch(e)
+    {
+      return res.status(500).json(e.response.data);
+    }
     //Update the status of order to printing
     const {values,date_quote,date_order,date_printing,date_deliver}=tran;
     const status1="printed";
