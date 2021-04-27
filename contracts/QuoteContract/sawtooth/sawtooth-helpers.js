@@ -118,7 +118,6 @@ module.exports.sendTransaction = async function ( transactions, cancelToken /*Op
       outputs,
       payload, 
     } = t;
-    console.log(t);
     return buildTransaction(
       transactionFamily, 
       transactionFamilyVersion, 
@@ -126,7 +125,6 @@ module.exports.sendTransaction = async function ( transactions, cancelToken /*Op
       outputs,
       payload);
   });
-  console.log(txs);
   const batchListBytes = buildBatch(txs);
   let params = {
     headers: {'Content-Type': 'application/octet-stream'}

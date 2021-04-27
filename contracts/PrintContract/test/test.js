@@ -13,33 +13,7 @@ describe('Put', async () => {
     printerId: 8372,
     manufacturerId: "rer2323342"
   }
-  it('must have an quotationId',
-    async () => {
-      try {
-        await axios.post(`http://localhost:3001/api/quote/`, data);
-        var data1 = {
-          id: "dwwedwe323ede",
-        }
-        const put = await axios.put(`http://localhost:3003/api/order/`, data1)
-        assert.fail("ee");
-      } catch (e) {
-        assert.equal(e.message, "Request failed with status code 500");
-      }
-    }).timeout(20 * 1000);
-    it('must have an id',
-    async () => {
-      try {
-        await axios.post(`http://localhost:3001/api/quote/`, data);
-        var data1 = {
-          quotationId: "1827172y2ws2w2"
-        }
-        const put = await axios.put(`http://localhost:3003/api/order/`, data1)
-        assert.fail(put);
-      } catch (e) {
-        assert.equal(e.message, "Request failed with status code 500");
-      }
-    }).timeout(20 * 1000);
-  it('Should add the order correctly',
+  it('Should add the order printing correctly',
     async () => {
       try {
         await axios.post(`http://localhost:3001/api/quote/`, data);
@@ -47,17 +21,18 @@ describe('Put', async () => {
           id: "dwwedwe323ede",
           quotationId: "1827172y2ws2w2"
         }
-        const put = await axios.put(`http://localhost:3003/api/order/`, data1)
+        await axios.put(`http://localhost:3003/api/order/`, data1)
+        const put = await axios.put(`http://localhost:3002/api/print/`, data1)
         assert.equal(put.status, 200);
       } catch (e) {
         assert.fail(e.message);
       }
     }).timeout(20 * 1000);
-  it('Get order',
+  it('Get order printing',
     async () => {
       try {
         const txid1 = "1827172y2ws2w2";
-        const post = await axios.get(`http://localhost:3003/api/order/${txid1}`);
+        const post = await axios.get(`http://localhost:3002/api/print/${txid1}`);
         assert.equal(post.status, 200);
       } catch (e) {
         assert.fail(e.message);

@@ -82,6 +82,10 @@ module.exports.putSeparationMoney = async function (req, res) {
   try {
     const txid1 = req.body.quotationId
     const order = req.body.id;
+    if(order===undefined)
+    {
+      throw new Error('Incomplete data')
+    }
     //Look for the quote
     const j = await axios.get(`http://localhost:3001/api/quote/${txid1}`);
     const tran = j.data;
@@ -92,15 +96,15 @@ module.exports.putSeparationMoney = async function (req, res) {
     //Separate the money
     let jg;
     const signature = uuidv4();
-    try {
-      const { manufacturerId, price, clientId } = tran.values;
-      const je = { recipient: manufacturerId, amount: price, sender: clientId, signature, pending: true };
-      jg = await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, je);
-      console.log(jg);
-    }
-    catch (e) {
-      return res.status(500).json(e.response.data);
-    }
+    //try {
+      //const { manufacturerId, price, clientId } = tran.values;
+      //const je = { recipient: manufacturerId, amount: price, sender: clientId, signature, pending: true };
+      //jg = await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, je);
+      //console.log(jg);
+    //}
+    //catch (e) {
+      //return res.status(500).json(e.response.data);
+    //}
     //Update the status of quote to order
     const { values, date_quote } = tran;
     const status = "order";
