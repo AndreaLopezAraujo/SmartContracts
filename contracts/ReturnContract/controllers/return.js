@@ -101,6 +101,10 @@ module.exports.putReturn = async function(req, res) {
   try{
     const txid1=req.body.quotationId
     const order=req.body.id;
+    if(order===undefined)
+    {
+      throw new Error('Incomplete data')
+    }
     //Look for the printing
     const j=await axios.get(`http://localhost:3005/api/all/${txid1}`);
     const tran=j.data;
@@ -108,7 +112,7 @@ module.exports.putReturn = async function(req, res) {
     const {signature,status}=tran;
     if(status==="quote"||status==="printed"||status==="return")
     {
-      throw new Error('The quote cannot be canceled')
+      throw new Error('The quote or order cannot be canceled')
     }
     //Return the money to the user
     //try{

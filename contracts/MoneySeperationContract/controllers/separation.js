@@ -91,7 +91,7 @@ module.exports.putSeparationMoney = async function (req, res) {
     const tran = j.data;
     console.log(tran);
     if (tran === "The quote exists, but it is no longer just a quote") {
-      return res.status(210).json(tran);
+      throw new Error('The quote exists, but it is no longer just a quote')
     }
     //Separate the money
     let jg;

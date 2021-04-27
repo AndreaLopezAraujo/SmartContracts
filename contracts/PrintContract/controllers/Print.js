@@ -101,7 +101,7 @@ module.exports.putPrint = async function(req, res) {
     ||tran==="The data exists, but it is not a order is a deliver"
     ||tran==="The data exists, but it is not a order is a return")
     {
-      return res.status(210).json(tran);
+      throw new Error(tran)
     }
     //Update the status of order to printing
     const {values,date_quote,date_order,signature}=tran;

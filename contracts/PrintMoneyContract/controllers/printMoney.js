@@ -128,6 +128,10 @@ module.exports.putPrintMoney = async function (req, res) {
   try {
     const txid1 = req.body.quotationId
     const order = req.body.id;
+    if(order===undefined)
+    {
+      throw new Error('Incomplete data')
+    }
     //Look for the printing
     const j = await axios.get(`http://localhost:3004/api/deliver/${txid1}`);
     const tran = j.data;
@@ -221,7 +225,7 @@ module.exports.putDeliver = async function (req, res) {
       || tran === "The data exists, but it is not a printing is a order"
       || tran === "The data exists, but it is not a printing is a return"
       || tran === "The data exists, but it is not a printing is a deliver") {
-      return res.status(210).json(tran);
+        throw new Error(tran)
     }
     //Update the status of order to delever
     const { values, date_quote, date_order, date_printing, signature } = tran;
