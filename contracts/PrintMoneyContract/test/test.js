@@ -94,7 +94,7 @@ describe('Put deliver', async () => {
 describe('Put order finish', async () => {
   var data = {
     price: 100,
-    id: "1827172y2ws2w2",
+    id: "1827172y2ws2w23",
     deliveryDate: "20/03/2021",
     clientId: "ac.lopez",
     printerId: 8372,
@@ -138,7 +138,7 @@ describe('Put order finish', async () => {
         await axios.post(`http://localhost:3001/api/quote/`, data);
         var data1 = {
           id: "dwwedwe323ede",
-          quotationId: "1827172y2ws2w2"
+          quotationId: "1827172y2ws2w23"
         }
         await axios.put(`http://localhost:3003/api/order/`, data1)
         await axios.put(`http://localhost:3002/api/print/`, data1)
@@ -152,7 +152,7 @@ describe('Put order finish', async () => {
   it('Get order finish',
     async () => {
       try {
-        const txid1 = "1827172y2ws2w2";
+        const txid1 = "1827172y2ws2w23";
         const post = await axios.get(`http://localhost:3004/api/printFinish/${txid1}`);
         assert.equal(post.status, 200);
       } catch (e) {
@@ -167,16 +167,6 @@ describe('Put order finish', async () => {
         assert.fail(200);
       } catch (e) {
         assert.equal(e.message, "Request failed with status code 404");
-      }
-    }).timeout(20 * 1000);
-    it('Get quote is not a quote',
-    async () => {
-      try {
-        const txid1 = "1827172y2ws2w2";
-        const post = await axios.get(`http://localhost:3001/api/quote/${txid1}`);
-        assert.equal(post.status, 201);
-      } catch (e) {
-        assert.fail(e.message);
       }
     }).timeout(20 * 1000);
 });

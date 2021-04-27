@@ -130,7 +130,7 @@ module.exports.putPrintMoney = async function (req, res) {
     const order = req.body.id;
     if(order===undefined)
     {
-      throw new Error('Incomplete data')
+      throw new Error('Incomplete data1')
     }
     //Look for the printing
     const j = await axios.get(`http://localhost:3004/api/deliver/${txid1}`);
