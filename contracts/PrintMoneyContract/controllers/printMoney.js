@@ -208,6 +208,10 @@ module.exports.putDeliver = async function (req, res) {
   try {
     const txid1 = req.body.quotationId
     const order = req.body.id;
+    if(order===undefined)
+    {
+      throw new Error('Incomplete data')
+    }
     //Look for the printing
     const j = await axios.get(`http://localhost:3002/api/print/${txid1}`);
     const tran = j.data;

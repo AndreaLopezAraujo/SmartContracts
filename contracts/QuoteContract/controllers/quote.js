@@ -84,7 +84,7 @@ module.exports.getQuote = async function (req, res) {
     var tr = value;
     const status = tr.value.status;
     if (!(status === "quote")) {
-      res.status(201).json("The quote exists, but it is no longer just a quote");
+      return res.status(201).json("The quote exists, but it is no longer just a quote");
     }
     return res.status(200).json(value.value);
   }

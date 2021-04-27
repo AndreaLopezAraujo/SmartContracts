@@ -86,6 +86,7 @@ module.exports.getAll = async function(req, res) {
     if(!value){
       return res.status(404).json("not found"); 
     }
+    console.log("aqui");
     return res.status(200).json(value.value);
   }
   catch(e){
@@ -105,19 +106,19 @@ module.exports.putReturn = async function(req, res) {
     const tran=j.data;
     console.log(tran);
     const {signature,status}=tran;
-    if(status==="quote"||status==="printed")
+    if(status==="quote"||status==="printed"||status==="return")
     {
       throw new Error('The quote cannot be canceled')
     }
     //Return the money to the user
-    try{
-      const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:false}});
-      console.log(jk);
-    }
-    catch(e)
-    {
-      return res.status(500).json(e.response.data);
-    }
+    //try{
+      //const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:false}});
+      //console.log(jk);
+    //}
+    //catch(e)
+    //{
+      //return res.status(500).json(e.response.data);
+    //}
     //Update the status of data to return
     const {values,date_quote,date_order,date_printing,date_deliver}=tran;
     const status1="return";
