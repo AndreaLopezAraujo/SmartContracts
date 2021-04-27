@@ -13,7 +13,35 @@ describe('Put', async () => {
     printerId: 8372,
     manufacturerId: "rer2323342"
   }
-  it('Should add the order printing correctly',
+  it('must have an quotationId',
+    async () => {
+      try {
+        await axios.post(`http://localhost:3001/api/quote/`, data);
+        var data1 = {
+          id: "dwwedwe323ede"
+        }
+        await axios.put(`http://localhost:3003/api/order/`, data1)
+        const put = await axios.put(`http://localhost:3002/api/print/`, data1)
+        assert.fail(put);
+      } catch (e) {
+        assert.equal(e.message, "Request failed with status code 500");
+      }
+    }).timeout(20 * 1000);
+    it('must have an id',
+    async () => {
+      try {
+        await axios.post(`http://localhost:3001/api/quote/`, data);
+        var data1 = {
+          quotationId: "1827172y2ws2w2"
+        }
+        await axios.put(`http://localhost:3003/api/order/`, data1)
+        const put = await axios.put(`http://localhost:3002/api/print/`, data1)
+        assert.fail(put);
+      } catch (e) {
+        assert.equal(e.message, "Request failed with status code 500");
+      }
+    }).timeout(20 * 1000);
+    it('Should add the order printing correctly',
     async () => {
       try {
         await axios.post(`http://localhost:3001/api/quote/`, data);
@@ -42,7 +70,7 @@ describe('Put', async () => {
     async () => {
       try {
         const txid1 = "1827172y2ws2w2dd";
-        const post = await axios.get(`http://localhost:3003/api/order/${txid1}`);
+        const post = await axios.get(`http://localhost:3002/api/print/${txid1}`);
         assert.fail(200);
       } catch (e) {
         assert.equal(e.message, "Request failed with status code 404");

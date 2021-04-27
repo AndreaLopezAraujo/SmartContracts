@@ -5,10 +5,12 @@ const {
   getReturn, 
   postReturn, 
   putReturn,
-  getReturnHistory
+  getReturnHistory,
+  getAll
 } = require('../controllers/return');
 //const {authTransactionMiddleware} = require('../controllers/transaction');
 router.get('/return', getAllReturn);
+router.get('/all', getAll);
 router.get('/return/:id', getReturn);
 router.put('/return', putReturn);
 

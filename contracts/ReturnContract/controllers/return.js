@@ -79,23 +79,36 @@ module.exports.getReturn = async function(req, res) {
     return res.status(500).json({error:e})
   }
 }
+module.exports.getAll = async function(req, res) {
+  try{
+    let values = await queryState(address(req.params.id + ""));
+    let value = _.find(values, v => v.key == req.params.id + "");
+    if(!value){
+      return res.status(404).json("not found"); 
+    }
+    return res.status(200).json(value.value);
+  }
+  catch(e){
+    if(e.response && e.response.status === 404){
+      return res.status(404).json(e.response.data) 
+    }
+    return res.status(500).json({error:e})
+  }
+}
 module.exports.putReturn = async function(req, res) {
   
   try{
     const txid1=req.body.quotationId
     const order=req.body.id;
     //Look for the printing
-    const j=await axios.get(`http://localhost:3002/api/print/${txid1}`);
+    const j=await axios.get(`http://localhost:3005/api/all/${txid1}`);
     const tran=j.data;
     console.log(tran);
-    if(tran==="The data exists, but it is not a printing is a quote"
-    ||tran==="The data exists, but it is not a printing is a printed"
-    ||tran==="The data exists, but it is not a printing is a order"
-    ||tran==="The data exists, but it is not a printing is a return")
+    const {signature,status}=tran;
+    if(status==="quote"||status==="printed")
     {
-      return res.status(210).json(tran);
+      throw new Error('The quote cannot be canceled')
     }
-    const {signature}=tran;
     //Return the money to the user
     try{
       const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:false}});
@@ -107,10 +120,10 @@ module.exports.putReturn = async function(req, res) {
     }
     //Update the status of data to return
     const {values,date_quote,date_order,date_printing,date_deliver}=tran;
-    const status="return";
+    const status1="return";
     const fecha = new Date();
     const date_return= new Date(fecha);
-    const transaction={values,status,date_quote,date_order,date_printing,date_deliver,date_return};
+    const transaction={values,status:status1,date_quote,date_order,date_printing,date_deliver,date_return};
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     console.log(transaction);
