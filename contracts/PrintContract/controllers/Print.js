@@ -93,9 +93,9 @@ module.exports.putPrint = async function(req, res) {
     const msg1=JSON.stringify({clientId,quotationId});
     console.log("Mensaje");
     console.log(msg1);
-    const signature2=req.body.signature;
+    const signatureManufacturer=req.body.signature;
     console.log("firma");
-    console.log(signature2);
+    console.log(signatureManufacturer);
     if(order===undefined)
     {
       throw new Error('Incomplete data')
@@ -113,7 +113,7 @@ module.exports.putPrint = async function(req, res) {
       throw new Error(tran)
     }
     //Get signature from the quote
-    const signature = tran.signature;
+    const signatureUser = tran.signatureUser;
     const msg2 = JSON.stringify(tran.msg);
     console.log("Mensaje2");
     console.log(msg2);
@@ -123,7 +123,7 @@ module.exports.putPrint = async function(req, res) {
     const {
       getPublicKey
     } = require('../controllers/separation');
-    const s = getPublicKey(msg1, signature2);
+    const s = getPublicKey(msg1, signatureManufacturer);
     console.log("llave 1: " + s)
     const s2 = getPublicKey(msg2, signature);
     console.log("llave 2: " + s2)
@@ -131,11 +131,11 @@ module.exports.putPrint = async function(req, res) {
       throw new Error('the publicKey are differets')
     }
     //Update the status of order to printing
-    const {values,date_quote,date_order,signature}=tran;
+    const {values,date_quote,date_order,signatureUser}=tran;
     const status="printing";
     const fecha = new Date();
     const date_printing= new Date(fecha);
-    const transaction={values,status,date_quote,date_order,date_printing,signature};
+    const transaction={values,status,date_quote,date_order,date_printing,signatureUser,signatureManufacturer};
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});

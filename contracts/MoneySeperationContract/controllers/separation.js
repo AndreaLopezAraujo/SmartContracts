@@ -100,14 +100,14 @@ module.exports.putSeparationMoney = async function (req, res) {
       throw new Error('The quote exists, but it is no longer just a quote')
     }
     //Get signature from the quote
-    const signature = tran.signature;
+    const signatureUser = tran.signatureUser;
     const msg2 = JSON.stringify(tran.msg);
     //Comaparate signatures
     const {
       getPublicKey
     } = require('../controllers/separation');
     const s = getPublicKey(msg1, signature2);
-    const s2 = getPublicKey(msg2, signature);
+    const s2 = getPublicKey(msg2, signatureUser);
     if (s != s2) {
       throw new Error('Public keys are different');
     }
@@ -128,7 +128,7 @@ module.exports.putSeparationMoney = async function (req, res) {
     const status = "order";
     const fecha = new Date();
     const date_order = new Date(fecha);
-    const transaction = { values, status, date_quote, date_order, signature };
+    const transaction = { values, status, date_quote, date_order, signatureUser };
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({ func: 'put', args: { transaction, txid: txid1 } });

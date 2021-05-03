@@ -102,7 +102,7 @@ module.exports.postQuote = async function (req, res) {
     const txid1 = req.body.id;
     const {deliveryDate,price,clientId,manufacturerId,catalogItemId,printSettingsIds,printerId}=req.body;
     //Get signature
-    const signature=req.body.signature;
+    const signatureUser=req.body.signature;
     const msg=
     {
       catalogItemId,clientId,printSettingsIds
@@ -115,7 +115,7 @@ module.exports.postQuote = async function (req, res) {
     const fecha = new Date();
     const date_quote = new Date(fecha);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
-    const payload = JSON.stringify({ func: 'post', args: { transaction: { values, date_quote, status,signature,msg }, txid: txid1 } });
+    const payload = JSON.stringify({ func: 'post', args: { transaction: { values, date_quote, status,signatureUser,msg }, txid: txid1 } });
     await sendTransaction([{
       transactionFamily: TRANSACTION_FAMILY,
       transactionFamilyVersion: TRANSACTION_FAMILY_VERSION,
