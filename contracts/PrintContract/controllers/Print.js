@@ -111,6 +111,7 @@ module.exports.putPrint = async function(req, res) {
     ||tran==="The data exists, but it is not a order is a deliver"
     ||tran==="The data exists, but it is not a order is a return")
     {
+      console.log(tran);
       throw new Error(tran)
     }
     console.log("vio la orden")
