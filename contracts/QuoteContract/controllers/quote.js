@@ -131,3 +131,27 @@ module.exports.postQuote = async function (req, res) {
     return res.status(500).json({ err });
   }
 };
+function readFile(file) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(file, (err, data) => {
+      if (err) {
+        resolve(null);
+      }
+      try {
+        let p = JSON.parse(data);
+        return resolve(p);
+      }
+      catch (e) {
+        resolve(null);
+      }
+    });
+  });
+}
+
+module.exports.getQuoteHistory = async function (req, res) {
+  let state = await readFile('./data/current_state.json');
+  if (!(req.params.id in state)) {
+    return res.status(404).json('not found');
+  }
+  return res.json(state[req.params.id]);
+} 
