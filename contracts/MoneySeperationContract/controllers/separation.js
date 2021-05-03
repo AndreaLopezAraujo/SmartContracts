@@ -116,18 +116,17 @@ module.exports.putSeparationMoney = async function (req, res) {
       throw new Error('Public keys are different');
     }
     //Separate the money
-    let jg;
-    const {transactionCNK}=req.body;
+    let moneyModule;
+    const { transactionCNK } = req.body;
     console.log(transactionCNK);
-    //try {
-    //const { manufacturerId, price, clientId } = tran.values;
-    //const je = { recipient: manufacturerId, amount: price, sender: clientId, signature, pending: true };
-    //jg = await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, je);
-    //console.log(jg);
-    //}
-    //catch (e) {
-    //return res.status(500).json(e.response.data);
-    //}
+    try {
+      const transaction = { transactionCNK };
+      await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, transaction);
+      console.log(moneyModule);
+    }
+    catch (e) {
+      return res.status(500).json(e.response.data);
+    }
     //Update the status of quote to order
     const { values, date_quote } = tran;
     const status = "order";
