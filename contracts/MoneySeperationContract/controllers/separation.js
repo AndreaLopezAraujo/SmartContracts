@@ -102,10 +102,6 @@ module.exports.putSeparationMoney = async function (req, res) {
     //Get signature from the quote
     const signature = tran.signature;
     const msg2 = JSON.stringify(tran.msg);
-    console.log("Mensaje2");
-    console.log(msg2);
-    console.log("firma2");
-    console.log(signature);
     //Comaparate signatures
     const {
       getPublicKey
