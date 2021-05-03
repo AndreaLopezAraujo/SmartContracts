@@ -86,7 +86,8 @@ module.exports.putSeparationMoney = async function (req, res) {
     const txid1 = req.body.quotationId
     const order = req.body.id;
     const clientId=req.body.quotation.clientId;
-    const msg1={clientId,quotationId};
+    //Get signature
+    const msg1=JSON.stringify({clientId,quotationId});
     console.log("Mensaje");
     console.log(msg1);
     const signature2=req.body.signature;
@@ -104,7 +105,7 @@ module.exports.putSeparationMoney = async function (req, res) {
     }
     //Comaparate signatures
     const signature=tran.signature;
-    const msg2=tran.msg;
+    const msg2=JSON.stringify(tran.msg);
     console.log("Mensaje2");
     console.log(msg2);
     console.log("firma2");
