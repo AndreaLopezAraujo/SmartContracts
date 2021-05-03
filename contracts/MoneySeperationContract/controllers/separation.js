@@ -82,11 +82,15 @@ module.exports.getSeparationMoney = async function (req, res) {
 module.exports.putSeparationMoney = async function (req, res) {
 
   try {
-    const val=req.body;
-    console.log(val);
     const txid1 = req.body.quotationId
     const order = req.body.id;
+    const clientId=req.body.clientId;
+    const msg1={txid1,clientId};
+    console.log("Mensaje");
+    console.log(msg1);
     const signature2=req.body.signature;
+    console.log("firma");
+    console.log(signature2);
     if(order===undefined)
     {
       throw new Error('Incomplete data')
@@ -101,13 +105,17 @@ module.exports.putSeparationMoney = async function (req, res) {
     //Comaparate signatures
     const signature=tran.signature;
     const msg2=tran.msg;
+    console.log("Mensaje2");
+    console.log(msg2);
+    console.log("firma2");
+    console.log(signature);
     const {
       getPublicKey
     } = require('../controllers/separation');
-    const s =getPublicKey(txid1,signature2);
-    console.log(s);
+    const s =getPublicKey(msg1,signature2);
+    console.log("llave 1: "+s)
     const s2 =getPublicKey(msg2,signature);
-    console.log(s2);
+    console.log("llave 2: "+s2)
     if(s!=s2)
     {
       throw new Error('the publicKey are differets')
