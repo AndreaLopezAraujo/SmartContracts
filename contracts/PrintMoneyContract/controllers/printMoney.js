@@ -245,7 +245,8 @@ module.exports.putDeliver = async function (req, res) {
     const creationDate=or.creationDate;
     const createdAt=or.createdAt;
     const updatedAt=or.updatedAt;
-    const m={createdAt,creationDate,id,quotationId,updatedAt};
+    const status=or.status;
+    const m={createdAt,creationDate,id,quotationId,status,updatedAt};
     console.log(m);
     //Get signature from order
     const signatureM=req.body.signature;
