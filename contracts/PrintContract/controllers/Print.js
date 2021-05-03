@@ -113,15 +113,19 @@ module.exports.putPrint = async function(req, res) {
     {
       throw new Error(tran)
     }
+    console.log("vio la orden")
     //Update the status of order to printing
     const {values,date_quote,date_order,signatureUser}=tran;
     status="printing";
     const fecha = new Date();
     const date_printing= new Date(fecha);
     const transaction={values,status,date_quote,date_order,date_printing,signatureUser,signatureManufacturer};
+    console.log("hizo la transaccion")
     const input = getAddress(TRANSACTION_FAMILY, orderId);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
+    console.log("saco los valores");
     const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});
+    console.log("envio la monda");
     const resc= await sendTransactionWithAwait([
       {
         transactionFamily: TRANSACTION_FAMILY, 
@@ -136,7 +140,7 @@ module.exports.putPrint = async function(req, res) {
   }
   catch(err){
     let errMsg;
-    console.log(errMsg);
+    console.log(err);
     if(err.data){
       errMsg = err.data;
       if(err.message == 'Invalid transaction'){
