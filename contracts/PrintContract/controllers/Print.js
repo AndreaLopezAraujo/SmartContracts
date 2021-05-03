@@ -93,7 +93,7 @@ module.exports.putPrint = async function(req, res) {
     const msgManufacture=or;
     //Get signature from order
     const signatureManufacturer=req.body.signature;
-    if(orderId===undefined||order===undefined)
+    if(orderId===undefined||or===undefined)
     {
       throw new Error('Incomplete data')
     }
