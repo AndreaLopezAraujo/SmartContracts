@@ -121,7 +121,7 @@ module.exports.putReturn = async function (req, res) {
     const j = await axios.get(`http://localhost:3005/api/all/${txid1}`);
     const tran = j.data;
     console.log(tran);
-    const { signature, status1:status } = tran;
+    const status1 = tran.status;
     if (status1 === "quote" || status1 === "printed" || status1 === "return") {
       throw new Error('The quote or order cannot be canceled')
     }
