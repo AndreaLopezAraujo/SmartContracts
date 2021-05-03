@@ -2,6 +2,8 @@ var _ = require('underscore');
 const crypto = require('crypto');
 const mongo = require('../mongodb/mongo')
 const protobuf = require('sawtooth-sdk/protobuf');
+const secp256k1 = require('secp256k1')
+const { ethers } = require("ethers");
 const { v4: uuidv4 } = require('uuid');
 const {
   sendTransaction,
@@ -82,6 +84,7 @@ module.exports.putSeparationMoney = async function (req, res) {
   try {
     const txid1 = req.body.quotationId
     const order = req.body.id;
+    const signature2=req.body.signature;
     if(order===undefined)
     {
       throw new Error('Incomplete data')
@@ -93,9 +96,23 @@ module.exports.putSeparationMoney = async function (req, res) {
     if (tran === "The quote exists, but it is no longer just a quote") {
       throw new Error('The quote exists, but it is no longer just a quote')
     }
+    //Comaparate signatures
+    const signature=tran.signature;
+    const msg2=tran.msg;
+    const {
+      getPublicKey
+    } = require('../controllers/separation');
+    const s =getPublicKey(order,signature2);
+    console.log(s);
+    const s2 =getPublicKey(msg2,signature);
+    console.log(s2);
+    if(s!=s2)
+    {
+      throw new Error('the publicKey are differets')
+    }
     //Separate the money
     let jg;
-    const signature = uuidv4();
+    //const signature = uuidv4();
     //try {
       //const { manufacturerId, price, clientId } = tran.values;
       //const je = { recipient: manufacturerId, amount: price, sender: clientId, signature, pending: true };

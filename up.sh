@@ -10,9 +10,10 @@ gnome-terminal --tab -- bash -c "cd ./contracts/QuoteContract; npm start; bash"
 gnome-terminal --tab -- bash -c "cd ./contracts/PrintContract; npm start; bash"
 gnome-terminal --tab -- bash -c "cd ./contracts/MoneySeperationContract; npm start; bash"
 gnome-terminal --tab -- bash -c "cd ./contracts/PrintMoneyContract; npm start; bash"
+gnome-terminal --tab -- bash -c "cd ./contracts/ReturnContract; npm start; bash"
 #gnome-terminal --tab -- bash -c "cd ./containers/app/client; npm start; bash"
 
 rm ./contracts/QuoteContract/data/blocks.json
 rm ./contracts/QuoteContract/data/state.json
-gnome-terminal --tab -- bash -c "cd ./contracts/ledger_sync; npm start; bash"
+#gnome-terminal --tab -- bash -c "cd ./contracts/ledger_sync; npm start; bash"
 

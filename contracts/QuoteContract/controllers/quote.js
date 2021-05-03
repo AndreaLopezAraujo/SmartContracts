@@ -99,7 +99,6 @@ module.exports.postQuote = async function (req, res) {
   try {
     //Get the quote values
     const values = req.body;
-    console.log(values);
     const txid1 = req.body.id;
     const {deliveryDate,price,clientId,manufacturerId,catalogItemId,printSettingsIds,printerId}=req.body;
     //Get signature
@@ -116,16 +115,17 @@ module.exports.postQuote = async function (req, res) {
     const fecha = new Date();
     const date_quote = new Date(fecha);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
-    const payload = JSON.stringify({ func: 'post', args: { transaction: { values, date_quote, status,signature }, txid: txid1 } });
-    let resc = await sendTransaction([{
+    const payload = JSON.stringify({ func: 'post', args: { transaction: { values, date_quote, status,signature,msg }, txid: txid1 } });
+    await sendTransaction([{
       transactionFamily: TRANSACTION_FAMILY,
       transactionFamilyVersion: TRANSACTION_FAMILY_VERSION,
       inputs: [address],
       outputs: [address],
       payload
     }]);
-    console.log(resc.data)
-    return res.status(200).json("The quote was made on date: " + date_quote + "correctly, with the id: " + txid1);
+    const men="The quote was made on date: " + date_quote + "correctly, with the id: " + txid1;
+    console.log(men);
+    return res.status(200).json(men);
   }
   catch (err) {
     console.log(err);
