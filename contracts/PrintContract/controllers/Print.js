@@ -86,19 +86,18 @@ module.exports.putPrint = async function(req, res) {
   
   try{
     console.log(req.body);
-    const quotationId=req.body.quotationId
-    const txid1 = req.body.quotationId
-    const orderId = req.body.orderId;
+    const quotationId=req.body.quotationId;
+    const txid1 = req.body.quotationId;
+    const orderId = req.body.id;
     const status=req.body.status;
-    const manufactureId=req.body.quotation.manufactureId;
     //Get signature from order
-    const msg1=JSON.stringify({manufactureId,orderId,status});
+    const msg1=JSON.stringify({quotationId,status});
     console.log("Mensaje");
     console.log(msg1);
     const signatureManufacturer=req.body.signature;
     console.log("firma");
     console.log(signatureManufacturer);
-    if(orderId===undefined||manufactureId===undefined)
+    if(orderId===undefined||status===undefined)
     {
       throw new Error('Incomplete data')
     }
