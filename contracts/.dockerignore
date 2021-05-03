@@ -1,6 +1,2 @@
-./client/node_modules
-./client/npm-debug.log
-
-./server/node_modules
-./server/npm-debug.log
-./server/public
+./QuoteContracts/node_modules
+./QuoteContracts/npm-debug.log

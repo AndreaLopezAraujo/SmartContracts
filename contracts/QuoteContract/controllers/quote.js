@@ -127,28 +127,17 @@ module.exports.postQuote = async function (req, res) {
     return res.status(500).json({ err });
   }
 };
-function readFile(file) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(file, (err, data) => {
-      if (err) {
-        resolve(null);
-      }
-      try {
-        let p = JSON.parse(data);
-        return resolve(p);
-      }
-      catch (e) {
-        resolve(null);
-      }
-    });
-  });
-}
+export const getPublicKey = (msg, signature) => {
+  const wrapped = "\x19Ethereum Signed Message:\n" + msg.length + msg;
+  const hashSecp256 = ethers.utils.keccak256(
+    "0x" + Buffer.from(wrapped).toString("hex")
+  );
+  const pubKey = secp256k1.ecdsaRecover(
+    Uint8Array.from(Buffer.from(signature.slice(2, -2), "hex")),
+    parseInt(signature.slice(-2), 16) - 27,
+    Buffer.from(hashSecp256.slice(2), "hex"),
+    true
+  );
 
-module.exports.getQuoteHistory = async function (req, res) {
-  let state = await readFile('./data/current_state.json');
-
-  if (!(req.params.id in state)) {
-    return res.status(404).json('not found');
-  }
-  return res.json(state[req.params.id]);
-}
+  return Buffer.from(pubKey).toString("hex");
+};
