@@ -167,7 +167,7 @@ module.exports.putReturn = async function (req, res) {
     const fecha = new Date();
     const date_return = new Date(fecha);
     const transaction = { values, msg, msgManufacture,status: status1, date_quote, date_order, date_printing, date_deliver, date_return, signatureUser,signatureManufacturer};
-    const input = getAddress(TRANSACTION_FAMILY, order);
+    const input = getAddress(TRANSACTION_FAMILY, orderId);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     console.log(transaction);
     const payload = JSON.stringify({ func: 'put', args: { transaction, txid: txid1 } });
