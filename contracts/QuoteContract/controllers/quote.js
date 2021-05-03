@@ -100,12 +100,12 @@ module.exports.postQuote = async function (req, res) {
     //Get the quote values
     const values = req.body;
     const txid1 = req.body.id;
-    const {deliveryDate,price,clientId,manufacturerId,catalogItemId,printSettingsId}=req.body;
+    const {deliveryDate,price,clientId,manufacturerId,catalogItemId,printSettingsIds,printerId}=req.body;
     //Get signature
     const signature=req.body.signature;
     const msg=
     {
-      catalogItemId,printSettingsId,clientId
+      catalogItemId,printSettingsIds,clientId
     }
     console.log(msg);
     if (deliveryDate === undefined|| price === undefined || clientId === undefined || printerId === undefined || manufacturerId === undefined) {
