@@ -90,7 +90,11 @@ module.exports.putPrint = async function(req, res) {
     const txid1 = quotationId;
     const orderId = req.body.order.id;
     const or=req.body.order;
-    const msgManufacture=or;
+    const id=or.id;
+    const creationDate=or.creationDate;
+    const createdAt=or.createdAt;
+    const updatedAt=or.updatedAt;
+    const msgManufacture={createdAt,creationDate,id,quotationId,updatedAt};
     //Get signature from order
     const signatureManufacturer=req.body.signature;
     if(orderId===undefined||or===undefined)

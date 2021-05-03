@@ -241,10 +241,14 @@ module.exports.putDeliver = async function (req, res) {
     const txid1 = quotationId;
     const orderId = req.body.order.id;
     const or=req.body.order;
-    const msgM=or;
+    const id=or.id;
+    const creationDate=or.creationDate;
+    const createdAt=or.createdAt;
+    const updatedAt=or.updatedAt;
+    const m={createdAt,creationDate,id,quotationId,updatedAt};
     //Get signature from order
     const signatureM=req.body.signature;
-    const msg1 = JSON.stringify(or);
+    const msg1 = JSON.stringify(m);
     console.log("Mensaje");
     console.log(msg1);
     console.log("firma");
