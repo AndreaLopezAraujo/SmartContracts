@@ -85,7 +85,7 @@ module.exports.getPrint = async function(req, res) {
 module.exports.putPrint = async function(req, res) {
   
   try{
-    console.log(req.body);
+    //console.log(req.body);
     const quotationId=req.body.order.quotationId;
     const txid1 = quotationId;
     const orderId = req.body.order.id;
@@ -103,7 +103,7 @@ module.exports.putPrint = async function(req, res) {
     //Look for the order
     const j=await axios.get(`http://localhost:3003/api/order/${txid1}`);
     const tran=j.data;
-    console.log(tran);
+    //console.log(tran);
     if(tran==="The data exists, but it is not a order is a quote"
     ||tran==="The data exists, but it is not a order is a printing"
     ||tran==="The data exists, but it is not a order is a printed"
@@ -132,6 +132,7 @@ module.exports.putPrint = async function(req, res) {
       }
     ]);
     const resp="The status of the order with id: "+txid1+" was changed to printing";
+    console.log(resp)
     return res.status(200).json(resp);
   }
   catch(err){

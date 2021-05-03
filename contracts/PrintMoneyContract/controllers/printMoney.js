@@ -179,7 +179,7 @@ module.exports.putPrintMoney = async function (req, res) {
     const pay = tran.pay;
     //Pay the money to the printer
     try {
-      console.log(pay);
+      //console.log(pay);
       const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: true } });
     }
     catch (e) {
@@ -205,6 +205,8 @@ module.exports.putPrintMoney = async function (req, res) {
       }
     ]);
     const resp = "The status of the deliver with id: " + txid1 + " was changed to finish";
+    console.log("The money was pay correctly with address "+ pay);
+    console.log(resp)
     return res.status(200).json(resp);
   }
   catch (err) {
@@ -243,7 +245,7 @@ function readFile(file) {
 }
 module.exports.putDeliver = async function (req, res) {
   try {
-    console.log(req.body);
+    //console.log(req.body);
     const quotationId = req.body.order.quotationId;
     const txid1 = quotationId;
     const orderId = req.body.order.id;
@@ -252,7 +254,7 @@ module.exports.putDeliver = async function (req, res) {
     const creationDate = or.creationDate;
     const status = or.status;
     const m = { creationDate, id, quotationId, status };
-    console.log(m);
+    //console.log(m);
     //Get signature from order
     const signatureM = req.body.signature;
     const msg1 = JSON.stringify(m);

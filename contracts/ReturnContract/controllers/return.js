@@ -99,7 +99,7 @@ module.exports.getAll = async function (req, res) {
 module.exports.putReturn = async function (req, res) {
 
   try {
-    console.log(req.body);
+    //console.log(req.body);
     const quotationId = req.body.order.quotationId;
     const txid1 = quotationId;
     const orderId = req.body.order.id;
@@ -108,21 +108,21 @@ module.exports.putReturn = async function (req, res) {
     const creationDate = or.creationDate;
     const status = or.status;
     const m = { creationDate, id, quotationId, status };
-    console.log(m);
+    //console.log(m);
     //Get signature from order
     const signatureM = req.body.signature;
     const msg1 = JSON.stringify(m);
-    console.log("Mensaje");
-    console.log(msg1);
-    console.log("firma");
-    console.log(signatureM);
+    //console.log("Mensaje");
+    //console.log(msg1);
+    //console.log("firma");
+    //console.log(signatureM);
     if (orderId === undefined || or === undefined) {
       throw new Error('Incomplete data')
     }
     //Look for the printing
     const j = await axios.get(`http://localhost:3005/api/all/${txid1}`);
     const tran = j.data;
-    console.log(tran);
+    //console.log(tran);
     const status1 = tran.status;
     if (status1 === "quote" || status1 === "printed" || status1 === "return") {
       throw new Error('The quote or order cannot be canceled')
@@ -132,18 +132,18 @@ module.exports.putReturn = async function (req, res) {
     if (tran.msgManufacture != undefined) {
       signatureManufacturer = tran.signatureManufacturer;
       const msgManufacture2 = JSON.stringify(tran.msgManufacture);
-      console.log("Mensaje2");
-      console.log(msgManufacture2);
-      console.log("firma2");
-      console.log(signatureManufacturer);
+      //console.log("Mensaje2");
+      //console.log(msgManufacture2);
+      //console.log("firma2");
+      //console.log(signatureManufacturer);
       //Comaparate signatures
       const {
         getPublicKey
       } = require('../controllers/return');
       const s = getPublicKey(msg1, signatureM);
-      console.log("llave 1: " + s)
+      //console.log("llave 1: " + s)
       const s2 = getPublicKey(msgManufacture2, signatureManufacturer);
-      console.log("llave 2: " + s2)
+      //console.log("llave 2: " + s2)
       if (s != s2) {
         throw new Error('Public keys are different')
       }
@@ -156,7 +156,7 @@ module.exports.putReturn = async function (req, res) {
     const pay = tran.pay;
     try{
     const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`,{},{params:{approve:false}});
-    console.log(jk);
+    //console.log(jk);
     }
     catch(e)
     {
@@ -183,6 +183,7 @@ module.exports.putReturn = async function (req, res) {
       }
     ]);
     const resp = "The status of the printed with id: " + txid1 + " was changed to return";
+    onsole.log("The money was returned correctly with address "+ pay);
     console.log(resp);
     return res.status(200).json(resp);
   }

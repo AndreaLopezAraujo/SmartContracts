@@ -95,7 +95,7 @@ module.exports.putSeparationMoney = async function (req, res) {
     //Look for the quote
     const j = await axios.get(`http://localhost:3001/api/quote/${txid1}`);
     const tran = j.data;
-    console.log(tran);
+    //console.log(tran);
     if (tran === "The quote exists, but it is no longer just a quote") {
       throw new Error('The quote exists, but it is no longer just a quote')
     }
@@ -117,7 +117,7 @@ module.exports.putSeparationMoney = async function (req, res) {
     let pay;
     try {
       moneyModule=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, {...transactionCNK});
-      console.log(moneyModule.data);
+      //console.log(moneyModule.data);
       pay=moneyModule.data.payload.signature;
     }
     catch (e) {
@@ -144,7 +144,7 @@ module.exports.putSeparationMoney = async function (req, res) {
       }
     ]);
     const resp = "The status of the quote with id: " + txid1 + " was changed to order";
-    console.log(moneyModule.data);
+    console.log("The money was separated correctly with address "+ pay);
     console.log(resp);
     return res.status(200).json({resp,CNKAPI:moneyModule.data});
   }
