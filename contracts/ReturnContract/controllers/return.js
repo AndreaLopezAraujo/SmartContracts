@@ -137,7 +137,7 @@ module.exports.putReturn = async function (req, res) {
       //Comaparate signatures
       const {
         getPublicKey
-      } = require('../controllers/printMoney');
+      } = require('../controllers/return');
       const s = getPublicKey(msg1, signatureM);
       console.log("llave 1: " + s)
       const s2 = getPublicKey(msgManufacture2, signatureManufacturer);
