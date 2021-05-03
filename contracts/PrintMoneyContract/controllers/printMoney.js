@@ -135,10 +135,8 @@ module.exports.putPrintMoney = async function (req, res) {
     const or = req.body.order;
     const id = or.id;
     const creationDate = or.creationDate;
-    const createdAt = or.createdAt;
-    const updatedAt = or.updatedAt;
     const status = or.status;
-    const m = { createdAt, creationDate, id, quotationId, status, updatedAt };
+    const m = { creationDate, id, quotationId, status };
     console.log(m);
     //Get signature from order
     const signatureM = req.body.signature;
@@ -189,11 +187,11 @@ module.exports.putPrintMoney = async function (req, res) {
     //return res.status(500).json(e.response.data);
     //}
     //Update the status of order to printing
-    const { values, date_quote, date_order, date_printing, date_deliver,msg,msgManufacture, signatureUser } = tran;
+    const { values, date_quote, date_order, date_printing, date_deliver, msg, msgManufacture, signatureUser } = tran;
     const status1 = "finish";
     const fecha = new Date();
     const date_printed = new Date(fecha);
-    const transaction = { values, msg, msgManufacture, status: status1, date_quote, date_order, date_printing, date_deliver,date_printed, signatureUser, signatureManufacturer };
+    const transaction = { values, msg, msgManufacture, status: status1, date_quote, date_order, date_printing, date_deliver, date_printed, signatureUser, signatureManufacturer };
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({ func: 'put', args: { transaction, txid: txid1 } });
@@ -258,10 +256,6 @@ module.exports.putDeliver = async function (req, res) {
     //Get signature from order
     const signatureM = req.body.signature;
     const msg1 = JSON.stringify(m);
-    console.log("Mensaje");
-    console.log(msg1);
-    console.log("firma");
-    console.log(signatureM);
     if (orderId === undefined || or === undefined) {
       throw new Error('Incomplete data')
     }
@@ -274,24 +268,18 @@ module.exports.putDeliver = async function (req, res) {
       || tran === "The data exists, but it is not a printing is a order"
       || tran === "The data exists, but it is not a printing is a return"
       || tran === "The data exists, but it is not a printing is a deliver") {
-        console.log(tran)
+      console.log(tran)
       throw new Error(tran)
     }
     //Get signature from the quote
     const signatureManufacturer = tran.signatureManufacturer;
     const msgManufacture2 = JSON.stringify(tran.msgManufacture);
-    console.log("Mensaje2");
-    console.log(msgManufacture2);
-    console.log("firma2");
-    console.log(signatureManufacturer);
     //Comaparate signatures
     const {
       getPublicKey
     } = require('../controllers/printMoney');
     const s = getPublicKey(msg1, signatureM);
-    console.log("llave 1: " + s)
     const s2 = getPublicKey(msgManufacture2, signatureManufacturer);
-    console.log("llave 2: " + s2)
     if (s != s2) {
       throw new Error('Public keys are different')
     }
