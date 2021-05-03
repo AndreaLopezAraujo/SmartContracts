@@ -160,7 +160,7 @@ module.exports.putPrintMoney = async function (req, res) {
     }
 
     //Get signature from the quote
-    const signatureUser = tran.signatureUser,;
+    const signatureUser = tran.signatureUser;
     const msgManufacture2 = JSON.stringify(tran.msg);
     console.log("Mensaje2");
     console.log(msgManufacture2);
@@ -172,7 +172,7 @@ module.exports.putPrintMoney = async function (req, res) {
     } = require('../controllers/printMoney');
     const s = getPublicKey(msg1, signatureM);
     console.log("llave 1: " + s)
-    const s2 = getPublicKey(msgManufacture2, signatureUser,);
+    const s2 = getPublicKey(msgManufacture2, signatureUser);
     console.log("llave 2: " + s2)
     if (s != s2) {
       throw new Error('Public keys are different')
