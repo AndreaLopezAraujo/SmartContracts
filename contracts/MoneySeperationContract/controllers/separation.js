@@ -82,6 +82,8 @@ module.exports.getSeparationMoney = async function (req, res) {
 module.exports.putSeparationMoney = async function (req, res) {
 
   try {
+    const values=req.body;
+    console.log(values);
     const txid1 = req.body.quotationId
     const order = req.body.id;
     const signature2=req.body.signature;
