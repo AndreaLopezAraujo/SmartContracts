@@ -85,6 +85,7 @@ module.exports.getPrint = async function(req, res) {
 module.exports.putPrint = async function(req, res) {
   
   try{
+    console.log(req.body);
     const quotationId=req.body.quotationId
     const txid1 = req.body.quotationId
     const order = req.body.id;
