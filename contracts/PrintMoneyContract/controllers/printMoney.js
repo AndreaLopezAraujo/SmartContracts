@@ -261,7 +261,7 @@ module.exports.putDeliver = async function (req, res) {
     //Look for the printing
     const j = await axios.get(`http://localhost:3002/api/print/${txid1}`);
     const tran = j.data;
-    console.log(tran);
+    //console.log(tran);
     if (tran === "The data exists, but it is not a printing is a quote"
       || tran === "The data exists, but it is not a printing is a finish"
       || tran === "The data exists, but it is not a printing is a order"
@@ -285,7 +285,7 @@ module.exports.putDeliver = async function (req, res) {
     const s2 = getPublicKey(msgManufacture2, signatureManufacturer);
     console.log("llave 2: " + s2)
     if (s != s2) {
-      throw new Error('the publicKey are differets')
+      throw new Error('Public keys are different')
     }
     //Update the status of order to delever
     const { values, date_quote, date_order, signatureUser,msg,msgManufacture } = tran;
