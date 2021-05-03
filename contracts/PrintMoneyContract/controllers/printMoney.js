@@ -158,6 +158,7 @@ module.exports.putPrintMoney = async function (req, res) {
       || tran === "The data exists, but it is not a deliver is a return") {
       return res.status(210).json(tran);
     }
+    
     //Get signature from the quote
     const signatureManufacturer = tran.signatureManufacturer;
     const msgManufacture2 = JSON.stringify(tran.msgManufacture);
