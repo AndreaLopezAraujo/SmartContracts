@@ -117,7 +117,7 @@ module.exports.putSeparationMoney = async function (req, res) {
     console.log(transactionCNK);
     try {
       const transaction = { transactionCNK };
-      await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, transaction);
+      moneyModule=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, transaction);
       console.log(moneyModule);
     }
     catch (e) {
@@ -142,8 +142,9 @@ module.exports.putSeparationMoney = async function (req, res) {
       }
     ]);
     const resp = "The status of the quote with id: " + txid1 + " was changed to order";
+    console.log(moneyModule.data);
     console.log(resp);
-    return res.status(200).json(resp);
+    return res.status(200).json({resp,CNKAPI:moneyModule.data});
   }
   catch (err) {
     console.log(err);
