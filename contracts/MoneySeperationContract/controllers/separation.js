@@ -121,6 +121,7 @@ module.exports.putSeparationMoney = async function (req, res) {
       console.log(moneyModule);
     }
     catch (e) {
+      console.log(e.response.data);
       return res.status(500).json(e.response.data);
     }
     //Update the status of quote to order
