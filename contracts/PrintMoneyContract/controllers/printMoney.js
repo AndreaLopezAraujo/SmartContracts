@@ -160,19 +160,19 @@ module.exports.putPrintMoney = async function (req, res) {
     }
 
     //Get signature from the quote
-    const signatureManufacturer = tran.signatureManufacturer;
-    const msgManufacture2 = JSON.stringify(tran.msgManufacture);
+    const signatureUser = tran.signatureUser,;
+    const msgManufacture2 = JSON.stringify(tran.msg);
     console.log("Mensaje2");
     console.log(msgManufacture2);
     console.log("firma2");
-    console.log(signatureManufacturer);
+    console.log(signatureUser,);
     //Comaparate signatures
     const {
       getPublicKey
     } = require('../controllers/printMoney');
     const s = getPublicKey(msg1, signatureM);
     console.log("llave 1: " + s)
-    const s2 = getPublicKey(msgManufacture2, signatureManufacturer);
+    const s2 = getPublicKey(msgManufacture2, signatureUser,);
     console.log("llave 2: " + s2)
     if (s != s2) {
       throw new Error('Public keys are different')
@@ -187,7 +187,7 @@ module.exports.putPrintMoney = async function (req, res) {
       return res.status(500).json(e.response.data);
     }
     //Update the status of order to printing
-    const { values, date_quote, date_order, date_printing, date_deliver, msg, msgManufacture, signatureUser } = tran;
+    const { values, date_quote, date_order, date_printing, date_deliver, msg, msgManufacture, signatureManufacturer } = tran;
     const status1 = "finish";
     const fecha = new Date();
     const date_printed = new Date(fecha);
