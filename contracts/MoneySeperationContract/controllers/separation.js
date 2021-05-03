@@ -124,7 +124,7 @@ module.exports.putSeparationMoney = async function (req, res) {
       return res.status(500).json(e.response.data);
     }
     //Update the status of quote to order
-    const { values, date_quote } = tran;
+    const { values, date_quote ,msg} = tran;
     const status = "order";
     const fecha = new Date();
     const date_order = new Date(fecha);
