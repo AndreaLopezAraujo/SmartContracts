@@ -116,8 +116,7 @@ module.exports.putSeparationMoney = async function (req, res) {
     const { transactionCNK } = req.body;
     console.log(transactionCNK);
     try {
-      const transaction = { transactionCNK };
-      moneyModule=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, transaction);
+      moneyModule=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, transactionCNK);
       console.log(moneyModule);
     }
     catch (e) {
