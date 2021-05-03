@@ -139,7 +139,7 @@ module.exports.putPrintMoney = async function (req, res) {
     const m = { creationDate, id, quotationId, status };
     //Get signature from order
     const signatureM = req.body.signature;
-    //const msg1 = JSON.stringify(m);
+    const msg1 = JSON.stringify(m);
     //console.log("Mensaje");
     //console.log(msg1);
     //console.log("firma");

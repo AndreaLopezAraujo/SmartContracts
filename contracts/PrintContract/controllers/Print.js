@@ -122,7 +122,7 @@ module.exports.putPrint = async function(req, res) {
     const input = getAddress(TRANSACTION_FAMILY, orderId);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});
-    const resc= await sendTransactionWithAwait([
+    await sendTransactionWithAwait([
       {
         transactionFamily: TRANSACTION_FAMILY, 
         transactionFamilyVersion: TRANSACTION_FAMILY_VERSION, 
