@@ -276,7 +276,7 @@ module.exports.putDeliver = async function (req, res) {
     } = require('../controllers/printMoney');
     const s = getPublicKey(msg1, signatureM);
     console.log("llave 1: " + s)
-    const s2 = getPublicKey(msg2, signatureManufacturer);
+    const s2 = getPublicKey(msgManufacture2, signatureManufacturer);
     console.log("llave 2: " + s2)
     if (s != s2) {
       throw new Error('the publicKey are differets')
