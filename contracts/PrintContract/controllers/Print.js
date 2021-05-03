@@ -86,13 +86,14 @@ module.exports.putPrint = async function(req, res) {
   
   try{
     console.log(req.body);
-    const quotationId=req.body.quotationId;
-    const txid1 = req.body.quotationId;
-    const orderId = req.body.id;
-    const status=req.body.status;
+    const quotationId=req.body.order.quotationId;
+    const txid1 = quotationId;
+    const orderId = req.body.order.id;
+    const or=req.body.order;
+    const msgManufacture=or;
     //Get signature from order
     const signatureManufacturer=req.body.signature;
-    if(orderId===undefined||status===undefined)
+    if(orderId===undefined||order===undefined)
     {
       throw new Error('Incomplete data')
     }
@@ -110,11 +111,11 @@ module.exports.putPrint = async function(req, res) {
       throw new Error(tran)
     }
     //Update the status of order to printing
-    const {values,date_quote,date_order,signatureUser}=tran;
+    const {values,date_quote,date_order,signatureUser,msg}=tran;
     const status1="printing";
     const fecha = new Date();
     const date_printing= new Date(fecha);
-    const transaction={values,status:status1,date_quote,date_order,date_printing,signatureUser,signatureManufacturer};
+    const transaction={values,msg,msgManufacture,status:status1,date_quote,date_order,date_printing,signatureUser,signatureManufacturer};
     const input = getAddress(TRANSACTION_FAMILY, orderId);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});
