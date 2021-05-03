@@ -121,8 +121,8 @@ module.exports.putReturn = async function (req, res) {
     const j = await axios.get(`http://localhost:3005/api/all/${txid1}`);
     const tran = j.data;
     console.log(tran);
-    const { signature, status } = tran;
-    if (status === "quote" || status === "printed" || status === "return") {
+    const { signature, status1:status } = tran;
+    if (status1 === "quote" || status1 === "printed" || status1 === "return") {
       throw new Error('The quote or order cannot be canceled')
     }
     //Get signature from the quote
@@ -163,10 +163,10 @@ module.exports.putReturn = async function (req, res) {
     }
     //Update the status of data to return
     const { values, date_quote, date_order, date_printing, date_deliver, msg, msgManufacture, signatureUser } = tran;
-    const status1 = "return";
+    const status2 = "return";
     const fecha = new Date();
     const date_return = new Date(fecha);
-    const transaction = { values, msg, msgManufacture,status: status1, date_quote, date_order, date_printing, date_deliver, date_return, signatureUser,signatureManufacturer};
+    const transaction = { values, msg, msgManufacture,status: status2, date_quote, date_order, date_printing, date_deliver, date_return, signatureUser,signatureManufacturer};
     const input = getAddress(TRANSACTION_FAMILY, orderId);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     console.log(transaction);
@@ -181,9 +181,11 @@ module.exports.putReturn = async function (req, res) {
       }
     ]);
     const resp = "The status of the printed with id: " + txid1 + " was changed to return";
+    console.log(resp);
     return res.status(200).json(resp);
   }
   catch (err) {
+    console.log(err);
     let errMsg;
     if (err.data) {
       errMsg = err.data;

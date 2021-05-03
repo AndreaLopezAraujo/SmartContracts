@@ -128,7 +128,7 @@ module.exports.getDelivered = async function (req, res) {
 module.exports.putPrintMoney = async function (req, res) {
 
   try {
-    console.log(req.body);
+    //console.log(req.body);
     const quotationId = req.body.order.quotationId;
     const txid1 = quotationId;
     const orderId = req.body.order.id;
@@ -137,14 +137,13 @@ module.exports.putPrintMoney = async function (req, res) {
     const creationDate = or.creationDate;
     const status = or.status;
     const m = { creationDate, id, quotationId, status };
-    console.log(m);
     //Get signature from order
     const signatureM = req.body.signature;
-    const msg1 = JSON.stringify(m);
-    console.log("Mensaje");
-    console.log(msg1);
-    console.log("firma");
-    console.log(signatureM);
+    //const msg1 = JSON.stringify(m);
+    //console.log("Mensaje");
+    //console.log(msg1);
+    //console.log("firma");
+    //console.log(signatureM);
     if (orderId === undefined || or === undefined) {
       throw new Error('Incomplete data')
     }
@@ -162,18 +161,18 @@ module.exports.putPrintMoney = async function (req, res) {
     //Get signature from the quote
     const signatureUser = tran.signatureUser;
     const msgManufacture2 = JSON.stringify(tran.msg);
-    console.log("Mensaje2");
-    console.log(msgManufacture2);
-    console.log("firma2");
-    console.log(signatureUser,);
+    //console.log("Mensaje2");
+    //console.log(msgManufacture2);
+    //console.log("firma2");
+    //console.log(signatureUser,);
     //Comaparate signatures
     const {
       getPublicKey
     } = require('../controllers/printMoney');
     const s = getPublicKey(msg1, signatureM);
-    console.log("llave 1: " + s)
+    //console.log("llave 1: " + s)
     const s2 = getPublicKey(msgManufacture2, signatureUser);
-    console.log("llave 2: " + s2)
+    //console.log("llave 2: " + s2)
     if (s != s2) {
       throw new Error('Public keys are different')
     }
