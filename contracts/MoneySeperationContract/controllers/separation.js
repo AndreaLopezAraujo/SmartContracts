@@ -117,7 +117,7 @@ module.exports.putSeparationMoney = async function (req, res) {
     console.log(transactionCNK);
     try {
       moneyModule=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, {...transactionCNK});
-      console.log(moneyModule);
+      console.log(moneyModule.data);
     }
     catch (e) {
       console.log(e.response.data);
@@ -125,10 +125,11 @@ module.exports.putSeparationMoney = async function (req, res) {
     }
     //Update the status of quote to order
     const { values, date_quote ,msg} = tran;
+    console.log(msg);
     const status = "order";
     const fecha = new Date();
     const date_order = new Date(fecha);
-    const transaction = { values, msg,status, date_quote, date_order, signatureUser, };
+    const transaction = { values,msg,status, date_quote, date_order, signatureUser, };
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({ func: 'put', args: { transaction, txid: txid1 } });
