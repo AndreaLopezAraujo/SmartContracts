@@ -84,7 +84,7 @@ module.exports.putSeparationMoney = async function (req, res) {
   try {
     const txid1 = req.body.quotationId
     const order = req.body.id;
-    const clientId=req.body.clientId;
+    const clientId=req.body.quotation.clientId;
     const msg1={txid1,clientId};
     console.log("Mensaje");
     console.log(msg1);
@@ -98,7 +98,6 @@ module.exports.putSeparationMoney = async function (req, res) {
     //Look for the quote
     const j = await axios.get(`http://localhost:3001/api/quote/${txid1}`);
     const tran = j.data;
-    console.log(tran);
     if (tran === "The quote exists, but it is no longer just a quote") {
       throw new Error('The quote exists, but it is no longer just a quote')
     }
