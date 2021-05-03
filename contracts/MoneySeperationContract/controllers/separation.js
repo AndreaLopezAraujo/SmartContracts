@@ -102,7 +102,7 @@ module.exports.putSeparationMoney = async function (req, res) {
     const {
       getPublicKey
     } = require('../controllers/separation');
-    const s =getPublicKey(order,signature2);
+    const s =getPublicKey(txid1,signature2);
     console.log(s);
     const s2 =getPublicKey(msg2,signature);
     console.log(s2);
