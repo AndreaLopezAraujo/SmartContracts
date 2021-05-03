@@ -177,12 +177,11 @@ module.exports.putPrintMoney = async function (req, res) {
     if (s != s2) {
       throw new Error('Public keys are different')
     }
+    const pay = tran.pay;
     //Pay the money to the printer
     try {
-      const pay = tran.pay;
       console.log(pay);
       const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: true } });
-      console.log(jk);
     }
     catch (e) {
       console.log(e.response);
