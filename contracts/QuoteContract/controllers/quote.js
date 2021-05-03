@@ -97,13 +97,17 @@ module.exports.getQuote = async function (req, res) {
 }
 module.exports.postQuote = async function (req, res) {
   try {
+    //Get the quote values
     const values = req.body;
     const txid1 = req.body.id;
-    const deliveryDate = req.body.deliveryDate;
-    const price = req.body.price;
-    const clientId = req.body.clientId;
-    const printerId = req.body.printerId;
-    const manufacturerId = req.body.manufacturerId;
+    const {deliveryDate,price,clientId,manufacturerId,catalogItemId,printSettingsId}=req.body;
+    //Get signature
+    const signature=req.body.signature;
+    const msg=
+    {
+      catalogItemId,printSettingsId,clientId
+    }
+    console.log(msg);
     if (deliveryDate === undefined|| price === undefined || clientId === undefined || printerId === undefined || manufacturerId === undefined) {
       throw new Error('Incomplete data')
     }
@@ -111,7 +115,7 @@ module.exports.postQuote = async function (req, res) {
     const fecha = new Date();
     const date_quote = new Date(fecha);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
-    const payload = JSON.stringify({ func: 'post', args: { transaction: { values, date_quote, status }, txid: txid1 } });
+    const payload = JSON.stringify({ func: 'post', args: { transaction: { values, date_quote, status,signature }, txid: txid1 } });
     let resc = await sendTransaction([{
       transactionFamily: TRANSACTION_FAMILY,
       transactionFamilyVersion: TRANSACTION_FAMILY_VERSION,
@@ -126,18 +130,4 @@ module.exports.postQuote = async function (req, res) {
     console.log(err);
     return res.status(500).json({ err });
   }
-};
-export const getPublicKey = (msg, signature) => {
-  const wrapped = "\x19Ethereum Signed Message:\n" + msg.length + msg;
-  const hashSecp256 = ethers.utils.keccak256(
-    "0x" + Buffer.from(wrapped).toString("hex")
-  );
-  const pubKey = secp256k1.ecdsaRecover(
-    Uint8Array.from(Buffer.from(signature.slice(2, -2), "hex")),
-    parseInt(signature.slice(-2), 16) - 27,
-    Buffer.from(hashSecp256.slice(2), "hex"),
-    true
-  );
-
-  return Buffer.from(pubKey).toString("hex");
 };
