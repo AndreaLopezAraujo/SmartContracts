@@ -105,7 +105,7 @@ module.exports.postQuote = async function (req, res) {
     const signature=req.body.signature;
     const msg=
     {
-      catalogItemId,printSettingsIds,clientId
+      catalogItemId,clientId,printSettingsIds
     }
     console.log(msg);
     if (deliveryDate === undefined|| price === undefined || clientId === undefined || printerId === undefined || manufacturerId === undefined) {

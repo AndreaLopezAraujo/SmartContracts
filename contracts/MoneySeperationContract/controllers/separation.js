@@ -85,7 +85,7 @@ module.exports.putSeparationMoney = async function (req, res) {
     const txid1 = req.body.quotationId
     const order = req.body.id;
     const clientId=req.body.quotation.clientId;
-    const msg1={txid1,clientId};
+    const msg1={clientId,txid1};
     console.log("Mensaje");
     console.log(msg1);
     const signature2=req.body.signature;
