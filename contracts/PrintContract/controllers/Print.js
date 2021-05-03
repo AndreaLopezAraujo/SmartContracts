@@ -114,11 +114,11 @@ module.exports.putPrint = async function(req, res) {
       throw new Error(tran)
     }
     //Update the status of order to printing
-    const {values,date_quote,date_order,signatureUser,msg}=tran;
+    const {values,date_quote,date_order,signatureUser,msg,pay}=tran;
     const status1="printing";
     const fecha = new Date();
     const date_printing= new Date(fecha);
-    const transaction={values,msg,msgManufacture,status:status1,date_quote,date_order,date_printing,signatureUser,signatureManufacturer};
+    const transaction={values,msg,msgManufacture,status:status1,date_quote,date_order,date_printing,signatureUser,signatureManufacturer,pay};
     const input = getAddress(TRANSACTION_FAMILY, orderId);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});

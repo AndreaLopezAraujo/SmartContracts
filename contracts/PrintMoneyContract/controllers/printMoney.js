@@ -158,7 +158,7 @@ module.exports.putPrintMoney = async function (req, res) {
       || tran === "The data exists, but it is not a deliver is a return") {
       return res.status(210).json(tran);
     }
-    
+
     //Get signature from the quote
     const signatureManufacturer = tran.signatureManufacturer;
     const msgManufacture2 = JSON.stringify(tran.msgManufacture);
@@ -177,16 +177,15 @@ module.exports.putPrintMoney = async function (req, res) {
     if (s != s2) {
       throw new Error('Public keys are different')
     }
-    //const { signature } = tran;
     //Pay the money to the printer
-    //try{
-    //const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:true}});
-    //console.log(jk);
-    //}
-    //catch(e)
-    //{
-    //return res.status(500).json(e.response.data);
-    //}
+    try {
+      const pay = tran.pay;
+      const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: true } });
+      console.log(jk);
+    }
+    catch (e) {
+      return res.status(500).json(e.response.data);
+    }
     //Update the status of order to printing
     const { values, date_quote, date_order, date_printing, date_deliver, msg, msgManufacture, signatureUser } = tran;
     const status1 = "finish";
@@ -285,11 +284,11 @@ module.exports.putDeliver = async function (req, res) {
       throw new Error('Public keys are different')
     }
     //Update the status of order to delever
-    const { values, date_quote, date_order, signatureUser, msg, msgManufacture, date_printing } = tran;
+    const { values, date_quote, date_order, signatureUser, msg, msgManufacture, date_printing, pay } = tran;
     const status1 = "deliver";
     const fecha = new Date();
     const date_deliver = new Date(fecha);
-    const transaction = { values, msg, msgManufacture, status: status1, date_quote, date_order, date_printing, date_deliver, signatureUser, signatureManufacturer };
+    const transaction = { values, msg, msgManufacture, status: status1, date_quote, date_order, date_printing, date_deliver, signatureUser, signatureManufacturer, pay };
     const input = getAddress(TRANSACTION_FAMILY, orderId);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({ func: 'put', args: { transaction, txid: txid1 } });
