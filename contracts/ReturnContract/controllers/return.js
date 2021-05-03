@@ -183,7 +183,7 @@ module.exports.putReturn = async function (req, res) {
       }
     ]);
     const resp = "The status of the printed with id: " + txid1 + " was changed to return";
-    onsole.log("The money was returned correctly with address "+ pay);
+    console.log("The money was returned correctly with address "+ pay);
     console.log(resp);
     return res.status(200).json(resp);
   }
