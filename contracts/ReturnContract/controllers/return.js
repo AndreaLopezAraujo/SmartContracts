@@ -126,7 +126,7 @@ module.exports.putReturn = async function (req, res) {
       throw new Error('The quote or order cannot be canceled')
     }
     //Get signature from the quote
-    const signatureManufacturer;
+    let signatureManufacturer;
     if (tran.msgManufacture != undefined) {
       signatureManufacturer = tran.signatureManufacturer;
       const msgManufacture2 = JSON.stringify(tran.msgManufacture);
