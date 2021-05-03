@@ -126,19 +126,18 @@ module.exports.getDelivered = async function (req, res) {
 module.exports.putPrintMoney = async function (req, res) {
 
   try {
-    const quotationId=req.body.quotationId
+    const quotationId = req.body.quotationId
     const txid1 = req.body.quotationId
     const order = req.body.id;
-    const clientId=req.body.quotation.clientId;
+    const clientId = req.body.quotation.clientId;
     //Get signature from order
-    const msg1=JSON.stringify({clientId,quotationId});
+    const msg1 = JSON.stringify({ clientId, quotationId });
     console.log("Mensaje");
     console.log(msg1);
-    const signatureManufacturer=req.body.signature;
+    const signatureManufacturer = req.body.signature;
     console.log("firma");
     console.log(signatureManufacturer);
-    if(order===undefined||clientId===undefined)
-    {
+    if (order === undefined || clientId === undefined) {
       throw new Error('Incomplete data')
     }
     //Look for the printing
@@ -172,13 +171,13 @@ module.exports.putPrintMoney = async function (req, res) {
     //const { signature } = tran;
     //Pay the money to the printer
     //try{
-      //const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:true}});
-      //console.log(jk);
-      //}
-      //catch(e)
-      //{
-      //return res.status(500).json(e.response.data);
-      //}
+    //const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:true}});
+    //console.log(jk);
+    //}
+    //catch(e)
+    //{
+    //return res.status(500).json(e.response.data);
+    //}
     //Update the status of order to printing
     const { values, date_quote, date_order, date_printing, date_deliver } = tran;
     const status1 = "finish";
@@ -235,12 +234,20 @@ function readFile(file) {
   });
 }
 module.exports.putDeliver = async function (req, res) {
-
   try {
-    const txid1 = req.body.quotationId
-    const order = req.body.id;
-    if(order===undefined)
-    {
+    console.log(req.body);
+    const quotationId = req.body.quotationId;
+    const txid1 = req.body.quotationId;
+    const orderId = req.body.id;
+    const status = req.body.status;
+    //Get signature from order
+    const msg1 = JSON.stringify({ quotationId, status });
+    console.log("Mensaje");
+    console.log(msg1);
+    const signatureM = req.body.signature;
+    console.log("firma");
+    console.log(signatureM);
+    if (orderId === undefined || status === undefined) {
       throw new Error('Incomplete data')
     }
     //Look for the printing
@@ -252,15 +259,34 @@ module.exports.putDeliver = async function (req, res) {
       || tran === "The data exists, but it is not a printing is a order"
       || tran === "The data exists, but it is not a printing is a return"
       || tran === "The data exists, but it is not a printing is a deliver") {
-        throw new Error(tran)
+      throw new Error(tran)
+    }
+
+    //Get signature from the quote
+    const signatureManufacturer = tran.signatureManufacturer;
+    const msg2 = JSON.stringify(tran.msg);
+    console.log("Mensaje2");
+    console.log(msg2);
+    console.log("firma2");
+    console.log(signatureManufacturer);
+    //Comaparate signatures
+    const {
+      getPublicKey
+    } = require('../controllers/separation');
+    const s = getPublicKey(msg1, signatureM);
+    console.log("llave 1: " + s)
+    const s2 = getPublicKey(msg2, signatureManufacturer);
+    console.log("llave 2: " + s2)
+    if (s != s2) {
+      throw new Error('the publicKey are differets')
     }
     //Update the status of order to delever
-    const { values, date_quote, date_order, date_printing, signature } = tran;
-    const status = "deliver";
+    const { values, date_quote, date_order, signatureUser } = tran;
+    const status1 = "deliver";
     const fecha = new Date();
     const date_deliver = new Date(fecha);
-    const transaction = { values, status, date_quote, date_order, date_printing, date_deliver, signature };
-    const input = getAddress(TRANSACTION_FAMILY, order);
+    const transaction = { values, status, date_quote, date_order, date_printing, date_deliver, signatureUser, signatureManufacturer };
+    const input = getAddress(TRANSACTION_FAMILY, orderId);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({ func: 'put', args: { transaction, txid: txid1 } });
     const resc = await sendTransactionWithAwait([
@@ -273,9 +299,11 @@ module.exports.putDeliver = async function (req, res) {
       }
     ]);
     const resp = "The status of the printing with id: " + txid1 + " was changed to deliver";
+    console.log(resp);
     return res.status(200).json(resp);
   }
   catch (err) {
+    console.log(err)
     let errMsg;
     if (err.data) {
       errMsg = err.data;

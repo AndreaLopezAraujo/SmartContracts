@@ -91,12 +91,7 @@ module.exports.putPrint = async function(req, res) {
     const orderId = req.body.id;
     const status=req.body.status;
     //Get signature from order
-    const msg1=JSON.stringify({quotationId,status});
-    console.log("Mensaje");
-    console.log(msg1);
     const signatureManufacturer=req.body.signature;
-    console.log("firma");
-    console.log(signatureManufacturer);
     if(orderId===undefined||status===undefined)
     {
       throw new Error('Incomplete data')
@@ -114,19 +109,15 @@ module.exports.putPrint = async function(req, res) {
       console.log(tran);
       throw new Error(tran)
     }
-    console.log("vio la orden")
     //Update the status of order to printing
     const {values,date_quote,date_order,signatureUser}=tran;
-    status1="printing";
+    const status1="printing";
     const fecha = new Date();
     const date_printing= new Date(fecha);
     const transaction={values,status:status1,date_quote,date_order,date_printing,signatureUser,signatureManufacturer};
-    console.log("hizo la transaccion")
     const input = getAddress(TRANSACTION_FAMILY, orderId);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
-    console.log("saco los valores");
     const payload = JSON.stringify({func: 'put', args:{transaction, txid:txid1}});
-    console.log("envio la monda");
     const resc= await sendTransactionWithAwait([
       {
         transactionFamily: TRANSACTION_FAMILY, 
