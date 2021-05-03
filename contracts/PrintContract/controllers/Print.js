@@ -117,10 +117,10 @@ module.exports.putPrint = async function(req, res) {
     console.log("vio la orden")
     //Update the status of order to printing
     const {values,date_quote,date_order,signatureUser}=tran;
-    status="printing";
+    status1="printing";
     const fecha = new Date();
     const date_printing= new Date(fecha);
-    const transaction={values,status,date_quote,date_order,date_printing,signatureUser,signatureManufacturer};
+    const transaction={values,status:status1,date_quote,date_order,date_printing,signatureUser,signatureManufacturer};
     console.log("hizo la transaccion")
     const input = getAddress(TRANSACTION_FAMILY, orderId);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
