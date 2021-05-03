@@ -126,11 +126,20 @@ module.exports.getDelivered = async function (req, res) {
 module.exports.putPrintMoney = async function (req, res) {
 
   try {
+    const quotationId=req.body.quotationId
     const txid1 = req.body.quotationId
     const order = req.body.id;
-    if(order===undefined)
+    const clientId=req.body.quotation.clientId;
+    //Get signature from order
+    const msg1=JSON.stringify({clientId,quotationId});
+    console.log("Mensaje");
+    console.log(msg1);
+    const signatureManufacturer=req.body.signature;
+    console.log("firma");
+    console.log(signatureManufacturer);
+    if(order===undefined||clientId===undefined)
     {
-      throw new Error('Incomplete data1')
+      throw new Error('Incomplete data')
     }
     //Look for the printing
     const j = await axios.get(`http://localhost:3004/api/deliver/${txid1}`);
@@ -142,7 +151,25 @@ module.exports.putPrintMoney = async function (req, res) {
       || tran === "The data exists, but it is not a deliver is a return") {
       return res.status(210).json(tran);
     }
-    const { signature } = tran;
+    //Get signature from the quote
+    const signatureUser = tran.signatureUser;
+    const msg2 = JSON.stringify(tran.msg);
+    console.log("Mensaje2");
+    console.log(msg2);
+    console.log("firma2");
+    console.log(signature);
+    //Comaparate signatures
+    const {
+      getPublicKey
+    } = require('../controllers/separation');
+    const s = getPublicKey(msg1, signatureManufacturer);
+    console.log("llave 1: " + s)
+    const s2 = getPublicKey(msg2, signatureUser);
+    console.log("llave 2: " + s2)
+    if (s != s2) {
+      throw new Error('the publicKey are differets')
+    }
+    //const { signature } = tran;
     //Pay the money to the printer
     //try{
       //const jk=await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${signature}`,{},{params:{approve:true}});

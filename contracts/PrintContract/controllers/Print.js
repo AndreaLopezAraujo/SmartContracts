@@ -88,15 +88,15 @@ module.exports.putPrint = async function(req, res) {
     const quotationId=req.body.quotationId
     const txid1 = req.body.quotationId
     const order = req.body.id;
-    const clientId=req.body.quotation.clientId;
+    const manufactureId=req.body.quotation.manufactureId;
     //Get signature from order
-    const msg1=JSON.stringify({clientId,quotationId});
+    const msg1=JSON.stringify({manufactureId,quotationId});
     console.log("Mensaje");
     console.log(msg1);
     const signatureManufacturer=req.body.signature;
     console.log("firma");
     console.log(signatureManufacturer);
-    if(order===undefined)
+    if(order===undefined||manufactureId===undefined)
     {
       throw new Error('Incomplete data')
     }
@@ -111,24 +111,6 @@ module.exports.putPrint = async function(req, res) {
     ||tran==="The data exists, but it is not a order is a return")
     {
       throw new Error(tran)
-    }
-    //Get signature from the quote
-    const signatureUser = tran.signatureUser;
-    const msg2 = JSON.stringify(tran.msg);
-    console.log("Mensaje2");
-    console.log(msg2);
-    console.log("firma2");
-    console.log(signature);
-    //Comaparate signatures
-    const {
-      getPublicKey
-    } = require('../controllers/separation');
-    const s = getPublicKey(msg1, signatureManufacturer);
-    console.log("llave 1: " + s)
-    const s2 = getPublicKey(msg2, signature);
-    console.log("llave 2: " + s2)
-    if (s != s2) {
-      throw new Error('the publicKey are differets')
     }
     //Update the status of order to printing
     const {values,date_quote,date_order,signatureUser}=tran;
