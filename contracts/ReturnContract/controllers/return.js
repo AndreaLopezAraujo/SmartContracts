@@ -1,5 +1,7 @@
 var _ = require('underscore');
 const crypto = require('crypto');
+const secp256k1 = require('secp256k1')
+const { ethers } = require("ethers");
 const mongo = require('../mongodb/mongo')
 const protobuf = require('sawtooth-sdk/protobuf');
 const { v4: uuidv4 } = require('uuid');
