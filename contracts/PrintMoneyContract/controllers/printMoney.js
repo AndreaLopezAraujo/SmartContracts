@@ -184,6 +184,7 @@ module.exports.putPrintMoney = async function (req, res) {
       console.log(jk);
     }
     catch (e) {
+      console.log(e.response);
       return res.status(500).json(e.response.data);
     }
     //Update the status of order to printing
