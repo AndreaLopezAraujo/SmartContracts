@@ -99,6 +99,7 @@ module.exports.postQuote = async function (req, res) {
   try {
     //Get the quote values
     const values = req.body;
+    console.log(values);
     const txid1 = req.body.id;
     const {deliveryDate,price,clientId,manufacturerId,catalogItemId,printSettingsIds,printerId}=req.body;
     //Get signature
