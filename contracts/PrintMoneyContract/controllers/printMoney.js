@@ -184,7 +184,7 @@ module.exports.putPrintMoney = async function (req, res) {
     const status1 = "finish";
     const fecha = new Date();
     const date_printed = new Date(fecha);
-    const transaction = { values, status: status1, date_quote, date_order, date_printing, date_deliver, date_printed, signature };
+    const transaction = { values,msg,msgManufacture, status:status1, date_quote, date_order, date_printing, date_deliver, signatureUser, signatureManufacturer};
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({ func: 'put', args: { transaction, txid: txid1 } });
@@ -288,7 +288,7 @@ module.exports.putDeliver = async function (req, res) {
       throw new Error('Public keys are different')
     }
     //Update the status of order to delever
-    const { values, date_quote, date_order, signatureUser,msg,msgManufacture } = tran;
+    const { values, date_quote, date_order, signatureUser,msg,msgManufacture ,date_printing} = tran;
     const status1 = "deliver";
     const fecha = new Date();
     const date_deliver = new Date(fecha);
