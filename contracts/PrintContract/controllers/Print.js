@@ -136,6 +136,7 @@ module.exports.putPrint = async function(req, res) {
   }
   catch(err){
     let errMsg;
+    console.log(errMsg);
     if(err.data){
       errMsg = err.data;
       if(err.message == 'Invalid transaction'){
