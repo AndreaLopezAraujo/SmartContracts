@@ -180,6 +180,7 @@ module.exports.putPrintMoney = async function (req, res) {
     //Pay the money to the printer
     try {
       const pay = tran.pay;
+      console.log(pay);
       const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: true } });
       console.log(jk);
     }
