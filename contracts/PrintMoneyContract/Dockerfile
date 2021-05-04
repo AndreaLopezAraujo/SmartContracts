@@ -1,10 +1,10 @@
 FROM node:10 as build
 
-WORKDIR /Tp
+WORKDIR /contracts/PrintMoneyContract
 COPY package*.json ./
 RUN npm install --loglevel verbose
 COPY . .
 
-EXPOSE 4004
+EXPOSE 3004
 
 CMD [ "node", "bin/www" ]
