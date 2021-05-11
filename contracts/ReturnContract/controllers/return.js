@@ -154,16 +154,17 @@ module.exports.putReturn = async function (req, res) {
     //Return the money to the user
     const pay = tran.pay;
     try {
-      const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: false } });
+      const { transactionCNK } = req.body.order;
+      const sng = transactionCNK.signature;
+      const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: false, signature: sng } });
       //console.log(jk);
     }
     catch (e) {
-      if (e.response!=undefined) {
+      if (e.response != undefined) {
         console.log(e.response.data);
         return res.status(500).json(e.response.data);
       }
-      else
-      {
+      else {
         console.log(e);
         return res.status(500).json(e);
       }

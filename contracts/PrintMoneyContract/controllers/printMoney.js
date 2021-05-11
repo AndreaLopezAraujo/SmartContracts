@@ -180,18 +180,16 @@ module.exports.putPrintMoney = async function (req, res) {
     //Pay the money to the printer
     try {
       const { transactionCNK } = req.body.order;
-      const sng=transactionCNK.signature;
+      const sng = transactionCNK.signature;
       //console.log(pay);
-      const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: true, signature:sng } });
+      const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: true, signature: sng } });
     }
     catch (e) {
-      if(e.response!=undefined)
-      {
+      if (e.response != undefined) {
         console.log(e.response.data);
-      return res.status(500).json(e.response.data);
+        return res.status(500).json(e.response.data);
       }
-      else
-      {
+      else {
         console.log(e);
         return res.status(500).json(e);
       }
@@ -215,7 +213,7 @@ module.exports.putPrintMoney = async function (req, res) {
       }
     ]);
     const resp = "The status of the deliver with id: " + txid1 + " was changed to finish";
-    console.log("The money was pay correctly with address "+ pay);
+    console.log("The money was pay correctly with address " + pay);
     console.log(resp)
     return res.status(200).json(resp);
   }
