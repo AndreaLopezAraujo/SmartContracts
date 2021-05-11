@@ -128,7 +128,7 @@ module.exports.getDelivered = async function (req, res) {
 module.exports.putPrintMoney = async function (req, res) {
 
   try {
-    console.log(req.body);
+    //console.log(req.body);
     const quotationId = req.body.order.quotationId;
     const txid1 = quotationId;
     const orderId = req.body.order.id;
@@ -150,7 +150,7 @@ module.exports.putPrintMoney = async function (req, res) {
     //Look for the printing
     const j = await axios.get(`http://localhost:3004/api/deliver/${txid1}`);
     const tran = j.data;
-    console.log(tran);
+    //console.log(tran);
     if (tran === "The data exists, but it is not a deliver is a quote"
       || tran === "The data exists, but it is not a deliver is a printed"
       || tran === "The data exists, but it is not a deliver is a order"
@@ -179,7 +179,7 @@ module.exports.putPrintMoney = async function (req, res) {
     const pay = tran.pay;
     //Pay the money to the printer
     try {
-      const { transactionCNK } = req.body;
+      const { transactionCNK } = req.body.order;
       const sng=transactionCNK.signature;
       //console.log(pay);
       const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: true, signature:sng } });
