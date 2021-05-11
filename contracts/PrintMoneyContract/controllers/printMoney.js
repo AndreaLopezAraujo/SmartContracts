@@ -128,7 +128,7 @@ module.exports.getDelivered = async function (req, res) {
 module.exports.putPrintMoney = async function (req, res) {
 
   try {
-    //console.log(req.body);
+    console.log(req.body);
     const quotationId = req.body.order.quotationId;
     const txid1 = quotationId;
     const orderId = req.body.order.id;
