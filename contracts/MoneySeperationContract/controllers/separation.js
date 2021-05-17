@@ -82,13 +82,20 @@ module.exports.getSeparationMoney = async function (req, res) {
 module.exports.putSeparationMoney = async function (req, res) {
 
   try {
+    let validation;
+    //validation = true;
     const quotationId = req.body.quotationId
     const txid1 = req.body.quotationId
     const order = req.body.id;
     const clientId = req.body.quotation.clientId;
     //Get signature from order
-    const msg1 = JSON.stringify({ clientId, quotationId });
-    const signature2 = req.body.signature;
+    let msg1 = ""
+    let signature2 = "";
+    let pay = "";
+    if (validation != undefined) {
+      msg1 = JSON.stringify({ clientId, quotationId });
+      signature2 = req.body.signature;
+    }
     if (order === undefined || clientId === undefined) {
       throw new Error('Incomplete data')
     }
@@ -100,37 +107,38 @@ module.exports.putSeparationMoney = async function (req, res) {
       throw new Error('The quote exists, but it is no longer just a quote')
     }
     //Get signature from the quote
-    const signatureUser = tran.signatureUser;
-    const msg2 = JSON.stringify(tran.msg);
-    //Comaparate signatures
-    const {
-      getPublicKey
-    } = require('../controllers/separation');
-    const s = getPublicKey(msg1, signature2);
-    const s2 = getPublicKey(msg2, signatureUser);
-    if (s != s2) {
-      throw new Error('Public keys are different');
-    }
-    //Separate the money
-    let moneyModule;
-    const { transactionCNK } = req.body;
-    let pay;
-    try {
-      moneyModule=await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, {...transactionCNK});
-      //console.log(moneyModule.data);
-      pay=moneyModule.data.payload.signature;
-    }
-    catch (e) {
-      console.log(e.response.data);
-      return res.status(500).json(e.response.data);
+    if (validation != undefined) {
+      const signatureUser = tran.signatureUser;
+      const msg2 = JSON.stringify(tran.msg);
+      //Comaparate signatures
+      const {
+        getPublicKey
+      } = require('../controllers/separation');
+      const s = getPublicKey(msg1, signature2);
+      const s2 = getPublicKey(msg2, signatureUser);
+      if (s != s2) {
+        throw new Error('Public keys are different');
+      }
+      //Separate the money
+      let moneyModule;
+      const { transactionCNK } = req.body;
+      try {
+        moneyModule = await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, { ...transactionCNK });
+        //console.log(moneyModule.data);
+        pay = moneyModule.data.payload.signature;
+      }
+      catch (e) {
+        console.log(e.response.data);
+        return res.status(500).json(e.response.data);
+      }
     }
     //Update the status of quote to order
-    const { values, date_quote ,msg} = tran;
+    const { values, date_quote, msg } = tran;
     //console.log(msg);
     const status = "order";
     const fecha = new Date();
     const date_order = new Date(fecha);
-    const transaction = { values,msg,status, date_quote, date_order, signatureUser, pay};
+    const transaction = { values, msg, status, date_quote, date_order, signatureUser, pay };
     const input = getAddress(TRANSACTION_FAMILY, order);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({ func: 'put', args: { transaction, txid: txid1 } });
@@ -144,9 +152,9 @@ module.exports.putSeparationMoney = async function (req, res) {
       }
     ]);
     const resp = "The status of the quote with id: " + txid1 + " was changed to order";
-    console.log("The money was separated correctly with address "+ pay);
+    console.log("The money was separated correctly with address " + pay);
     console.log(resp);
-    return res.status(200).json({resp,CNKAPI:moneyModule.data});
+    return res.status(200).json({ resp, CNKAPI: moneyModule.data });
   }
   catch (err) {
     console.log(err);

@@ -10,7 +10,9 @@ describe('Put', async () => {
     id: "1827172y2ws2w2",
     deliveryDate: "20/03/2021",
     clientId: "ac.lopez",
-    printerId: 8372,
+    quotation: {
+      printerId: 8372
+    },
     manufacturerId: "rer2323342"
   }
   it('must have an quotationId',
@@ -26,7 +28,7 @@ describe('Put', async () => {
         assert.equal(e.message, "Request failed with status code 500");
       }
     }).timeout(20 * 1000);
-    it('must have an id',
+  it('must have an id',
     async () => {
       try {
         await axios.post(`http://localhost:3001/api/quote/`, data);
@@ -73,7 +75,7 @@ describe('Put', async () => {
         assert.equal(e.message, "Request failed with status code 404");
       }
     }).timeout(20 * 1000);
-    it('Get quote is not a quote',
+  it('Get quote is not a quote',
     async () => {
       try {
         const txid1 = "1827172y2ws2w2";

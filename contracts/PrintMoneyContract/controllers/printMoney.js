@@ -199,7 +199,10 @@ module.exports.putPrintMoney = async function (req, res) {
     const status1 = "finish";
     const fecha = new Date();
     const date_printed = new Date(fecha);
-    const transaction = { values, msg, msgManufacture, status: status1, date_quote, date_order, date_printing, date_deliver, date_printed, signatureUser, signatureManufacturer, pay };
+    const transaction = {
+      values, msg, msgManufacture, status: status1, date_quote, date_order, date_printing,
+      date_deliver, date_printed, signatureUser, signatureManufacturer, pay
+    };
     const input = getAddress(TRANSACTION_FAMILY, orderId);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({ func: 'put', args: { transaction, txid: txid1 } });
@@ -298,7 +301,10 @@ module.exports.putDeliver = async function (req, res) {
     const status1 = "deliver";
     const fecha = new Date();
     const date_deliver = new Date(fecha);
-    const transaction = { values, msg, msgManufacture, status: status1, date_quote, date_order, date_printing, date_deliver, signatureUser, signatureManufacturer, pay };
+    const transaction = {
+      values, msg, msgManufacture, status: status1, date_quote, date_order, date_printing, date_deliver, signatureUser,
+      signatureManufacturer, pay
+    };
     const input = getAddress(TRANSACTION_FAMILY, orderId);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
     const payload = JSON.stringify({ func: 'put', args: { transaction, txid: txid1 } });

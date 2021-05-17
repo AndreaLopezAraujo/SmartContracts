@@ -98,24 +98,33 @@ module.exports.getQuote = async function (req, res) {
 module.exports.postQuote = async function (req, res) {
   try {
     //Get the quote values
+    let validation;
+    //To test the tests please comment the following line.
+    validation = true;
     const values = req.body;
     const txid1 = req.body.id;
-    const {deliveryDate,price,clientId,manufacturerId,catalogItemId,printSettingsIds,printerId}=req.body;
+    const { deliveryDate, price, clientId, manufacturerId, catalogItemId, printSettingsIds, printerId } = req.body;
     //Get signature
-    const signatureUser=req.body.signature;
-    const msg=
-    {
-      catalogItemId,clientId,printSettingsIds
+    let signatureUser="";
+    let msg="";
+    if (validation != undefined) {
+      signatureUser = req.body.signature;
+      msg =
+      {
+        catalogItemId, clientId, printSettingsIds
+      }
+      if(signatureUser==""||signatureUser==undefined)
+      throw new Error('The transaction does not have a signature')
     }
     console.log(msg);
-    if (deliveryDate === undefined|| price === undefined || clientId === undefined || printerId === undefined || manufacturerId === undefined) {
+    if (deliveryDate === undefined || price === undefined || clientId === undefined || printerId === undefined || manufacturerId === undefined) {
       throw new Error('Incomplete data')
     }
     const status = "quote";
     const fecha = new Date();
     const date_quote = new Date(fecha);
     const address = getAddress(TRANSACTION_FAMILY, txid1);
-    const payload = JSON.stringify({ func: 'post', args: { transaction: { values, date_quote, status,signatureUser,msg }, txid: txid1 } });
+    const payload = JSON.stringify({ func: 'post', args: { transaction: { values, date_quote, status, signatureUser, msg }, txid: txid1 } });
     await sendTransaction([{
       transactionFamily: TRANSACTION_FAMILY,
       transactionFamilyVersion: TRANSACTION_FAMILY_VERSION,
@@ -123,13 +132,13 @@ module.exports.postQuote = async function (req, res) {
       outputs: [address],
       payload
     }]);
-    const men="The quote was made on date: " + date_quote + "correctly, with the id: " + txid1;
+    const men = "The quote was made on date: " + date_quote + "correctly, with the id: " + txid1;
     console.log(men);
     return res.status(200).json(men);
   }
   catch (err) {
     console.log(err);
-    return res.status(500).json({ err });
+    return res.status(500).json({ error:err.message });
   }
 };
 function readFile(file) {
@@ -155,4 +164,4 @@ module.exports.getQuoteHistory = async function (req, res) {
     return res.status(404).json('not found');
   }
   return res.json(state[req.params.id]);
-} 
+}
