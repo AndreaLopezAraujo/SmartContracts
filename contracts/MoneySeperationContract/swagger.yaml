@@ -41,6 +41,9 @@ paths:
             example:
               id: "dwwedwe323ede"
               quotationId: "1827172y2ws2w2"
+              quotation: {
+                clientId: 8372
+              }
       responses:
           '200':    # status code
             description: 

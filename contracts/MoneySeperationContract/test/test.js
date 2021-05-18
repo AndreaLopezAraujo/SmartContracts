@@ -48,7 +48,7 @@ describe('Put', async () => {
           quotationId: "1827172y2ws2w2",
           quotation: {
             clientId: 8372
-          },
+          }
         }
         const put = await axios.put(`http://localhost:3003/api/order/`, data1)
         assert.equal(put.status, 200);
