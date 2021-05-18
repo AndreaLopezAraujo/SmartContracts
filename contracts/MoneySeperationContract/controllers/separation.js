@@ -84,7 +84,7 @@ module.exports.putSeparationMoney = async function (req, res) {
   try {
     let validation;
     //To test the tests please comment the following line.
-    //validation = true;
+    validation = true;
     const quotationId = req.body.quotationId
     const txid1 = req.body.quotationId
     const order = req.body.id;
