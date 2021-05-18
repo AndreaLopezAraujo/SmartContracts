@@ -126,8 +126,9 @@ module.exports.putSeparationMoney = async function (req, res) {
     let moneyModule;
     //Get signature from the quote
     if (validation != undefined) {
-      const signatureUser = tran.signatureUser;
-      const msg2 = JSON.stringify(tran.msg);
+      signatureUser = tran.signatureUser;
+      msg2 = JSON.stringify(tran.msg);
+      console.log(signatureUser);
       //Comaparate signatures
       const {
         getPublicKey

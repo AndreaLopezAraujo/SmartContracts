@@ -140,10 +140,10 @@ module.exports.putPrintMoney = async function (req, res) {
     //Get signature from order
     const signatureM = req.body.signature;
     const msg1 = JSON.stringify(m);
-    //console.log("Mensaje");
-    //console.log(msg1);
-    //console.log("firma");
-    //console.log(signatureM);
+    console.log("Mensaje");
+    console.log(msg1);
+    console.log("firma");
+    console.log(signatureM);
     if (orderId === undefined || or === undefined) {
       throw new Error('Incomplete data')
     }
@@ -161,10 +161,10 @@ module.exports.putPrintMoney = async function (req, res) {
     //Get signature from the quote
     const signatureUser = tran.signatureUser;
     const msgManufacture2 = JSON.stringify(tran.msg);
-    //console.log("Mensaje2");
-    //console.log(msgManufacture2);
-    //console.log("firma2");
-    //console.log(signatureUser,);
+    console.log("Mensaje2");
+    console.log(msgManufacture2);
+    console.log("firma2");
+    console.log(signatureUser,);
     //Comaparate signatures
     const {
       getPublicKey
@@ -304,8 +304,8 @@ module.exports.putDeliver = async function (req, res) {
     let signatureManufacturer = "";
     let msgManufacture2 = "";
     if (validation = !undefined) {
-      const signatureManufacturer = tran.signatureManufacturer;
-      const msgManufacture2 = JSON.stringify(tran.msgManufacture);
+      signatureManufacturer = tran.signatureManufacturer;
+      msgManufacture2 = JSON.stringify(tran.msgManufacture);
       //Comaparate signatures
       const {
         getPublicKey

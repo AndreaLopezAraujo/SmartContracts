@@ -109,7 +109,7 @@ module.exports.putPrint = async function (req, res) {
     if (validation != undefined) {
       msgManufacture = { creationDate, id, quotationId, status };
       signatureManufacturer = req.body.signature;
-      if(signatureManufacturer ==undefined)
+      if(signatureManufacturer ==undefined||signatureManufacturer=="")
       {
         throw new Error('The transaction does not have a signature')
       }
