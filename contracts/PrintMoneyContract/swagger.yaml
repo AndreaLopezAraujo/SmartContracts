@@ -28,7 +28,10 @@ paths:
                   type: string
             example:
               id: "dwwedwe323ede"
-              quotationId: "1827172y2ws2w2"
+              order: {
+                id: "8372",
+                quotationId: "1827172y2ws2w2"
+          }
       responses:
           '200':    # status code
             description: 
