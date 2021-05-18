@@ -1,6 +1,6 @@
 FROM node:10 as build
 
-WORKDIR /contracts
+WORKDIR /contracts/MoneySeperationContract
 COPY package*.json ./
 RUN npm install --loglevel verbose
 COPY . .

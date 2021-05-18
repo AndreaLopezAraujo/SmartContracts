@@ -83,11 +83,22 @@ module.exports.putSeparationMoney = async function (req, res) {
 
   try {
     let validation;
+    //To test the tests please comment the following line.
     //validation = true;
     const quotationId = req.body.quotationId
     const txid1 = req.body.quotationId
     const order = req.body.id;
-    const clientId = req.body.quotation.clientId;
+    let clientId;
+
+    if(validation==undefined)
+    {
+      console.log(req.body.quotation['clientId']);
+      clientId = req.body.quotation['clientId'];
+    }
+    else
+    {
+      clientId= req.body.quotation.clientId;
+    }
     //Get signature from order
     let msg1 = ""
     let signature2 = "";
@@ -95,6 +106,10 @@ module.exports.putSeparationMoney = async function (req, res) {
     if (validation != undefined) {
       msg1 = JSON.stringify({ clientId, quotationId });
       signature2 = req.body.signature;
+      if(signature2==undefined)
+      {
+        throw new Error('The transaction does not have a signature')
+      }
     }
     if (order === undefined || clientId === undefined) {
       throw new Error('Incomplete data')
@@ -106,6 +121,9 @@ module.exports.putSeparationMoney = async function (req, res) {
     if (tran === "The quote exists, but it is no longer just a quote") {
       throw new Error('The quote exists, but it is no longer just a quote')
     }
+    let signatureUser = "";
+    let msg2 = "";
+    let moneyModule;
     //Get signature from the quote
     if (validation != undefined) {
       const signatureUser = tran.signatureUser;
@@ -120,7 +138,6 @@ module.exports.putSeparationMoney = async function (req, res) {
         throw new Error('Public keys are different');
       }
       //Separate the money
-      let moneyModule;
       const { transactionCNK } = req.body;
       try {
         moneyModule = await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, { ...transactionCNK });
@@ -154,7 +171,12 @@ module.exports.putSeparationMoney = async function (req, res) {
     const resp = "The status of the quote with id: " + txid1 + " was changed to order";
     console.log("The money was separated correctly with address " + pay);
     console.log(resp);
-    return res.status(200).json({ resp, CNKAPI: moneyModule.data });
+    let resp2=""
+    if(moneyModule!=undefined)
+    {
+      resp2=moneyModule.data;
+    }
+    return res.status(200).json({ resp, CNKAPI: resp2 });
   }
   catch (err) {
     console.log(err);

@@ -100,7 +100,7 @@ module.exports.postQuote = async function (req, res) {
     //Get the quote values
     let validation;
     //To test the tests please comment the following line.
-    validation = true;
+    //validation = true;
     const values = req.body;
     const txid1 = req.body.id;
     const { deliveryDate, price, clientId, manufacturerId, catalogItemId, printSettingsIds, printerId } = req.body;
