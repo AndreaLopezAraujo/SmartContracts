@@ -76,7 +76,7 @@ services:
         - SAWTOOTH_REST=http://rest-api:8008
         - VALIDATOR_HOST=tcp://validator:4004
         - CNK_API_URL=http://134.209.216.13:3000
-        - QUOTE_CONTRACT=http://quotecontract:3001
+        - QUOTE_CONTRACT=http://quotecontract:3001/api/quote
         - MONGO_URI="mongodb://root:example@localhost:27017/mydb"
         - KAFKA_CONSUMER="localhost:9093"
         - KAFKA_PRODUCER="localhost:9093"
@@ -100,7 +100,7 @@ services:
               - SAWTOOTH_REST=http://rest-api:8008
               - VALIDATOR_HOST=tcp://validator:4004
               - CNK_API_URL=http://134.209.216.13:3000
-              - MONEY_SEPARATION_CONTRACT=http://moneyseparationcontract:3003
+              - MONEY_SEPARATION_CONTRACT=http://moneyseparationcontract:3003/api/order
               - MONGO_URI="mongodb://root:example@localhost:27017/mydb"
               - KAFKA_CONSUMER="localhost:9093"
               - KAFKA_PRODUCER="localhost:9093"

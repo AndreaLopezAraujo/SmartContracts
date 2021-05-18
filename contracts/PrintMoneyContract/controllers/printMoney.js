@@ -257,9 +257,21 @@ function readFile(file) {
 module.exports.putDeliver = async function (req, res) {
   try {
     //console.log(req.body);
+    let validation;
+    //To test the tests please comment the following line.
+    validation = true;
     const quotationId = req.body.order.quotationId;
-    const txid1 = quotationId;
-    const orderId = req.body.order.id;
+    let txid1 = "";
+    let orderId = "";
+    if (validation == undefined) {
+      console.log(req.body.order['id']);
+      clientId = req.body.order['id'];
+      txid1 = req.body.order['quotationId'];
+    }
+    else {
+      orderId = req.body.order.id;
+      txid1 = quotationId;
+    }
     const or = req.body.order;
     const id = or.id;
     const creationDate = or.creationDate;
@@ -267,13 +279,17 @@ module.exports.putDeliver = async function (req, res) {
     const m = { creationDate, id, quotationId, status };
     //console.log(m);
     //Get signature from order
-    const signatureM = req.body.signature;
-    const msg1 = JSON.stringify(m);
+    let signatureM = "";
+    let msg1 = "";
+    if (validation = !undefined) {
+      signatureM = req.body.signature;
+      msg1 = JSON.stringify(m);
+    }
     if (orderId === undefined || or === undefined) {
       throw new Error('Incomplete data')
     }
     //Look for the printing
-    const j = await axios.get(`http://localhost:3002/api/print/${txid1}`);
+    const j = await axios.get(`${process.env.PRINT_CONTRACT}/${txid1}`);
     const tran = j.data;
     //console.log(tran);
     if (tran === "The data exists, but it is not a printing is a quote"
@@ -285,16 +301,20 @@ module.exports.putDeliver = async function (req, res) {
       throw new Error(tran)
     }
     //Get signature from the quote
-    const signatureManufacturer = tran.signatureManufacturer;
-    const msgManufacture2 = JSON.stringify(tran.msgManufacture);
-    //Comaparate signatures
-    const {
-      getPublicKey
-    } = require('../controllers/printMoney');
-    const s = getPublicKey(msg1, signatureM);
-    const s2 = getPublicKey(msgManufacture2, signatureManufacturer);
-    if (s != s2) {
-      throw new Error('Public keys are different')
+    let signatureManufacturer = "";
+    let msgManufacture2 = "";
+    if (validation = !undefined) {
+      const signatureManufacturer = tran.signatureManufacturer;
+      const msgManufacture2 = JSON.stringify(tran.msgManufacture);
+      //Comaparate signatures
+      const {
+        getPublicKey
+      } = require('../controllers/printMoney');
+      const s = getPublicKey(msg1, signatureM);
+      const s2 = getPublicKey(msgManufacture2, signatureManufacturer);
+      if (s != s2) {
+        throw new Error('Public keys are different')
+      }
     }
     //Update the status of order to delever
     const { values, date_quote, date_order, signatureUser, msg, msgManufacture, date_printing, pay } = tran;
