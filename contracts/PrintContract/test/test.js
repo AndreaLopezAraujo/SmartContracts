@@ -11,7 +11,10 @@ describe('Put', async () => {
     deliveryDate: "20/03/2021",
     clientId: "ac.lopez",
     printerId: 8372,
-    manufacturerId: "rer2323342"
+    manufacturerId: "rer2323342",
+    quotation: {
+      clientId: 8372
+    }
   }
   it('must have an quotationId',
     async () => {
@@ -47,10 +50,20 @@ describe('Put', async () => {
         await axios.post(`http://localhost:3001/api/quote/`, data);
         var data1 = {
           id: "dwwedwe323ede",
-          quotationId: "1827172y2ws2w2"
+          quotationId: "1827172y2ws2w2",
+          quotation: {
+            clientId: 8372
+          }
         }
         await axios.put(`http://localhost:3003/api/order/`, data1)
-        const put = await axios.put(`http://localhost:3002/api/print/`, data1)
+        var data2 = {
+          id: "dwwedwe323ede",
+          order: {
+            id: "8372",
+            quotationId: "1827172y2ws2w2"
+          }
+        }
+        const put = await axios.put(`http://localhost:3002/api/print/`, data2)
         assert.equal(put.status, 200);
       } catch (e) {
         assert.fail(e.message);
