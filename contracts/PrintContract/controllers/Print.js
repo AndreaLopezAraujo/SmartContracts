@@ -86,6 +86,9 @@ module.exports.putPrint = async function(req, res) {
   
   try{
     //console.log(req.body);
+    let validation;
+    //To test the tests please comment the following line.
+    validation = true;
     const quotationId=req.body.order.quotationId;
     const txid1 = quotationId;
     const orderId = req.body.order.id;

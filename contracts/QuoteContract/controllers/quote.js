@@ -116,7 +116,7 @@ module.exports.postQuote = async function (req, res) {
       if(signatureUser==""||signatureUser==undefined)
       throw new Error('The transaction does not have a signature')
     }
-    console.log(msg);
+    //console.log(msg);
     if (deliveryDate === undefined || price === undefined || clientId === undefined || printerId === undefined || manufacturerId === undefined) {
       throw new Error('Incomplete data')
     }
