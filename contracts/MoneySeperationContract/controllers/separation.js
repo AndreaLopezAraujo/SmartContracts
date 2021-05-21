@@ -1,10 +1,7 @@
 var _ = require('underscore');
 const crypto = require('crypto');
-const mongo = require('../mongodb/mongo')
-const protobuf = require('sawtooth-sdk/protobuf');
 const secp256k1 = require('secp256k1')
 const { ethers } = require("ethers");
-const { v4: uuidv4 } = require('uuid');
 const {
   sendTransaction,
   getAddress,
@@ -100,17 +97,13 @@ module.exports.putSeparationMoney = async function (req, res) {
       clientId= req.body.quotation.clientId;
     }
     //Get signature from order
-    let msg1 = ""
-    let signature2 = "";
     let pay = "";
-    if (validation != undefined) {
-      msg1 = JSON.stringify({ clientId, quotationId });
-      signature2 = req.body.signature;
+      const msg1 = JSON.stringify({ clientId, quotationId });
+      const signature2 = req.body.signature;
       if(signature2==undefined)
       {
         throw new Error('The transaction does not have a signature')
       }
-    }
     if (order === undefined || clientId === undefined) {
       throw new Error('Incomplete data')
     }

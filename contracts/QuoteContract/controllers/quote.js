@@ -1,6 +1,5 @@
 var _ = require('underscore');
 const crypto = require('crypto');
-const mongo = require('../mongodb/mongo')
 const protobuf = require('sawtooth-sdk/protobuf');
 const {
   sendTransaction,

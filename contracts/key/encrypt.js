@@ -2,9 +2,8 @@ const crypto = require('crypto')
 const path = require('path')
 const fs = require('fs')
 const data = {
-  catalogItemId: "sjdfhgfhrefrf",
-  printSettingsIds: "hdahdjsahdsjde",
-  clientId: "ac.lopez",
+  clientId: 8372,
+  quotationId: "1827172y2ws2w2"
 }
 
 const encrypt = (text, pkPath) => {
