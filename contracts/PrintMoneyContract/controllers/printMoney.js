@@ -338,11 +338,9 @@ module.exports.putDeliver = async function (req, res) {
       throw new Error(tran)
     }
     //Get signature from the quote
-    let signatureManufacturer = "";
-    let msgManufacture2 = "";
+    const signatureManufacturer = tran.signatureManufacturer;
+    const msgManufacture2 = JSON.stringify(tran.msgManufacture);
     if (validation != undefined) {
-      signatureManufacturer = tran.signatureManufacturer;
-      msgManufacture2 = JSON.stringify(tran.msgManufacture);
       //Comaparate signatures
       const {
         getPublicKey

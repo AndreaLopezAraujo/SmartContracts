@@ -2,9 +2,6 @@ var _ = require('underscore');
 const crypto = require('crypto');
 const secp256k1 = require('secp256k1')
 const { ethers } = require("ethers");
-const mongo = require('../mongodb/mongo')
-const protobuf = require('sawtooth-sdk/protobuf');
-const { v4: uuidv4 } = require('uuid');
 const {
   sendTransaction,
   getAddress,
@@ -99,15 +96,37 @@ module.exports.getAll = async function (req, res) {
 module.exports.putReturn = async function (req, res) {
 
   try {
-    //console.log(req.body);
-    const quotationId = req.body.order.quotationId;
-    const txid1 = quotationId;
-    const orderId = req.body.order.id;
-    const or = req.body.order;
-    const id = or.id;
-    const creationDate = or.creationDate;
-    const status = or.status;
-    const m = { creationDate, id, quotationId, status };
+    let validation;
+    //To test the tests please comment the following line.
+    validation = true;
+    console.log(req.body);
+    let quotationId = "";
+    let txid1 = "";
+    let orderId = "";
+    if (validation == undefined) {
+      console.log(req.body.order['id']);
+      clientId = req.body.order['id'];
+      txid1 = req.body.order['quotationId'];
+      quotationId = req.body.order['quotationId'];
+    }
+    else {
+      orderId = req.body.order.id;
+      quotationId = req.body.order.quotationId;
+      txid1 = quotationId;
+    }
+    let or = "";
+    let id = "";
+    let creationDate = "";
+    let status = "";
+    let m = { creationDate, id, quotationId, status };
+    if (validation != undefined) {
+      console.log("aqui")
+      or = req.body.order;
+      id = or.id;
+      creationDate = or.creationDate;
+      status = or.status;
+      m = { creationDate, id, quotationId, status };
+    }
     //console.log(m);
     //Get signature from order
     const signatureM = req.body.signature;
@@ -119,6 +138,10 @@ module.exports.putReturn = async function (req, res) {
     if (orderId === undefined || or === undefined) {
       throw new Error('Incomplete data')
     }
+    if(signatureM===undefined)
+    {
+      throw new Error('The transaction does not have a signature')
+    }
     //Look for the printing
     const j = await axios.get(`http://localhost:3005/api/all/${txid1}`);
     const tran = j.data;
@@ -129,44 +152,46 @@ module.exports.putReturn = async function (req, res) {
     }
     //Get signature from the quote
     let signatureManufacturer;
-    if (tran.msgManufacture != undefined) {
-      signatureManufacturer = tran.signatureManufacturer;
-      const msgManufacture2 = JSON.stringify(tran.msgManufacture);
-      //console.log("Mensaje2");
-      //console.log(msgManufacture2);
-      //console.log("firma2");
-      //console.log(signatureManufacturer);
-      //Comaparate signatures
-      const {
-        getPublicKey
-      } = require('../controllers/return');
-      const s = getPublicKey(msg1, signatureM);
-      //console.log("llave 1: " + s)
-      const s2 = getPublicKey(msgManufacture2, signatureManufacturer);
-      //console.log("llave 2: " + s2)
-      if (s != s2) {
-        throw new Error('Public keys are different')
-      }
-    }
-    else {
-      signatureManufacturer = signatureM;
-    }
-    //Return the money to the user
     const pay = tran.pay;
-    try {
-      const { transactionCNK } = req.body.order;
-      const sng = transactionCNK.signature;
-      const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: false, signature: sng } });
-      //console.log(jk);
-    }
-    catch (e) {
-      if (e.response != undefined) {
-        console.log(e.response.data);
-        return res.status(500).json(e.response.data);
+    if (validation != undefined) {
+      if (tran.msgManufacture != undefined) {
+        signatureManufacturer = tran.signatureManufacturer;
+        const msgManufacture2 = JSON.stringify(tran.msgManufacture);
+        //console.log("Mensaje2");
+        //console.log(msgManufacture2);
+        //console.log("firma2");
+        //console.log(signatureManufacturer);
+        //Comaparate signatures
+        const {
+          getPublicKey
+        } = require('../controllers/return');
+        const s = getPublicKey(msg1, signatureM);
+        //console.log("llave 1: " + s)
+        const s2 = getPublicKey(msgManufacture2, signatureManufacturer);
+        //console.log("llave 2: " + s2)
+        if (s != s2) {
+          throw new Error('Public keys are different')
+        }
       }
       else {
-        console.log(e);
-        return res.status(500).json(e);
+        signatureManufacturer = signatureM;
+      }
+      //Return the money to the user
+      try {
+        const { transactionCNK } = req.body.order;
+        const sng = transactionCNK.signature;
+        const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: false, signature: sng } });
+        //console.log(jk);
+      }
+      catch (e) {
+        if (e.response != undefined) {
+          console.log(e.response.data);
+          return res.status(500).json(e.response.data);
+        }
+        else {
+          console.log(e);
+          return res.status(500).json(e);
+        }
       }
     }
     //Update the status of data to return
@@ -211,7 +236,7 @@ module.exports.putReturn = async function (req, res) {
     else {
       errMsg = err;
     }
-    return res.status(500).json(errMsg);
+    return res.status(500).json({error: errMsg.message});
   }
 };
 function readFile(file) {
