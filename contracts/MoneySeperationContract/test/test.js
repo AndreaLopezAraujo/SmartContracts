@@ -42,7 +42,7 @@ describe('Put', async () => {
         assert.equal(e.message, "Request failed with status code 500");
       }
     }).timeout(20 * 1000);
-    it('must have an signature',
+  it('must have an signature',
     async () => {
       try {
         await axios.post(`http://localhost:3001/api/quote/`, data);
@@ -69,7 +69,7 @@ describe('Put', async () => {
           quotation: {
             clientId: 8372
           },
-          signature:"W8VO/naC7b5msluGMvWsX5XScOvajAYWTKn2l6dSsfWQmC5S/Ze7JddljSJEIJTM7QmGjsF8ls958VPNwOhdKuAlUvPmp0T1rsq/rS4SEaCcdV8eygXKPJNfjvLc71WsHt2We8wYwlfAJr/pQyhG3lwZ182LwPJtA3rE1ob1E6wrTpdTZ78i/g8Z2LS3DRiD35IqeXjq/uFAUtnE1v9O29LHqrHUN1xnbYGp8gu2C3aXXBGFMi8ibJzHSU5noZBgzGc5bLGO+sPIQMTLBHa+/1FO8QUqx2Ffs/tAgaX08L1jWvt7dYDgzuGovEeBvyk0WEeNqaT/HpfQNgpBSeZESg=="
+          signature: "W8VO/naC7b5msluGMvWsX5XScOvajAYWTKn2l6dSsfWQmC5S/Ze7JddljSJEIJTM7QmGjsF8ls958VPNwOhdKuAlUvPmp0T1rsq/rS4SEaCcdV8eygXKPJNfjvLc71WsHt2We8wYwlfAJr/pQyhG3lwZ182LwPJtA3rE1ob1E6wrTpdTZ78i/g8Z2LS3DRiD35IqeXjq/uFAUtnE1v9O29LHqrHUN1xnbYGp8gu2C3aXXBGFMi8ibJzHSU5noZBgzGc5bLGO+sPIQMTLBHa+/1FO8QUqx2Ffs/tAgaX08L1jWvt7dYDgzuGovEeBvyk0WEeNqaT/HpfQNgpBSeZESg=="
         }
         const put = await axios.put(`http://localhost:3003/api/order/`, data1)
         assert.equal(put.status, 200);

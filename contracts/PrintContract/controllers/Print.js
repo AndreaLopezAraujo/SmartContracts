@@ -1,8 +1,5 @@
 var _ = require('underscore');
 const crypto = require('crypto');
-const mongo = require('../mongodb/mongo')
-const protobuf = require('sawtooth-sdk/protobuf');
-const { v4: uuidv4 } = require('uuid');
 const {
   sendTransaction,
   getAddress,
@@ -82,21 +79,24 @@ module.exports.getPrint = async function (req, res) {
 module.exports.putPrint = async function (req, res) {
 
   try {
-    //console.log(req.body);
+    console.log(req.body);
     let validation;
     //To test the tests please comment the following line.
     validation = true;
-    const quotationId = req.body.order.quotationId;
     let txid1 ="";
     let orderId = "";
+    let  quotationId =""
     if(validation==undefined)
     {
+      console.log(req.body.order);
       console.log(req.body.order['id']);
       clientId = req.body.order['id'];
       txid1 = req.body.order['quotationId'];
+      quotationId = req.body.order['quotationId'];
     }
     else{
       orderId = req.body.order.id;
+      quotationId = req.body.order.quotationId;
       txid1 = quotationId;
     }
     const or = req.body.order;
@@ -105,20 +105,19 @@ module.exports.putPrint = async function (req, res) {
     const status = or.status;
     //Get signature from order
     let msgManufacture = "";
-    let signatureManufacturer = "";
+    const signatureManufacturer = req.body.signature;
     if (validation != undefined) {
       msgManufacture = { creationDate, id, quotationId, status };
-      signatureManufacturer = req.body.signature;
-      if(signatureManufacturer ==undefined||signatureManufacturer=="")
-      {
-        throw new Error('The transaction does not have a signature')
-      }
     }
     if (orderId === undefined || or === undefined) {
       console.log(orderId);
       console.log(or);
       throw new Error('Incomplete data')
     }
+    if(signatureManufacturer ==undefined)
+      {
+        throw new Error('The transaction does not have a signature')
+      }
     //Look for the order
     console.log()
     const j = await axios.get(`${process.env.MONEY_SEPARATION_CONTRACT}/${txid1}`);

@@ -114,12 +114,11 @@ module.exports.putSeparationMoney = async function (req, res) {
     if (tran === "The quote exists, but it is no longer just a quote") {
       throw new Error('The quote exists, but it is no longer just a quote')
     }
-    let signatureUser = "";
-    let msg2 = "";
+    const signatureUser = tran.signatureUser;
+    const msg2 = JSON.stringify(tran.msg);
     let moneyModule;
     //Get signature from the quote
     if (validation != undefined) {
-      signatureUser = tran.signatureUser;
       msg2 = JSON.stringify(tran.msg);
       console.log(signatureUser);
       //Comaparate signatures
@@ -187,7 +186,7 @@ module.exports.putSeparationMoney = async function (req, res) {
     else {
       errMsg = err;
     }
-    return res.status(500).json(errMsg);
+    return res.status(500).json({error: errMsg.message});
   }
 };
 

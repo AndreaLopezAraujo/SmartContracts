@@ -7,7 +7,6 @@ const {
   putPrint,
   getPrintHistory
 } = require('../controllers/Print');
-const {authTransactionMiddleware} = require('../controllers/transaction');
 
 
 router.get('/print', getAllPrint);
