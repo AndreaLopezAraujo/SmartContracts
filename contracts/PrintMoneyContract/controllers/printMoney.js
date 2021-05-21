@@ -253,37 +253,50 @@ function readFile(file) {
 }
 module.exports.putDeliver = async function (req, res) {
   try {
-    //console.log(req.body);
+    console.log(req.body);
     let validation;
     //To test the tests please comment the following line.
     validation = true;
-    const quotationId = req.body.order.quotationId;
+    let quotationId = "";
     let txid1 = "";
     let orderId = "";
     if (validation == undefined) {
       console.log(req.body.order['id']);
       clientId = req.body.order['id'];
       txid1 = req.body.order['quotationId'];
+      quotationId = req.body.order['quotationId'];
     }
     else {
       orderId = req.body.order.id;
+      quotationId = req.body.order.quotationId;
       txid1 = quotationId;
     }
-    const or = req.body.order;
-    const id = or.id;
-    const creationDate = or.creationDate;
-    const status = or.status;
-    const m = { creationDate, id, quotationId, status };
+    let or = "";
+    let id = "";
+    let creationDate = "";
+    let status = "";
+    let m = { creationDate, id, quotationId, status };
+    if (validation != undefined) {
+      console.log("aqui")
+      or = req.body.order;
+      id = or.id;
+      creationDate = or.creationDate;
+      status = or.status;
+      m = { creationDate, id, quotationId, status };
+    }
     //console.log(m);
     //Get signature from order
-    let signatureM = "";
+    let signatureM = req.body.signature;
     let msg1 = "";
-    if (validation = !undefined) {
+    if (validation != undefined) {
       signatureM = req.body.signature;
       msg1 = JSON.stringify(m);
     }
     if (orderId === undefined || or === undefined) {
       throw new Error('Incomplete data')
+    }
+    if (signatureM === undefined) {
+      throw new Error('The transaction does not have a signature')
     }
     //Look for the printing
     const j = await axios.get(`${process.env.PRINT_CONTRACT}/${txid1}`);
@@ -300,7 +313,7 @@ module.exports.putDeliver = async function (req, res) {
     //Get signature from the quote
     let signatureManufacturer = "";
     let msgManufacture2 = "";
-    if (validation = !undefined) {
+    if (validation != undefined) {
       signatureManufacturer = tran.signatureManufacturer;
       msgManufacture2 = JSON.stringify(tran.msgManufacture);
       //Comaparate signatures

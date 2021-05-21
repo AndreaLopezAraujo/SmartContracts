@@ -6,6 +6,7 @@ const valor = "abc23";
 //Math.floor(Math.random() * (1000 - 0) + 0);
 const valor2 = "abc23";
 //Math.floor(Math.random() * (1000 - 0) + 0);
+
 describe('Put', async () => {
   var data = {
     price: 100,
