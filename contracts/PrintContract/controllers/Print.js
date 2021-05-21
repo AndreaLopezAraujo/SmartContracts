@@ -79,22 +79,20 @@ module.exports.getPrint = async function (req, res) {
 module.exports.putPrint = async function (req, res) {
 
   try {
-    console.log(req.body);
     let validation;
     //To test the tests please comment the following line.
     validation = true;
-    let txid1 ="";
+    let txid1 = "";
     let orderId = "";
-    let  quotationId =""
-    if(validation==undefined)
-    {
+    let quotationId = ""
+    if (validation == undefined) {
       console.log(req.body.order);
       console.log(req.body.order['id']);
       clientId = req.body.order['id'];
       txid1 = req.body.order['quotationId'];
       quotationId = req.body.order['quotationId'];
     }
-    else{
+    else {
       orderId = req.body.order.id;
       quotationId = req.body.order.quotationId;
       txid1 = quotationId;
@@ -114,10 +112,9 @@ module.exports.putPrint = async function (req, res) {
       console.log(or);
       throw new Error('Incomplete data')
     }
-    if(signatureManufacturer ==undefined)
-      {
-        throw new Error('The transaction does not have a signature')
-      }
+    if (signatureManufacturer == undefined) {
+      throw new Error('The transaction does not have a signature')
+    }
     //Look for the order
     console.log()
     const j = await axios.get(`${process.env.MONEY_SEPARATION_CONTRACT}/${txid1}`);
@@ -168,7 +165,7 @@ module.exports.putPrint = async function (req, res) {
     else {
       errMsg = err;
     }
-    return res.status(500).json({error:errMsg.message});
+    return res.status(500).json({ error: errMsg.message });
   }
 };
 function readFile(file) {

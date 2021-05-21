@@ -81,29 +81,26 @@ module.exports.putSeparationMoney = async function (req, res) {
   try {
     let validation;
     //To test the tests please comment the following line.
-    validation = true;
+    validation = true; 
     const quotationId = req.body.quotationId
     const txid1 = req.body.quotationId
     const order = req.body.id;
     let clientId;
 
-    if(validation==undefined)
-    {
+    if (validation == undefined) {
       console.log(req.body.quotation['clientId']);
       clientId = req.body.quotation['clientId'];
     }
-    else
-    {
-      clientId= req.body.quotation.clientId;
+    else {
+      clientId = req.body.quotation.clientId;
     }
     //Get signature from order
     let pay = "";
-      const msg1 = JSON.stringify({ clientId, quotationId });
-      const signature2 = req.body.signature;
-      if(signature2==undefined)
-      {
-        throw new Error('The transaction does not have a signature')
-      }
+    const msg1 = JSON.stringify({ clientId, quotationId });
+    const signature2 = req.body.signature;
+    if (signature2 == undefined) {
+      throw new Error('The transaction does not have a signature')
+    }
     if (order === undefined || clientId === undefined) {
       throw new Error('Incomplete data')
     }
@@ -164,10 +161,9 @@ module.exports.putSeparationMoney = async function (req, res) {
     const resp = "The status of the quote with id: " + txid1 + " was changed to order";
     console.log("The money was separated correctly with address " + pay);
     console.log(resp);
-    let resp2=""
-    if(moneyModule!=undefined)
-    {
-      resp2=moneyModule.data;
+    let resp2 = ""
+    if (moneyModule != undefined) {
+      resp2 = moneyModule.data;
     }
     return res.status(200).json({ resp, CNKAPI: resp2 });
   }
@@ -186,7 +182,7 @@ module.exports.putSeparationMoney = async function (req, res) {
     else {
       errMsg = err;
     }
-    return res.status(500).json({error: errMsg.message});
+    return res.status(500).json({ error: errMsg.message });
   }
 };
 
