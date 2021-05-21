@@ -56,7 +56,7 @@ describe('Put deliver', async () => {
         assert.equal(e.message, "Request failed with status code 500");
       }
     }).timeout(20 * 1000);
-  it('Should add the order printing correctly',
+  it('Should add the order deliver correctly',
     async () => {
       try {
         var data1 = {
@@ -74,6 +74,13 @@ describe('Put deliver', async () => {
       }
     }).timeout(20 * 1000);
 })
+
+
+
+
+
+
+
 async function f() {
   try {
     var data = {
