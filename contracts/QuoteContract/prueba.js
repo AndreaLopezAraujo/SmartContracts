@@ -1,5 +1,4 @@
 const { default: axios } = require("axios");
-console.log("hola mundo");
 var data = {
   price: 100,
   id: "hdhdsdhshd1",
