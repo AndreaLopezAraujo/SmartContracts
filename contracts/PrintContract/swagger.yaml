@@ -44,6 +44,7 @@ paths:
                 id: "8372",
                 quotationId: "1827172y2ws2w2"
               }
+              signature: "W8VO/naC7b5msluGMvWsX5XScOvajAYWTKn2l6dSsfWQmC5S/Ze7JddljSJEIJTM7QmGjsF8ls958VPNwOhdKuAlUvPmp0T1rsq/rS4SEaCcdV8eygXKPJNfjvLc71WsHt2We8wYwlfAJr/pQyhG3lwZ182LwPJtA3rE1ob1E6wrTpdTZ78i/g8Z2LS3DRiD35IqeXjq/uFAUtnE1v9O29LHqrHUN1xnbYGp8gu2C3aXXBGFMi8ibJzHSU5noZBgzGc5bLGO+sPIQMTLBHa+/1FO8QUqx2Ffs/tAgaX08L1jWvt7dYDgzuGovEeBvyk0WEeNqaT/HpfQNgpBSeZESg=="
       responses:
           '200':    # status code
             description: 

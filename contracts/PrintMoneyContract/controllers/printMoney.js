@@ -125,24 +125,49 @@ module.exports.getDelivered = async function (req, res) {
 module.exports.putPrintMoney = async function (req, res) {
 
   try {
-    //console.log(req.body);
-    const quotationId = req.body.order.quotationId;
-    const txid1 = quotationId;
-    const orderId = req.body.order.id;
-    const or = req.body.order;
-    const id = or.id;
-    const creationDate = or.creationDate;
-    const status = or.status;
-    const m = { creationDate, id, quotationId, status };
+    let validation;
+    //To test the tests please comment the following line.
+    validation = true;
+    console.log(req.body);
+    let quotationId = "";
+    let txid1 = "";
+    let orderId = "";
+    if (validation == undefined) {
+      console.log(req.body.order['id']);
+      clientId = req.body.order['id'];
+      txid1 = req.body.order['quotationId'];
+      quotationId = req.body.order['quotationId'];
+    }
+    else {
+      orderId = req.body.order.id;
+      quotationId = req.body.order.quotationId;
+      txid1 = quotationId;
+    }
+    let or = "";
+    let id = "";
+    let creationDate = "";
+    let status = "";
+    let m = { creationDate, id, quotationId, status };
+    if (validation != undefined) {
+      console.log("aqui")
+      or = req.body.order;
+      id = or.id;
+      creationDate = or.creationDate;
+      status = or.status;
+      m = { creationDate, id, quotationId, status };
+    }
     //Get signature from order
     const signatureM = req.body.signature;
     const msg1 = JSON.stringify(m);
-    console.log("Mensaje");
-    console.log(msg1);
-    console.log("firma");
-    console.log(signatureM);
+    //console.log("Mensaje");
+    //console.log(msg1);
+    //console.log("firma");
+    //console.log(signatureM);
     if (orderId === undefined || or === undefined) {
       throw new Error('Incomplete data')
+    }
+    if (signatureM === undefined) {
+      throw new Error('The transaction does not have a signature')
     }
     //Look for the printing
     const j = await axios.get(`http://localhost:3004/api/deliver/${txid1}`);
@@ -158,37 +183,39 @@ module.exports.putPrintMoney = async function (req, res) {
     //Get signature from the quote
     const signatureUser = tran.signatureUser;
     const msgManufacture2 = JSON.stringify(tran.msg);
-    console.log("Mensaje2");
-    console.log(msgManufacture2);
-    console.log("firma2");
-    console.log(signatureUser,);
-    //Comaparate signatures
-    const {
-      getPublicKey
-    } = require('../controllers/printMoney');
-    const s = getPublicKey(msg1, signatureM);
-    //console.log("llave 1: " + s)
-    const s2 = getPublicKey(msgManufacture2, signatureUser);
-    //console.log("llave 2: " + s2)
-    if (s != s2) {
-      throw new Error('Public keys are different')
-    }
     const pay = tran.pay;
-    //Pay the money to the printer
-    try {
-      const { transactionCNK } = req.body.order;
-      const sng = transactionCNK.signature;
-      //console.log(pay);
-      const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: true, signature: sng } });
-    }
-    catch (e) {
-      if (e.response != undefined) {
-        console.log(e.response.data);
-        return res.status(500).json(e.response.data);
+    //console.log("Mensaje2");
+    //console.log(msgManufacture2);
+    //console.log("firma2");
+    //console.log(signatureUser,);
+    //Comaparate signatures
+    if (validation != undefined) {
+      const {
+        getPublicKey
+      } = require('../controllers/printMoney');
+      const s = getPublicKey(msg1, signatureM);
+      //console.log("llave 1: " + s)
+      const s2 = getPublicKey(msgManufacture2, signatureUser);
+      //console.log("llave 2: " + s2)
+      if (s != s2) {
+        throw new Error('Public keys are different')
       }
-      else {
-        console.log(e);
-        return res.status(500).json(e);
+      //Pay the money to the printer
+      try {
+        const { transactionCNK } = req.body.order;
+        const sng = transactionCNK.signature;
+        //console.log(pay);
+        const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: true, signature: sng } });
+      }
+      catch (e) {
+        if (e.response != undefined) {
+          console.log(e.response.data);
+          return res.status(500).json(e.response.data);
+        }
+        else {
+          console.log(e);
+          return res.status(500).json(e);
+        }
       }
     }
     //Update the status of order to printing
@@ -232,7 +259,7 @@ module.exports.putPrintMoney = async function (req, res) {
     else {
       errMsg = err;
     }
-    return res.status(500).json(errMsg);
+    return res.status(500).json({ error: errMsg.message });
   }
 };
 function readFile(file) {
@@ -253,7 +280,7 @@ function readFile(file) {
 }
 module.exports.putDeliver = async function (req, res) {
   try {
-    console.log(req.body);
+    //console.log(req.body);
     let validation;
     //To test the tests please comment the following line.
     validation = true;
