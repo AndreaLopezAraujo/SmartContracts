@@ -116,7 +116,6 @@ module.exports.putSeparationMoney = async function (req, res) {
     let moneyModule;
     //Get signature from the quote
     if (validation != undefined) {
-      msg2 = JSON.stringify(tran.msg);
       console.log(signatureUser);
       //Comaparate signatures
       const {
