@@ -1,0 +1,183 @@
+version: '3.3'
+services:
+#Sawtooth----------------------------------
+  validator:
+    image: hyperledger/sawtooth-validator:1.2.6
+    container_name: sawtooth-validator-default
+    expose:
+        - 4004
+    ports:
+        - "4004:4004"
+    # start the validator with an empty genesis batch
+    entrypoint: "bash -c \"\
+        sawadm keygen && \
+        sawtooth keygen my_key && \
+        sawset genesis -k /root/.sawtooth/keys/my_key.priv && \
+        sawset proposal create \
+            -k /root/.sawtooth/keys/my_key.priv \
+            sawtooth.consensus.algorithm.name=Devmode \
+            sawtooth.consensus.algorithm.version=0.1 \
+            -o config.batch && \
+        sawadm genesis config-genesis.batch config.batch && \
+        sawtooth-validator -vv \
+            --endpoint tcp://validator:8800 \
+            --bind component:tcp://eth0:4004 \
+            --bind network:tcp://eth0:8800 \
+            --bind consensus:tcp://eth0:5050 \
+            --scheduler serial \
+        \""
+  tp:
+    image: arrocitointelectual/tp
+    container_name: tp
+    depends_on:
+        - validator
+    environment:
+        - VALIDATOR=tcp://validator:4004
+
+  quotecontract:
+    image: arrocitointelectual/quotecontract
+    container_name: quotecontract
+    expose:
+        - 3001
+    ports:
+        - '3001:3001'
+    depends_on:
+        - validator
+        - tp
+    environment:
+        - SAWTOOTH_PRIVATE_KEY=0x7f664d71e4200b4a2989558d1f6006d0dac9771a36a546b1a47c384ec9c4f04b
+        - SAWTOOTH_REST=http://rest-api:8008
+        - VALIDATOR_HOST=tcp://validator:4004
+        - MONGO_URI="mongodb://root:example@localhost:27017/mydb"
+        - KAFKA_CONSUMER="localhost:9093"
+        - KAFKA_PRODUCER="localhost:9093"
+        - RETHINK_HOST=localhost
+        - RETHINK_PORT=28020
+        - RETHINK_USER="admin"
+        - RETHINK_PASSWORD="" 
+
+  moneyseparationcontract:
+    image: arrocitointelectual/moneyseparationcontract
+    container_name: moneyseparationcontract
+    expose:
+        - 3003
+    ports:
+        - '3003:3003'
+    depends_on:
+        - validator
+        - tp
+    environment:
+        - SAWTOOTH_PRIVATE_KEY=0x7f664d71e4200b4a2989558d1f6006d0dac9771a36a546b1a47c384ec9c4f04b
+        - SAWTOOTH_REST=http://rest-api:8008
+        - VALIDATOR_HOST=tcp://validator:4004
+        - CNK_API_URL=http://134.209.216.13:3000
+        - QUOTE_CONTRACT=http://quotecontract:3001/api/quote
+        - MONGO_URI="mongodb://root:example@localhost:27017/mydb"
+        - KAFKA_CONSUMER="localhost:9093"
+        - KAFKA_PRODUCER="localhost:9093"
+        - RETHINK_HOST=localhost
+        - RETHINK_PORT=28020
+        - RETHINK_USER="admin"
+        - RETHINK_PASSWORD=""
+      
+  printcontract:
+          image: arrocitointelectual/printcontract
+          container_name: printcontract
+          expose:
+              - 3002
+          ports:
+              - '3002:3002'
+          depends_on:
+              - validator
+              - tp
+          environment:
+              - SAWTOOTH_PRIVATE_KEY=0x7f664d71e4200b4a2989558d1f6006d0dac9771a36a546b1a47c384ec9c4f04b
+              - SAWTOOTH_REST=http://rest-api:8008
+              - VALIDATOR_HOST=tcp://validator:4004
+              - CNK_API_URL=http://134.209.216.13:3000
+              - MONEY_SEPARATION_CONTRACT=http://moneyseparationcontract:3003/api/order
+              - MONGO_URI="mongodb://root:example@localhost:27017/mydb"
+              - KAFKA_CONSUMER="localhost:9093"
+              - KAFKA_PRODUCER="localhost:9093"
+              - RETHINK_HOST=localhost
+              - RETHINK_PORT=28020
+              - RETHINK_USER="admin"
+              - RETHINK_PASSWORD=""
+
+  printmoneycontract:
+          image: arrocitointelectual/printmoneycontract
+          container_name: printmoneycontract
+          expose:
+              - 3004
+          ports:
+              - '3004:3004'
+          depends_on:
+              - validator
+              - tp
+          environment:
+              - SAWTOOTH_PRIVATE_KEY=0x7f664d71e4200b4a2989558d1f6006d0dac9771a36a546b1a47c384ec9c4f04b
+              - SAWTOOTH_REST=http://rest-api:8008
+              - VALIDATOR_HOST=tcp://validator:4004
+              - CNK_API_URL=http://134.209.216.13:3000
+              - PRINT_CONTRACT=http://printcontract:3002/api/print
+              - MONGO_URI="mongodb://root:example@localhost:27017/mydb"
+              - KAFKA_CONSUMER="localhost:9093"
+              - KAFKA_PRODUCER="localhost:9093"
+              - RETHINK_HOST=localhost
+              - RETHINK_PORT=28020
+              - RETHINK_USER="admin"
+              - RETHINK_PASSWORD=""
+
+  returncontract:
+          image: arrocitointelectual/returncontract
+          container_name: returncontract
+          expose:
+              - 3005
+          ports:
+              - '3005:3005'
+          depends_on:
+              - validator
+              - tp
+          environment:
+              - SAWTOOTH_PRIVATE_KEY=0x7f664d71e4200b4a2989558d1f6006d0dac9771a36a546b1a47c384ec9c4f04b
+              - SAWTOOTH_REST=http://rest-api:8008
+              - VALIDATOR_HOST=tcp://validator:4004
+              - CNK_API_URL=http://134.209.216.13:3000
+              - MONGO_URI="mongodb://root:example@localhost:27017/mydb"
+              - KAFKA_CONSUMER="localhost:9093"
+              - KAFKA_PRODUCER="localhost:9093"
+              - RETHINK_HOST=localhost
+              - RETHINK_PORT=28020
+              - RETHINK_USER="admin"
+              - RETHINK_PASSWORD=""
+
+  settings-tp:
+    image: hyperledger/sawtooth-settings-tp:1.2.6
+    container_name: sawtooth-settings-tp-default
+    depends_on:
+      - validator
+    entrypoint: settings-tp -vv -C tcp://validator:4004
+  
+  devmode-engine:
+    image: hyperledger/sawtooth-devmode-engine-rust:1.2.4
+    container_name: sawtooth-devmode-engine-rust-default
+    depends_on:
+      - validator
+    entrypoint: devmode-engine-rust -C tcp://validator:5050
+  rest-api:
+    image: hyperledger/sawtooth-rest-api:1.2.6
+    container_name: sawtooth-rest-api-default
+    ports:
+      - "8008:8008"
+    depends_on:
+      - validator
+    entrypoint: sawtooth-rest-api -C tcp://validator:4004 --bind rest-api:8008
+  shell:
+    image: hyperledger/sawtooth-shell:1.2.6
+    container_name: sawtooth-shell-default
+    depends_on:
+      - rest-api
+    entrypoint: "bash -c \"\
+        sawtooth keygen && \
+        tail -f /dev/null \
+        \""
