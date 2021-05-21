@@ -98,28 +98,21 @@ module.exports.getQuote = async function (req, res) {
 module.exports.postQuote = async function (req, res) {
   try {
     //Get the quote values
-    let validation;
-    //To test the tests please comment the following line.
-    validation = true;
     const values = req.body;
     const txid1 = req.body.id;
     const { deliveryDate, price, clientId, manufacturerId, catalogItemId, printSettingsIds, printerId } = req.body;
     //Get signature
-    let signatureUser="";
-    let msg="";
-    if (validation != undefined) {
-      signatureUser = req.body.signature;
-      msg =
-      {
-        catalogItemId, clientId, printSettingsIds
-      }
-      if(signatureUser==""||signatureUser==undefined)
-      throw new Error('The transaction does not have a signature')
+    const signatureUser = req.body.signature;
+    const msg =
+    {
+      catalogItemId, clientId, printSettingsIds
     }
     //console.log(msg);
     if (deliveryDate === undefined || price === undefined || clientId === undefined || printerId === undefined || manufacturerId === undefined) {
       throw new Error('Incomplete data')
     }
+    if (signatureUser == "" || signatureUser == undefined)
+    throw new Error('The transaction does not have a signature')
     const status = "quote";
     const fecha = new Date();
     const date_quote = new Date(fecha);
@@ -138,7 +131,7 @@ module.exports.postQuote = async function (req, res) {
   }
   catch (err) {
     console.log(err);
-    return res.status(500).json({ error:err.message });
+    return res.status(500).json({ error: err.message });
   }
 };
 function readFile(file) {
