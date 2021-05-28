@@ -27,6 +27,22 @@ function buildAddress(transactionFamily) {
 
 const address = buildAddress(TRANSACTION_FAMILY);
 
+function getAppURL(appNum){
+  if(!process.env.ORG_NUM){
+    console.log('process.env.ORG_NUM not defined');
+    process.exit(0);
+  }
+  else{
+    console.log(`process.env.ORG_NUM = ${process.env.ORG_NUM}`);
+  }
+  const APP_N_PORT = `APPORG${process.env.ORG_NUM}APP${appNum}_PORT`;
+  const ledgerUrl = process.env[APP_N_PORT] && new URL(process.env[APP_N_PORT]);
+  const ledgerHostPort = ledgerUrl && `http://${ledgerUrl.hostname}:${ledgerUrl.port}`;
+  return ledgerHostPort;
+}
+
+const APPORG0APP0_PORT = getAppURL(0);
+
 module.exports.getAllReturn = async function (req, res) {
 
   let params = {
@@ -180,7 +196,7 @@ module.exports.putReturn = async function (req, res) {
       try {
         const { transactionCNK } = req.body.order;
         const sng = transactionCNK.signature;
-        const jk = await axios.put(`${process.env.apporg1app0}/cryptocurrency/${pay}`, {}, { params: { approve: false, signature: sng } });
+        const jk = await axios.put(`${APPORG0APP0_PORT}/cryptocurrency/${pay}`, {}, { params: { approve: false, signature: sng } });
         //console.log(jk);
       }
       catch (e) {

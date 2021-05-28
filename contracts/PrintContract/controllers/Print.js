@@ -25,6 +25,23 @@ function buildAddress(transactionFamily) {
 
 const address = buildAddress(TRANSACTION_FAMILY);
 
+
+function getAppURL(appNum){
+  if(!process.env.ORG_NUM){
+    console.log('process.env.ORG_NUM not defined');
+    process.exit(0);
+  }
+  else{
+    console.log(`process.env.ORG_NUM = ${process.env.ORG_NUM}`);
+  }
+  const APP_N_PORT = `APPORG${process.env.ORG_NUM}APP${appNum}_PORT`;
+  const ledgerUrl = process.env[APP_N_PORT] && new URL(process.env[APP_N_PORT]);
+  const ledgerHostPort = ledgerUrl && `http://${ledgerUrl.hostname}:${ledgerUrl.port}`;
+  return ledgerHostPort;
+}
+
+const APPORG0APP1_PORT = getAppURL(1);
+
 module.exports.getAllPrint = async function (req, res) {
 
   let params = {
@@ -117,7 +134,7 @@ module.exports.putPrint = async function (req, res) {
     }
     //Look for the order
     console.log()
-    const j = await axios.get(`${process.env.apporg0app1}/${txid1}`);
+    const j = await axios.get(`${APPORG0APP1_PORT}/api/order/${txid1}`);
     const tran = j.data;
     //console.log(tran);
     if (tran === "The data exists, but it is not a order is a quote"

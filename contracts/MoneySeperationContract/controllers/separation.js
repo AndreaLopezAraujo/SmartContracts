@@ -27,6 +27,23 @@ function buildAddress(transactionFamily) {
 
 const address = buildAddress(TRANSACTION_FAMILY);
 
+function getAppURL(appNum){
+  if(!process.env.ORG_NUM){
+    console.log('process.env.ORG_NUM not defined');
+    process.exit(0);
+  }
+  else{
+    console.log(`process.env.ORG_NUM = ${process.env.ORG_NUM}`);
+  }
+  const APP_N_PORT = `APPORG${process.env.ORG_NUM}APP${appNum}_PORT`;
+  const ledgerUrl = process.env[APP_N_PORT] && new URL(process.env[APP_N_PORT]);
+  const ledgerHostPort = ledgerUrl && `http://${ledgerUrl.hostname}:${ledgerUrl.port}`;
+  return ledgerHostPort;
+}
+
+const APPORG0APP0_PORT = getAppURL(0);
+const APPORG0APP4_PORT = getAppURL(4);
+
 module.exports.getAllSeparationMoney = async function (req, res) {
 
   let params = {
@@ -105,7 +122,7 @@ module.exports.putSeparationMoney = async function (req, res) {
       throw new Error('Incomplete data')
     }
     //Look for the quote
-    const j = await axios.get(`${process.env.apporg0app4}/${txid1}`);
+    const j = await axios.get(`${APPORG0APP4_PORT}/api/quote/${txid1}`);
     const tran = j.data;
     //console.log(tran);
     if (tran === "The quote exists, but it is no longer just a quote") {
@@ -129,7 +146,7 @@ module.exports.putSeparationMoney = async function (req, res) {
       //Separate the money
       const { transactionCNK } = req.body;
       try {
-        moneyModule = await axios.post(`${process.env.apporg1app0}/cryptocurrency`, { ...transactionCNK });
+        moneyModule = await axios.post(`${APPORG0APP0_PORT}/cryptocurrency`, { ...transactionCNK });
         //console.log(moneyModule.data);
         pay = moneyModule.data.payload.signature;
       }
