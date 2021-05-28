@@ -117,7 +117,7 @@ module.exports.putPrint = async function (req, res) {
     }
     //Look for the order
     console.log()
-    const j = await axios.get(`${process.env.MONEY_SEPARATION_CONTRACT}/${txid1}`);
+    const j = await axios.get(`${process.env.apporg0app1}/${txid1}`);
     const tran = j.data;
     //console.log(tran);
     if (tran === "The data exists, but it is not a order is a quote"

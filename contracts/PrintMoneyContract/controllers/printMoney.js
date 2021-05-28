@@ -205,7 +205,7 @@ module.exports.putPrintMoney = async function (req, res) {
         const { transactionCNK } = req.body.order;
         const sng = transactionCNK.signature;
         //console.log(pay);
-        const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: true, signature: sng } });
+        const jk = await axios.put(`${process.env.apporg1app0}/cryptocurrency/${pay}`, {}, { params: { approve: true, signature: sng } });
       }
       catch (e) {
         if (e.response != undefined) {
@@ -326,7 +326,7 @@ module.exports.putDeliver = async function (req, res) {
       throw new Error('The transaction does not have a signature')
     }
     //Look for the printing
-    const j = await axios.get(`${process.env.PRINT_CONTRACT}/${txid1}`);
+    const j = await axios.get(`${process.env.apporg0app2}/${txid1}`);
     const tran = j.data;
     //console.log(tran);
     if (tran === "The data exists, but it is not a printing is a quote"

@@ -180,7 +180,7 @@ module.exports.putReturn = async function (req, res) {
       try {
         const { transactionCNK } = req.body.order;
         const sng = transactionCNK.signature;
-        const jk = await axios.put(`${process.env.CNK_API_URL}/cryptocurrency/${pay}`, {}, { params: { approve: false, signature: sng } });
+        const jk = await axios.put(`${process.env.apporg1app0}/cryptocurrency/${pay}`, {}, { params: { approve: false, signature: sng } });
         //console.log(jk);
       }
       catch (e) {

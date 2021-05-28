@@ -105,7 +105,7 @@ module.exports.putSeparationMoney = async function (req, res) {
       throw new Error('Incomplete data')
     }
     //Look for the quote
-    const j = await axios.get(`${process.env.QUOTE_CONTRACT}/${txid1}`);
+    const j = await axios.get(`${process.env.apporg0app4}/${txid1}`);
     const tran = j.data;
     //console.log(tran);
     if (tran === "The quote exists, but it is no longer just a quote") {
@@ -129,7 +129,7 @@ module.exports.putSeparationMoney = async function (req, res) {
       //Separate the money
       const { transactionCNK } = req.body;
       try {
-        moneyModule = await axios.post(`${process.env.CNK_API_URL}/cryptocurrency`, { ...transactionCNK });
+        moneyModule = await axios.post(`${process.env.apporg1app0}/cryptocurrency`, { ...transactionCNK });
         //console.log(moneyModule.data);
         pay = moneyModule.data.payload.signature;
       }
