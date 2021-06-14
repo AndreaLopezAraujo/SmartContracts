@@ -141,8 +141,8 @@ module.exports.putSeparationMoney = async function (req, res) {
       const s = getPublicKey(msg1, signature2);
       const s2 = getPublicKey(msg2, signatureUser);
       if (s != s2) {
-        console.log("firma 1: "+s);
-        console.log("firma 1: "+s2);
+        console.log("llave orden: "+s);
+        console.log("lleve cuotizacion: "+s2);
         throw new Error('Public keys are different');
       }
       //Separate the money
