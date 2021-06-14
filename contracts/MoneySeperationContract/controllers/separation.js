@@ -155,8 +155,14 @@ module.exports.putSeparationMoney = async function (req, res) {
         pay = moneyModule.data.payload.signature;
       }
       catch (e) {
-        console.log(e.response.data);
-        return res.status(500).json(e.response.data);
+        if (e.response != undefined) {
+          console.log(e.response.data);
+          return res.status(500).json(e.response.data);
+        }
+        else {
+          console.log(e);
+          return res.status(500).json(e);
+        }
       }
     }
     //Update the status of quote to order
