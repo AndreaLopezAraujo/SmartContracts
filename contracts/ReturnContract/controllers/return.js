@@ -41,7 +41,7 @@ function getAppURL(appNum){
   return ledgerHostPort;
 }
 
-const APPORG0APP0_PORT = getAppURL(0);
+//const APPORG0APP0_PORT = getAppURL(0);
 
 module.exports.getAllReturn = async function (req, res) {
 
@@ -196,7 +196,7 @@ module.exports.putReturn = async function (req, res) {
       try {
         const { transactionCNK } = req.body.order;
         const sng = transactionCNK.signature;
-        const jk = await axios.put(`${APPORG0APP0_PORT}/cryptocurrency/${pay}`, {}, { params: { approve: false, signature: sng } });
+        const jk = await axios.put(`${process.env.APPORG0APP0_PORT}/cryptocurrency/${pay}`, {}, { params: { approve: false, signature: sng } });
         //console.log(jk);
       }
       catch (e) {

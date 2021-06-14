@@ -41,7 +41,7 @@ function getAppURL(appNum){
   return ledgerHostPort;
 }
 
-const APPORG0APP0_PORT = getAppURL(0);
+//const APPORG0APP0_PORT = getAppURL(0);
 const APPORG0APP4_PORT = getAppURL(4);
 
 module.exports.getAllSeparationMoney = async function (req, res) {
@@ -150,7 +150,7 @@ module.exports.putSeparationMoney = async function (req, res) {
       //Separate the money
       const { transactionCNK } = req.body;
       try {
-        moneyModule = await axios.post(`${APPORG0APP0_PORT}/cryptocurrency`, { ...transactionCNK });
+        moneyModule = await axios.post(`${process.env.APPORG0APP0_PORT}/cryptocurrency`, { ...transactionCNK });
         //console.log(moneyModule.data);
         pay = moneyModule.data.payload.signature;
       }

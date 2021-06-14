@@ -42,7 +42,7 @@ function getAppURL(appNum){
 }
 
 const APPORG0APP2_PORT = getAppURL(2);
-const APPORG0APP0_PORT = getAppURL(0);
+//const APPORG0APP0_PORT = getAppURL(0);
 
 module.exports.getAllPrintMoney = async function (req, res) {
 
@@ -222,7 +222,7 @@ module.exports.putPrintMoney = async function (req, res) {
         const { transactionCNK } = req.body.order;
         const sng = transactionCNK.signature;
         //console.log(pay);
-        const jk = await axios.put(`${APPORG0APP0_PORT}/cryptocurrency/${pay}`, {}, { params: { approve: true, signature: sng } });
+        const jk = await axios.put(`${process.env.APPORG0APP0_PORT}/cryptocurrency/${pay}`, {}, { params: { approve: true, signature: sng } });
       }
       catch (e) {
         if (e.response != undefined) {
