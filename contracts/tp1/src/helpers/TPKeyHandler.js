@@ -134,12 +134,9 @@ module.exports = function({TP_FAMILY, TP_VERSION, TP_NAMESPACE, handlers, addres
       let func;
       try{
         const payload = JSON.parse(Buffer.from(transactionProcessRequest.payload, 'utf8').toString());
-        console.log("holi" , payload);
+        console.log(payload);
         func = payload.func;
         args = payload.args;
-
-        let {transaction, txid} = args;
-        //publicKey = getPublicKey(transaction, txid);  
       }
       catch(err){
         throw new InvalidTransaction('Bad transaction Format');
