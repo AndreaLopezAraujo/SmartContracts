@@ -58,7 +58,7 @@ const handlers = {
     }
     else if (status == "return") {
       const { msgManufacture, date_order, date_printing, date_return, signatureManufacturer } = transaction;
-      if (date_printed === undefined || date_return== undefined|| msgManufacture === undefined || date_order === undefined || date_printing === undefined || signatureManufacturer === undefined || pay === undefined) { throw new InvalidTransaction('Incomplete data'); }
+      if ( date_return== undefined|| msgManufacture === undefined || date_order === undefined || date_printing === undefined || signatureManufacturer === undefined ) { throw new InvalidTransaction('Incomplete data'); }
       else ps = true;
     }
     if (ps === true) {
