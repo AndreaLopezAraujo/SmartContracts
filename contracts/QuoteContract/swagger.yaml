@@ -53,15 +53,15 @@ paths:
                 text:
                   type: string
             example:
-              price: 100
-              id: "1827172y2ws2w2" 
-              deliveryDate: 20/03/2021
-              clientId: ac.lopez
-              printerId: 8372
-              manufacturerId: "rer2323342"
-              catalogItemId: "sjdfhgfhrefrf"
-              printSettingsIds: "hdahdjsahdsjde"
-              signature: "cVbdRomnb0GQIjVI7itA6A+Xam7Y7oPewCMgejLJMl0GfOW7PHH6cl57F1zNbdHPz1GT2qnKaV5f5QJj39R6uylfNOwWGk4yv332b8PBGwRbHauqtLXV5WayxjTHEtCUmSrtvUVcsVrLGlgXyjOCuTJ800xzGRrVwzRcx/Ugo56d4Gx7omA6zHcHigY/GCSVImRwxBoOeFUiEywUVIctCkZGvUGemmlex0+/cRQg/WG6sGQJub+CNJCO5iLFPhvn0R5RAal++Qbs0fpj2Ki3eAf9gvhh0KROFCDN5k8rNPsLK6XoJ9Mg7egZvBkn9mvZmljmL3ycocv0MIEDZ/GEKw=="
+              price: 11241.88
+              id: "2e8c7fd4-efdb-45e8-96f6-c662ae8884f5" 
+              deliveryDate: "2021-06-17T20:50:11.000Z"
+              clientId: "572487b8-ed2b-4ee8-9f3f-efa067a65835"
+              printerId: "0f7d2211-c84e-482b-91f2-7b019d73ea07"
+              manufacturerId: "6277deac-cce0-4fc2-a7eb-e5145153e382"
+              catalogItemId: "170f003d-1481-428c-b078-e07ccf9cbf0f"
+              printSettingsIds: ["8664044d-503d-4a13-8e36-b1abe5146387","581d3fed-ced8-43ad-9dde-25ed6fc20151","c4425f39-b6a5-404c-b4ff-966b51b5fd43","fcf0300d-ea97-49fa-87c2-805aea774122","e3abfc9a-8ade-4451-84ef-b8f6c09ec0e6","5f9710b8-2420-48ca-9d95-b9b51ebd21c9","0ed45481-8671-4d25-af35-2a9847051b18","2e56f0ff-bca4-49db-9d51-a348425e08ab"]
+              signature: "0xa4c631d5f247538cdb68ad72403f5e602817b060bf45a4ef9dbf28224af296505cf5c5f6e33ac001112913668c71586dc601c7ed93170f3c80cc9be5bd28968c1b"
       responses:
         '200':    # status code
           description: Respose
