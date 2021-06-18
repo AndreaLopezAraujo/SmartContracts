@@ -152,7 +152,7 @@ module.exports.putSeparationMoney = async function (req, res) {
       try {
         moneyModule = await axios.post(`${process.env.APPORG0APP0_PORT}/cryptocurrency`, { ...transactionCNK });
         //console.log(moneyModule.data);
-        pay = moneyModule.data.payload.signature;
+        pay = moneyModule.data.payload.address;
       }
       catch (e) {
         if (e.response != undefined) {
